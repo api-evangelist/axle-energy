@@ -1,0 +1,33 @@
+generated: '2026-07-18'
+method: searched
+source: openapi/axle-energy-openapi-original.json
+docs: https://docs.axle.energy/api-reference/auth/token-form
+summary:
+  types:
+  - oauth2
+  oauth2_flows:
+  - password
+  detail: >-
+    Token-based auth. Exchange API credentials (username/password) for a bearer token via
+    POST /auth/token-form. Organisation tokens are valid 1 hour. Component tokens
+    (POST /auth/component-token) are site-scoped and valid 24 hours for end-user sessions.
+    Send the token as `Authorization: Bearer <token>`.
+schemes:
+- name: OAuth2PasswordBearer
+  type: oauth2
+  flows:
+  - flow: password
+    tokenUrl: auth/token-form
+    scopes: 0
+  sources:
+  - openapi/axle-energy-openapi-original.json
+token_types:
+  - name: organisation-token
+    endpoint: POST /auth/token-form
+    ttl: 1h
+    docs: https://docs.axle.energy/api-reference/auth/token-form
+  - name: component-token
+    endpoint: POST /auth/component-token
+    ttl: 24h
+    scope: site
+    docs: https://docs.axle.energy/api-reference/auth/component-token
