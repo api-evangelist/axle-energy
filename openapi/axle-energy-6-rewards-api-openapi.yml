@@ -1,0 +1,359 @@
+openapi: 3.1.0
+info:
+  title: Axle 1. Authentication 6. Rewards API
+  description: For full documentation please see our official docs at <a href='http://docs.axle.energy'>docs.axle.energy</a>
+  version: 1.4.6
+servers:
+- url: https://api.axle.energy
+tags:
+- name: 6. Rewards
+  description: Determine how much your users have earned by participating with Axle; allow balance withdrawal
+paths:
+  /rewards/{site_id}/info:
+    get:
+      tags:
+      - 6. Rewards
+      summary: Get Balance Info
+      description: Get info about current balance and total earnings for the site. Requires an organisational bearer token.
+      operationId: get_balance_info_rewards__site_id__info_get
+      parameters:
+      - required: true
+        schema:
+          type: string
+          format: uuid
+          title: Site Id
+        name: site_id
+        in: path
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BalanceInfoResponse'
+        '404':
+          description: Site not found or not authorized to access
+        '500':
+          description: Internal server error
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - OAuth2PasswordBearer: []
+  /rewards/{site_id}/url/balance:
+    get:
+      tags:
+      - 6. Rewards
+      summary: Get Rewards Balance Withdrawal Url
+      description: Get a temporary link to an Axle-hosted form through which users can view and withdraw rewards. Requires an organisational bearer token.
+      operationId: get_rewards_balance_withdrawal_url_rewards__site_id__url_balance_get
+      parameters:
+      - description: The ID on Axle's system for this user. The site_id can be easily retrieved from the get-by-external-id endpoint.
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Site Id
+          description: The ID on Axle's system for this user. The site_id can be easily retrieved from the get-by-external-id endpoint.
+        name: site_id
+        in: path
+      - description: Require email verification before the user can link a bank account. Balance and transaction-history views are not gated. When omitted, falls back to the organisation's configured 2FA posture.
+        required: false
+        schema:
+          type: boolean
+          title: Enforce Two Factor Auth
+          description: Require email verification before the user can link a bank account. Balance and transaction-history views are not gated. When omitted, falls back to the organisation's configured 2FA posture.
+        name: enforce_two_factor_auth
+        in: query
+      - description: Where to redirect after completion
+        required: true
+        schema:
+          type: string
+          title: Redirect Uri
+          description: Where to redirect after completion
+        name: redirect_uri
+        in: query
+      - description: Hide transaction history from the user
+        required: false
+        schema:
+          type: boolean
+          title: Hide Transactions
+          description: Hide transaction history from the user
+          default: false
+        name: hide_transactions
+        in: query
+      - description: Skip the balance page and go straight to bank setup if no account exists
+        required: false
+        schema:
+          type: boolean
+          title: Auto Redirect To Setup
+          description: Skip the balance page and go straight to bank setup if no account exists
+          default: false
+        name: auto_redirect_to_setup
+        in: query
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BalanceWithdrawalURLResponse'
+        '404':
+          description: Site not found or not authorized to access
+        '500':
+          description: Internal server error
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - OAuth2PasswordBearer: []
+  /rewards/{site_id}/transactions:
+    get:
+      tags:
+      - 6. Rewards
+      summary: Get Transaction History
+      description: Get history of transactions for the site. Requires an organisational bearer token.
+      operationId: get_transaction_history_rewards__site_id__transactions_get
+      parameters:
+      - required: true
+        schema:
+          type: string
+          format: uuid
+          title: Site Id
+        name: site_id
+        in: path
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransactionDataResponse'
+        '404':
+          description: Site not found or not authorized to access
+        '500':
+          description: Internal server error
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - OAuth2PasswordBearer: []
+components:
+  schemas:
+    PaymentStatus:
+      type: string
+      enum:
+      - pending_approval
+      - approved
+      - processing
+      - posted
+      - failed
+      - rejected
+      - cancelled
+      - returned
+      title: PaymentStatus
+      description: Payment lifecycle states
+    TransactionDataResponse:
+      properties:
+        site_id:
+          type: string
+          format: uuid
+          title: Site Id
+          description: ID of the site
+        transactions:
+          items:
+            $ref: '#/components/schemas/TransactionDatumResponse'
+          type: array
+          title: Transactions
+          description: List of transactions for the site
+        is_below_withdrawal_minimum:
+          type: boolean
+          title: Is Below Withdrawal Minimum
+          description: If the user is below the minimum withdrawal threshold (if configured)
+          default: false
+        days_until_minimum_wait_time_met:
+          type: integer
+          title: Days Until Minimum Wait Time Met
+          description: How many days the user needs to wait to withdraw (if configured)
+      type: object
+      required:
+      - site_id
+      - transactions
+      title: TransactionDataResponse
+      description: Response model for transaction history.
+    BalanceWithdrawalURLResponse:
+      properties:
+        balance_withdrawal_url:
+          type: string
+          title: Balance Withdrawal Url
+          description: Temporary standalone URL via which an end-user may enter their bank details to withdraw their balance
+        url_expiry_timestamp:
+          type: string
+          format: date-time
+          title: Url Expiry Timestamp
+          description: Time at which the given URL will expire
+      type: object
+      required:
+      - balance_withdrawal_url
+      - url_expiry_timestamp
+      title: BalanceWithdrawalURLResponse
+      description: Response model for balance withdrawal URL.
+    UserTransactionType:
+      type: string
+      enum:
+      - flex period
+      - flex period top-up
+      - flex event
+      - withdrawal
+      - invoice paid
+      - goodwill credit
+      - signup bonus
+      - correction
+      - VPP Signup Bonus
+      - Referred Credit
+      - Referrer Credit
+      - Recurring Referrer Credit
+      - FR SC Referred Credit
+      - FR SC Referrer Credit
+      - FR SC Signup Bonus
+      title: UserTransactionType
+      description: An enumeration.
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    TransactionDatumResponse:
+      properties:
+        transaction_type:
+          allOf:
+          - $ref: '#/components/schemas/UserTransactionType'
+          description: Type of the transaction
+        transaction_id:
+          type: string
+          format: uuid
+          title: Transaction Id
+          description: ID of the transaction
+        start_time:
+          type: string
+          format: date-time
+          title: Start Time
+          description: 'For transaction_type = ''flex event'': when the event started
+
+            For transaction_type = ''flex period'': month start
+
+            For transaction_type = ''withdrawal'': when the withdrawal happened'
+        end_time:
+          type: string
+          format: date-time
+          title: End Time
+          description: 'For transaction_type = ''flex event'': when the event ended
+
+            For transaction_type = ''flex period'': month end
+
+            Not present for other transaction_type values'
+        settlement_date:
+          type: string
+          format: date
+          title: Settlement Date
+          description: Date on which the transaction was settled, if known. For flex periods this is the payout date — the period start for in-advance payments and the period end for arrears payments. Clients should prefer this over start_time/end_time when displaying a single date for the transaction.
+        flex_kwh:
+          type: number
+          title: Flex Kwh
+          description: 'Stored to the nearest watt-hour (3dp)
+
+            For transaction_type = ''flex event'': the change in energy flow during
+
+            the event relative to the baseline in kwh. +ve indicates additional energy
+
+            imported (or less energy exported). -ve indicates additional energy
+
+            exported (or less energy imported).
+
+            Not present for other transaction_type values'
+        credit_pence:
+          type: integer
+          title: Credit Pence
+          description: Amount credited in pence
+        payment_status:
+          allOf:
+          - $ref: '#/components/schemas/PaymentStatus'
+          description: Payment lifecycle status. Only present for withdrawal transactions that have an associated payment record.
+      type: object
+      required:
+      - transaction_id
+      - credit_pence
+      title: TransactionDatumResponse
+      description: Response model for single transaction.
+    BalanceInfoResponse:
+      properties:
+        current_balance_pence:
+          type: integer
+          title: Current Balance Pence
+          description: Current balance of the site in pence (total earnings minus total withdrawals)
+        total_earnings_pence:
+          type: integer
+          title: Total Earnings Pence
+          description: Lifetime earnings of the site in pence
+        minimum_withdrawal_threshold_pence:
+          type: integer
+          title: Minimum Withdrawal Threshold Pence
+          description: The minimum a user can withdraw in one transaction, in pence
+        withdrawal_min_wait_days:
+          type: integer
+          title: Withdrawal Min Wait Days
+          description: The number of days a user must wait to withdraw after their first reward
+        can_withdraw:
+          type: boolean
+          title: Can Withdraw
+          description: Whether the user can withdraw their balance
+      type: object
+      required:
+      - current_balance_pence
+      - total_earnings_pence
+      - minimum_withdrawal_threshold_pence
+      - withdrawal_min_wait_days
+      - can_withdraw
+      title: BalanceInfoResponse
+      description: Response model for site balance information.
+  securitySchemes:
+    OAuth2PasswordBearer:
+      type: oauth2
+      flows:
+        password:
+          scopes: {}
+          tokenUrl: auth/token-form

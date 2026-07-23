@@ -1,0 +1,67 @@
+generated: '2026-07-18'
+method: derived
+source: openapi/axle-energy-openapi-original.json
+summary: Entity-relationship graph derived from OpenAPI paths, $ref links and id-reference parameters (site_id, asset_id, meter_ref, external_id, event_id).
+entities:
+  - name: Site
+    id_field: site_id
+    description: "A premises/connection point (identified by MPAN/postcode) that participates in flexibility markets."
+  - name: Asset
+    id_field: asset_id
+    description: "A flexible energy device (EV, charger, battery, heat pump) belonging to a site."
+  - name: Meter
+    id_field: meter_ref/mpan
+    description: "An electricity meter (MPAN) associated with a site."
+  - name: User
+    id_field: external_id/user_email
+    description: "An end user in the API client's organisation (created on demand for component tokens)."
+  - name: Proposition
+    id_field: proposition
+    description: "A flexibility market product a site can be enrolled/unenrolled in."
+  - name: FlexEvent
+    id_field: event_id
+    description: "A dispatch/grid event a site participated in, with estimated and final gross revenue."
+  - name: Transaction
+    id_field: "-"
+    description: "A reward ledger entry contributing to a site's balance and total earnings."
+relationships:
+  - from: Site
+    type: has_many
+    to: Asset
+    via: site_id
+    note: "An asset belongs to a site"
+  - from: Asset
+    type: belongs_to
+    to: Site
+    via: site_id
+    note: "site owns the asset"
+  - from: Site
+    type: has_one
+    to: Meter
+    via: mpan
+    note: "site is identified by a meter/MPAN"
+  - from: Site
+    type: has_many
+    to: FlexEvent
+    via: site_id
+    note: "flex events a site participated in"
+  - from: Site
+    type: has_many
+    to: Transaction
+    via: site_id
+    note: "reward transactions accrue to a site"
+  - from: Site
+    type: enrolled_in
+    to: Proposition
+    via: proposition
+    note: "site enrols in flex propositions"
+  - from: User
+    type: has_many
+    to: Site
+    via: external_id
+    note: "end users own sites via external id"
+  - from: FlexEvent
+    type: dispatches
+    to: Asset
+    via: asset_id
+    note: "dispatch instruction targets assets with power_kw"

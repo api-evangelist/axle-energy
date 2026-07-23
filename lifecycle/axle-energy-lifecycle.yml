@@ -1,0 +1,27 @@
+generated: '2026-07-18'
+method: searched
+source: https://docs.axle.energy/
+summary: Versioning and deprecation posture for the Axle API, from the docs and derived from the OpenAPI.
+versioning:
+  scheme: semver-document
+  current: 1.4.6
+  path_versioned: false
+  detail: >-
+    The OpenAPI document carries a semantic version (1.4.6); the HTTP paths are unversioned.
+deprecation:
+  policy: >-
+    Deprecated operations are marked `deprecated: true` in the OpenAPI and flagged in the docs with
+    a recommended replacement (e.g. /onboard-site-and-asset -> /onboard). Legacy endpoints remain
+    supported with a migration recommendation.
+  sunset_header: unknown
+  docs: https://docs.axle.energy/api-reference/entities/site/onboard-site-and-asset
+deprecated_operations:
+  - openapi/axle-energy-openapi-original.json#onboard_site_and_asset_entities_site_onboard_site_and_asset_post
+  - openapi/axle-energy-openapi-original.json#get_meter_info_by_address_deprecated_meter__get
+  - openapi/axle-energy-openapi-original.json#get_meter_info_by_meter_ref_meter__meter_ref__mpan_get
+  - openapi/axle-energy-openapi-original.json#get_meter_info_by_mpan_deprecated_meter__mpan__get
+sla:
+  uptime_claim: ">99.9%"
+  source: https://www.axle.energy/
+  note: Marketing claim; no published SLA document or public status page found for axle.energy.
+status_page: null

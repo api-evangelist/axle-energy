@@ -1,0 +1,26 @@
+generated: '2026-07-18'
+method: searched
+source: https://docs.axle.energy/workflows/axle-vpp/api-reference/dispatch
+type: Webhooks
+status: development
+summary: >-
+  Axle documents an outbound dispatch webhook for VPP grid events. During a grid event Axle sends
+  an HTTP POST to a partner-registered webhook URL carrying a single dispatch instruction (one
+  event, a target power for each affected asset over a fixed window). Marked in-development in the
+  docs and not yet exposed by the API; schema may change. No AsyncAPI document is published.
+registration: Partner webhook URL is configured at integration setup (contact hello@axle.energy).
+webhooks:
+  - name: dispatch
+    method: POST
+    direction: outbound
+    ack: Return a 2xx status to acknowledge receipt.
+    payload_fields:
+      - {name: event_id, type: string(uuid), description: Unique identifier for this dispatch event.}
+      - {name: issued_timestamp, type: string(iso8601), description: When Axle issued the instruction.}
+      - {name: start_time, type: string(iso8601), description: Start of the dispatch window.}
+      - {name: end_time, type: string(iso8601), description: End of the dispatch window.}
+      - {name: assets, type: array, description: One entry per affected asset.}
+      - {name: "assets[].asset_id", type: string(uuid), description: The Axle asset identifier returned at onboarding.}
+      - {name: "assets[].power_kw", type: number, description: "Target power at the inverter; positive = charge (import), negative = discharge (export)."}
+    example_endpoint: GET /examples/dispatch-event
+docs: https://docs.axle.energy/workflows/axle-vpp/api-reference/dispatch

@@ -1,0 +1,30 @@
+generated: '2026-07-18'
+method: searched
+source: https://docs.axle.energy/api-reference/sandbox
+summary: Axle publishes a dedicated sandbox environment for testing and development.
+environments:
+  - name: sandbox
+    base_url: https://api-sandbox.axle.energy
+    interactive_docs: true
+    detail: >-
+      The API reference at docs.axle.energy is interactive; once authenticated you can make live
+      calls to api-sandbox.axle.energy from the docs. Sandbox accounts are provisioned by request.
+    provisioning: Contact hello@axle.energy to set up a new sandbox account.
+  - name: production
+    base_url: https://api.axle.energy
+    provisioning: Contact hello@axle.energy to set up a production environment.
+authentication:
+  detail: >-
+    Token-based. Exchange the username and password issued with your sandbox account for a bearer
+    token via POST /auth/token-form. The organisation token expires after 1 hour and must be
+    refreshed. Include it as `Authorization: Bearer <team_token>`.
+  docs: https://docs.axle.energy/api-reference/auth/token-form
+test_values:
+  note: >-
+    Axle does not publish fixed magic test identifiers (test cards / MPANs) in its public docs;
+    sandbox accounts come provisioned with their own credentials and data. No test values are
+    fabricated here.
+examples_endpoints:
+  - GET /examples/dispatch-event   # example grid dispatch event payload
+  - GET /examples/ocpp-charging-profile  # example OCPP charging profile
+docs: https://docs.axle.energy/api-reference/sandbox

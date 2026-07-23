@@ -1,0 +1,28 @@
+{
+  "provider": "axle-energy",
+  "sources": [
+    "axle-energy-1-authentication-api-openapi.yml",
+    "axle-energy-2-meters-api-openapi.yml",
+    "axle-energy-3-sites-api-openapi.yml",
+    "axle-energy-4-assets-api-openapi.yml",
+    "axle-energy-5-data-api-openapi.yml",
+    "axle-energy-6-rewards-api-openapi.yml",
+    "axle-energy-7-validation-api-openapi.yml",
+    "axle-energy-8-examples-api-openapi.yml"
+  ],
+  "outputs": [
+    "axle-energy-1-authentication-api-openapi.yml",
+    "axle-energy-2-meters-api-openapi.yml",
+    "axle-energy-3-sites-api-openapi.yml",
+    "axle-energy-4-assets-api-openapi.yml",
+    "axle-energy-5-data-api-openapi.yml",
+    "axle-energy-6-rewards-api-openapi.yml",
+    "axle-energy-7-validation-api-openapi.yml",
+    "axle-energy-8-examples-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [],
+  "skipped": []
+}

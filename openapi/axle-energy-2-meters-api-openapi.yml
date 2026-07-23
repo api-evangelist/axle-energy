@@ -1,0 +1,448 @@
+openapi: 3.1.0
+info:
+  title: Axle 1. Authentication 2. Meters API
+  description: For full documentation please see our official docs at <a href='http://docs.axle.energy'>docs.axle.energy</a>
+  version: 1.4.6
+servers:
+- url: https://api.axle.energy
+tags:
+- name: 2. Meters
+  description: Find key info about your sites
+paths:
+  /meter/by-address:
+    post:
+      tags:
+      - 2. Meters
+      summary: Get Meter Info By Address
+      description: 'Retrieve detailed information about a meter using its address.
+
+
+        This endpoint allows direct lookup of meter information by address, when the MPAN is not already known (if the MPAN is known, use the /meter/{mpan} endpoint).'
+      operationId: get_meter_info_by_address_meter_by_address_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MeterByAddressRequest'
+        required: true
+      responses:
+        '200':
+          description: Meter information for the requested address
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MeterResponse'
+        '202':
+          description: Unique meter was not found for the requested address (no meter or ambiguous address)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorWithDetail'
+        '422':
+          description: Provided address input was invalid/ ambiguous
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorWithDetail'
+        '500':
+          description: Something went wrong whilst processing the request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorWithDetail'
+        '503':
+          description: Request to meter data provider failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorWithDetail'
+        '504':
+          description: Request to meter data provider timed out
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorWithDetail'
+      security:
+      - OAuth2PasswordBearer: []
+  /meter/by-mpan:
+    post:
+      tags:
+      - 2. Meters
+      summary: Get Meter Info By Mpan
+      description: 'Retrieve detailed information about a meter using its MPAN.
+
+
+        This endpoint allows direct lookup of meter information when the MPAN is already known.'
+      operationId: get_meter_info_by_mpan_meter_by_mpan_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MeterByMPANRequest'
+        required: true
+      responses:
+        '200':
+          description: Meter information for the requested MPAN
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MeterResponse'
+        '202':
+          description: No meter was found for the requested MPAN
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorWithDetail'
+        '422':
+          description: Invalid MPAN or meter not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorWithDetail'
+        '504':
+          description: Request to meter data provider timed out
+      security:
+      - OAuth2PasswordBearer: []
+  /meter/:
+    get:
+      tags:
+      - 2. Meters
+      summary: Get Meter Info By Address Deprecated
+      description: 'Retrieve detailed information about a meter using its address.
+
+
+        This endpoint allows direct lookup of meter information by address, when the MPAN is not already known (if the MPAN is known, use the /meter/{mpan} endpoint).'
+      operationId: get_meter_info_by_address_deprecated_meter__get
+      parameters:
+      - description: Full address string, e.g. '221B Baker Street, London, NW1 6XE'. Must include postcode and begin with house number/ name or other uniquely-identifying information. May be constructed from individual address components, concatenated with separating commas. Better formatting may increase the chance of a meter being found.
+        required: true
+        schema:
+          type: string
+          title: Address
+          description: Full address string, e.g. '221B Baker Street, London, NW1 6XE'. Must include postcode and begin with house number/ name or other uniquely-identifying information. May be constructed from individual address components, concatenated with separating commas. Better formatting may increase the chance of a meter being found.
+        name: address
+        in: query
+      responses:
+        '200':
+          description: Meter information for the requested address
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MeterResponse'
+        '422':
+          description: Invalid/ ambiguous address, or no meter found at address
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorWithDetail'
+        '500':
+          description: Something went wrong whilst processing the request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorWithDetail'
+        '503':
+          description: Request to meter data provider failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorWithDetail'
+        '504':
+          description: Request to meter data provider timed out
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorWithDetail'
+      deprecated: true
+      security:
+      - OAuth2PasswordBearer: []
+  /meter/search:
+    get:
+      tags:
+      - 2. Meters
+      summary: Search Meters
+      description: 'Search for all electricity meters in the vicinity of a given postcode/ address.
+
+
+        This endpoint allows searching for meters by postcode and optionally by building identifier. For data protection and contractual reasons, meter details are returned in an encrypted format that can be used in subsequent API calls to retrieve the full meter information.
+
+
+        The search works in three steps:
+
+        1. Search for meters at the specified address using this endpoint
+
+        2. Ask the end-user to select the correct address from the list
+
+        3. Call the `/meter/by-ref/{meter_ref}` endpoint with the corresponding reference to get the full meter details
+
+
+        NB: This should not be used with procedural address matching; it is intended for end-user interaction only. For precise address matching, use the `/meter/by-address` endpoint instead, which will perform matching for you.'
+      operationId: search_meters_meter_search_get
+      parameters:
+      - description: Postcode at which the requested meter is registered
+        required: true
+        schema:
+          type: string
+          title: Postcode
+          description: Postcode at which the requested meter is registered
+        name: postcode
+        in: query
+      - description: House number or house/building name, e.g. '3', '10A', 'Flat 4', 'The Old Barn'
+        required: false
+        schema:
+          type: string
+          title: Building Identifier
+          description: House number or house/building name, e.g. '3', '10A', 'Flat 4', 'The Old Barn'
+        name: building_identifier
+        in: query
+      responses:
+        '200':
+          description: List of meters matching the address; may be empty
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/MeterSearchResponse'
+                type: array
+                title: Response 200 Search Meters Meter Search Get
+        '422':
+          description: Invalid postcode or no meters found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorWithDetail'
+        '500':
+          description: Something went wrong whilst processing the request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorWithDetail'
+        '503':
+          description: Request to meter data provider failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorWithDetail'
+        '504':
+          description: Request to meter data provider timed out
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorWithDetail'
+      security:
+      - OAuth2PasswordBearer: []
+  /meter/{meter_ref}/mpan:
+    get:
+      tags:
+      - 2. Meters
+      summary: Get Meter Info By Meter Ref
+      description: This endpoint is deprecated. Use the `/by-ref/{meter_ref}` instead.
+      operationId: get_meter_info_by_meter_ref_meter__meter_ref__mpan_get
+      parameters:
+      - description: Encrypted reference of the meter whose info is requested, as returned from the /meter/search endpoint
+        required: true
+        schema:
+          type: string
+          title: Meter Ref
+          description: Encrypted reference of the meter whose info is requested, as returned from the /meter/search endpoint
+        name: meter_ref
+        in: path
+      responses:
+        '200':
+          description: Meter information for the requested reference
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MeterResponse'
+        '422':
+          description: Invalid meter reference
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorWithDetail'
+      deprecated: true
+      security:
+      - OAuth2PasswordBearer: []
+  /meter/by-ref/{meter_ref}:
+    get:
+      tags:
+      - 2. Meters
+      summary: Get Meter Info By Meter Ref
+      description: Retrieve meter information using an encrypted reference.
+      operationId: get_meter_info_by_meter_ref_meter_by_ref__meter_ref__get
+      parameters:
+      - description: Encrypted reference of the meter whose info is requested, as returned from the /meter/search endpoint
+        required: true
+        schema:
+          type: string
+          title: Meter Ref
+          description: Encrypted reference of the meter whose info is requested, as returned from the /meter/search endpoint
+        name: meter_ref
+        in: path
+      responses:
+        '200':
+          description: Meter information for the requested reference
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MeterResponse'
+        '422':
+          description: Invalid meter reference
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorWithDetail'
+      security:
+      - OAuth2PasswordBearer: []
+  /meter/{mpan}:
+    get:
+      tags:
+      - 2. Meters
+      summary: Get Meter Info By Mpan Deprecated
+      description: 'Retrieve detailed information about a meter using its MPAN.
+
+
+        This endpoint allows direct lookup of meter information when the MPAN is already known.'
+      operationId: get_meter_info_by_mpan_deprecated_meter__mpan__get
+      parameters:
+      - description: 13-digit Meter Point Administration Number (MPAN) whose meter info is requested
+        required: true
+        schema:
+          type: string
+          title: Mpan
+          description: 13-digit Meter Point Administration Number (MPAN) whose meter info is requested
+        name: mpan
+        in: path
+      responses:
+        '200':
+          description: Meter information for the requested MPAN
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MeterResponse'
+        '422':
+          description: Invalid MPAN or meter not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorWithDetail'
+        '500':
+          description: Something went wrong whilst processing the request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorWithDetail'
+        '503':
+          description: Request to meter data provider failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorWithDetail'
+        '504':
+          description: Request to meter data provider timed out
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorWithDetail'
+      deprecated: true
+      security:
+      - OAuth2PasswordBearer: []
+components:
+  schemas:
+    MeterResponse:
+      properties:
+        mpan:
+          type: string
+          title: Mpan
+          description: Meter Point Administration Number
+        half_hourly_settled:
+          type: boolean
+          title: Half Hourly Settled
+          description: Whether the meter is half-hourly settled
+        supplier_mpid:
+          type: string
+          title: Supplier Mpid
+          description: Market Participant ID of the supplier
+        supplier_name:
+          type: string
+          title: Supplier Name
+          description: Name of the electricity supplier
+        eligible_markets:
+          items:
+            $ref: '#/components/schemas/EligibleMarket'
+          type: array
+          uniqueItems: true
+          description: Markets in which the meter is eligible to participate
+      type: object
+      required:
+      - mpan
+      - eligible_markets
+      title: MeterResponse
+      description: 'Response model for meter information.
+
+
+        Contains details about a meter including its MPAN, settlement status, and supplier information.'
+    ErrorWithDetail:
+      properties:
+        detail:
+          type: string
+          title: Detail
+      type: object
+      required:
+      - detail
+      title: ErrorWithDetail
+      description: Standard error response with a detailed message.
+    MeterByAddressRequest:
+      properties:
+        address:
+          type: string
+          title: Address
+          description: Full address of the meter, e.g. '221B Baker Street, London, NW1 6XE'. Must include postcode and begin with house number/ name or other uniquely-identifying information. May be constructed from individual address components, concatenated with separating commas. Better formatting may increase the chance of a meter being found.
+      type: object
+      required:
+      - address
+      title: MeterByAddressRequest
+    MeterSearchResponse:
+      properties:
+        ref:
+          type: string
+          title: Ref
+          description: Encrypted reference to the meter that can be used in subsequent API calls
+        address:
+          type: string
+          title: Address
+          description: Full address where the meter is registered
+      type: object
+      required:
+      - ref
+      - address
+      title: MeterSearchResponse
+      description: 'Response model for meter search results.
+
+
+        Contains a reference to the meter and its associated address.'
+    EligibleMarket:
+      type: string
+      enum:
+      - cm
+      - dno
+      - wholesale
+      title: EligibleMarket
+      description: An enumeration.
+    MeterByMPANRequest:
+      properties:
+        mpan:
+          type: string
+          title: Mpan
+          description: 13-digit Meter Point Administration Number (MPAN) whose meter info is requested
+      type: object
+      required:
+      - mpan
+      title: MeterByMPANRequest
+  securitySchemes:
+    OAuth2PasswordBearer:
+      type: oauth2
+      flows:
+        password:
+          scopes: {}
+          tokenUrl: auth/token-form

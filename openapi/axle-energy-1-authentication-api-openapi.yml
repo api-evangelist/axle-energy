@@ -1,0 +1,243 @@
+openapi: 3.1.0
+info:
+  title: Axle 1. Authentication API
+  description: For full documentation please see our official docs at <a href='http://docs.axle.energy'>docs.axle.energy</a>
+  version: 1.4.6
+servers:
+- url: https://api.axle.energy
+tags:
+- name: 1. Authentication
+  description: Authenticate yourself with the Axle API
+paths:
+  /auth/token-form:
+    post:
+      tags:
+      - 1. Authentication
+      summary: Login For Access Token Form
+      description: 'Authenticate using username and password submitted via form data.
+
+
+        This endpoint is compatible with standard OAuth2 clients that use form-based authentication. Returns an access token upon successful authentication.
+
+
+        The returned token is valid for 1 hour, after which a new token must be requested.'
+      operationId: login_for_access_token_form_auth_token_form_post
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Body_login_for_access_token_form_auth_token_form_post'
+        required: true
+      responses:
+        '200':
+          description: Successfully authenticated with access token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Token'
+        '401':
+          description: Incorrect username or password
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /auth/users/me/:
+    get:
+      tags:
+      - 1. Authentication
+      summary: Read Users Me
+      description: 'Get information about the currently authenticated user.
+
+
+        Returns the user details for the authenticated user based on the provided access token.'
+      operationId: read_users_me_auth_users_me__get
+      responses:
+        '200':
+          description: Current user information
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '401':
+          description: Not authenticated
+      security:
+      - OAuth2PasswordBearer: []
+  /auth/component-token:
+    post:
+      tags:
+      - 1. Authentication
+      summary: Create Component Token
+      description: 'Authenticate on behalf of an end user by supplying their external user ID.
+
+
+        This endpoint is used by authenticated API clients to create a user-scoped access token for a specific end user (referenced by their external ID) in the API client''s organisation. If no such end user exists, one will be created on demand.
+
+
+        Returns a bearer access token scoped to this end user upon success.
+
+
+        This token is site-scoped and valid for 24 hours, longer-lived than the standard organisation token (1 hour) as it is intended for end-user sessions.'
+      operationId: create_component_token_auth_component_token_post
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Body_create_component_token_auth_component_token_post'
+        required: true
+      responses:
+        '200':
+          description: Successfully authenticated with a user-scoped access token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ComponentToken'
+        '404':
+          description: Error trying to find organisation
+        '500':
+          description: Server error when trying to find or create the user
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - OAuth2PasswordBearer: []
+components:
+  schemas:
+    Body_create_component_token_auth_component_token_post:
+      properties:
+        external_user_id:
+          type: string
+          title: External User Id
+          description: Your ID for this end user; a site is created on demand if unknown
+        allowed_origin:
+          type: string
+          title: Allowed Origin
+          description: Origin allowed to embed the Axle-hosted flow
+        user_email:
+          type: string
+          title: User Email
+          description: The email of the user, to be added for new users or upserted for existing users.
+        gave_boundary_meter_consent_at:
+          type: string
+          format: date-time
+          title: Gave Boundary Meter Consent At
+          description: 'Timezone-aware ISO 8601 timestamp (e.g. ''2026-01-01T12:34:56Z'') indicating when the household gave consent for Axle to access readings from their boundary meter, if consent was given.
+
+
+            Unless explicitly exempted, this must be provided on the first call for a new `external_user_id`. It can optionally be included in later calls for the same `external_user_id`; the value submitted most recently will be kept on record.'
+      type: object
+      required:
+      - external_user_id
+      - allowed_origin
+      title: Body_create_component_token_auth_component_token_post
+    Body_login_for_access_token_form_auth_token_form_post:
+      properties:
+        username:
+          type: string
+          title: Username
+        password:
+          type: string
+          title: Password
+        grant_type:
+          type: string
+          pattern: ^password$
+          title: Grant Type
+          default: password
+      type: object
+      required:
+      - username
+      - password
+      title: Body_login_for_access_token_form_auth_token_form_post
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    Token:
+      properties:
+        access_token:
+          type: string
+          title: Access Token
+        token_type:
+          type: string
+          title: Token Type
+      type: object
+      required:
+      - access_token
+      - token_type
+      title: Token
+      description: Organisation scoped token.
+    ComponentToken:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+        access_token:
+          type: string
+          title: Access Token
+        token_type:
+          type: string
+          title: Token Type
+      type: object
+      required:
+      - id
+      - access_token
+      - token_type
+      title: ComponentToken
+      description: 'Organisation scoped token. Includes internal user ID so clients can make futher
+
+        API requests regarding this user if needed.'
+    User:
+      properties:
+        username:
+          type: string
+          title: Username
+        roles:
+          items:
+            type: string
+          type: array
+          title: Roles
+          description: Set of roles assigned to the user; any of `entity_read`, `entity_write`, `rewards`, `lookup`, `metrics_write`, `components`
+      type: object
+      required:
+      - username
+      - roles
+      title: User
+      description: Response model for info about the current API user, including their roles.
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+  securitySchemes:
+    OAuth2PasswordBearer:
+      type: oauth2
+      flows:
+        password:
+          scopes: {}
+          tokenUrl: auth/token-form

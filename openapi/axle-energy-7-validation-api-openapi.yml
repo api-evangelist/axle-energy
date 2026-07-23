@@ -1,0 +1,125 @@
+openapi: 3.1.0
+info:
+  title: Axle 1. Authentication 7. Validation API
+  description: For full documentation please see our official docs at <a href='http://docs.axle.energy'>docs.axle.energy</a>
+  version: 1.4.6
+servers:
+- url: https://api.axle.energy
+tags:
+- name: 7. Validation
+  description: Validate structured data against Axle's rules
+paths:
+  /validation/mpan:
+    post:
+      tags:
+      - 7. Validation
+      summary: Validate Mpan
+      description: Validates the provided MPAN as one that is well-formatted and is associated with a connected import meter
+      operationId: validate_mpan_validation_mpan_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MPANValidationRequest'
+        required: true
+      responses:
+        '200':
+          description: The provided MPAN is of valid format and has been verified as connected
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MPANValidationResponse'
+        '400':
+          description: The provided MPAN has an invalid format
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MPANValidationError'
+        '404':
+          description: The provided MPAN is formatted correctly, but a connected import meter could not be found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MPANValidationError'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - OAuth2PasswordBearer: []
+components:
+  schemas:
+    MPANValidationResponse:
+      properties:
+        isValid:
+          type: boolean
+          title: Isvalid
+          description: If the provided MPAN is valid and supported by Axle
+      type: object
+      required:
+      - isValid
+      title: MPANValidationResponse
+      description: Response for a correctly validated MPAN
+    MPANValidationRequest:
+      properties:
+        mpan:
+          type: string
+          title: Mpan
+          description: MPAN to be validated
+      type: object
+      required:
+      - mpan
+      title: MPANValidationRequest
+      description: Request model for validating an MPAN
+    MPANValidationError:
+      properties:
+        detail:
+          items:
+            type: string
+          type: array
+          title: Detail
+          description: Errors when trying to validate the MPAN
+      type: object
+      required:
+      - detail
+      title: MPANValidationError
+      description: Error(s) when trying to validate an MPAN
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+  securitySchemes:
+    OAuth2PasswordBearer:
+      type: oauth2
+      flows:
+        password:
+          scopes: {}
+          tokenUrl: auth/token-form

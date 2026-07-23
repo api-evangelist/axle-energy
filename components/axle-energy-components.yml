@@ -1,0 +1,41 @@
+generated: '2026-07-18'
+method: searched
+source: https://docs.axle.energy/components/getting-started/introduction
+summary: >-
+  Axle ships drop-in client-side UI components (React and hosted) for the consumer-facing consent,
+  address and smart-charging flows, distinct from the server-side API client.
+loader_libraries:
+  - language: javascript
+    registry: npm
+    name: "@axle-energy/components"
+    url: https://www.npmjs.com/package/@axle-energy/components
+    description: Frontend components for interacting with the Axle Energy API.
+    official: true
+  - language: javascript
+    registry: npm
+    name: "@axle-energy/core"
+    url: https://www.npmjs.com/package/@axle-energy/core
+    description: Shared types, objects and utility functions for Axle components.
+    official: true
+delivery:
+  - react-components
+  - hosted-components
+  - hosted-smart-charging-app
+families:
+  - family: Address Collection
+    docs: https://docs.axle.energy/components/components/address
+    purpose: Collect and validate a user's address to associate it with an electricity meter/MPAN.
+  - family: Smart charging intent
+    docs: https://docs.axle.energy/components/components/smart-charging
+    purpose: Capture a user's smart-charging intent (schedule / departure) for EV flexibility.
+  - family: Tariff
+    docs: https://docs.axle.energy/components/components/tariff
+    purpose: Present and manage the user's electricity tariff.
+guides:
+  theming:
+    docs: https://docs.axle.energy/components/guides/theming
+    detail: Per-partner branding applied via CSS variables.
+  enode_integration: https://docs.axle.energy/components/guides/enode-integration
+authentication:
+  detail: Components authenticate with a component token (site-scoped, 24h) from POST /auth/component-token.
+docs: https://docs.axle.energy/components/getting-started/introduction

@@ -1,25 +1,277 @@
 aid: axle-energy
 name: Axle Energy
-description: Axle Energy is a company surfaced as a portfolio company of accel and added to the API Evangelist
-  network as a stub for enrichment. This profile is a lead awaiting the enrichment pipeline.
+description: >-
+  Axle Energy operates a virtual power plant (VPP) platform that connects distributed energy
+  assets — electric vehicles, EV chargers, home batteries, and heat pumps — to electricity
+  flexibility markets through a single unified API. Partners (carmakers, charger and battery OEMs,
+  HVAC suppliers, and utilities) register sites and assets, prequalify and enrol them in flex
+  propositions, stream telemetry and plug/charge events, and let end users monetise shiftable
+  demand. The API covers authentication, meter lookup (MPAN), sites, assets, telemetry/readings,
+  rewards/payouts, validation, and half-hourly price curves, with markets live across Great
+  Britain, France, Germany, the Netherlands, Denmark and Sweden. React/hosted UI components and a
+  documented outbound dispatch webhook round out the developer surface.
 url: https://raw.githubusercontent.com/api-evangelist/axle-energy/refs/heads/main/apis.yml
+accessModel:
+  pricing: unknown
+  onboarding: self-serve
+  trial: false
+  try_now: false
+  public: false
+  label: Self-serve signup
+  confidence: medium
+  source:
+  - authentication
+  generated: '2026-07-22'
+  method: derived
+image: https://cdn.prod.website-files.com/6706a319ca966248529c44be/6a4dc6c17d68be5261e80f8d_OG.png
 x-type: company
 x-source: vc-portfolio
 x-backed-by:
 - accel
-x-tier: stub
-x-tier-reason: portfolio-lead
+x-tier: enriched
+x-tier-reason: live-openapi-and-developer-surface
 specificationVersion: '0.20'
 created: '2026-07-17'
-modified: '2026-07-17'
+modified: '2026-07-18'
 tags:
 - Company
-apis: []
+- Energy
+- Flexibility
+- Virtual Power Plant
+- Electric Vehicles
+- Smart Charging
+- Batteries
+- Demand Response
+- Grid
+- Sustainability
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
+apis:
+- aid: axle-energy:axle-energy-1-authentication-api
+  name: Axle Energy 1. Authentication API
+  description: Authenticate yourself with the Axle API
+  humanURL: https://docs.axle.energy/introduction
+  baseURL: https://api.axle.energy
+  tags:
+  - 1. Authentication
+  properties:
+  - type: OpenAPI
+    url: openapi/axle-energy-1-authentication-api-openapi.yml
+  - type: ErrorCatalog
+    url: errors/axle-energy-problem-types.yml
+  - type: DataModel
+    url: data-model/axle-energy-data-model.yml
+  - type: Sandbox
+    url: sandbox/axle-energy-sandbox.yml
+  - type: Conventions
+    url: conventions/axle-energy-conventions.yml
+  - type: Conformance
+    url: conformance/axle-energy-conformance.yml
+  - type: Webhooks
+    url: asyncapi/axle-energy-dispatch-webhooks.yml
+- aid: axle-energy:axle-energy-2-meters-api
+  name: Axle Energy 2. Meters API
+  description: Find key info about your sites
+  humanURL: https://docs.axle.energy/introduction
+  baseURL: https://api.axle.energy
+  tags:
+  - 2. Meters
+  properties:
+  - type: OpenAPI
+    url: openapi/axle-energy-2-meters-api-openapi.yml
+  - type: ErrorCatalog
+    url: errors/axle-energy-problem-types.yml
+  - type: DataModel
+    url: data-model/axle-energy-data-model.yml
+  - type: Sandbox
+    url: sandbox/axle-energy-sandbox.yml
+  - type: Conventions
+    url: conventions/axle-energy-conventions.yml
+  - type: Conformance
+    url: conformance/axle-energy-conformance.yml
+  - type: Webhooks
+    url: asyncapi/axle-energy-dispatch-webhooks.yml
+- aid: axle-energy:axle-energy-3-sites-api
+  name: Axle Energy 3. Sites API
+  description: Register your sites with Axle; configure market participation
+  humanURL: https://docs.axle.energy/introduction
+  baseURL: https://api.axle.energy
+  tags:
+  - 3. Sites
+  properties:
+  - type: OpenAPI
+    url: openapi/axle-energy-3-sites-api-openapi.yml
+  - type: ErrorCatalog
+    url: errors/axle-energy-problem-types.yml
+  - type: DataModel
+    url: data-model/axle-energy-data-model.yml
+  - type: Sandbox
+    url: sandbox/axle-energy-sandbox.yml
+  - type: Conventions
+    url: conventions/axle-energy-conventions.yml
+  - type: Conformance
+    url: conformance/axle-energy-conformance.yml
+  - type: Webhooks
+    url: asyncapi/axle-energy-dispatch-webhooks.yml
+- aid: axle-energy:axle-energy-4-assets-api
+  name: Axle Energy 4. Assets API
+  description: Register your assets with Axle
+  humanURL: https://docs.axle.energy/introduction
+  baseURL: https://api.axle.energy
+  tags:
+  - 4. Assets
+  properties:
+  - type: OpenAPI
+    url: openapi/axle-energy-4-assets-api-openapi.yml
+  - type: ErrorCatalog
+    url: errors/axle-energy-problem-types.yml
+  - type: DataModel
+    url: data-model/axle-energy-data-model.yml
+  - type: Sandbox
+    url: sandbox/axle-energy-sandbox.yml
+  - type: Conventions
+    url: conventions/axle-energy-conventions.yml
+  - type: Conformance
+    url: conformance/axle-energy-conformance.yml
+  - type: Webhooks
+    url: asyncapi/axle-energy-dispatch-webhooks.yml
+- aid: axle-energy:axle-energy-5-data-api
+  name: Axle Energy 5. Data API
+  description: Send asset metrics to Axle, for analysis and optimisation purposes
+  humanURL: https://docs.axle.energy/introduction
+  baseURL: https://api.axle.energy
+  tags:
+  - 5. Data
+  properties:
+  - type: OpenAPI
+    url: openapi/axle-energy-5-data-api-openapi.yml
+  - type: ErrorCatalog
+    url: errors/axle-energy-problem-types.yml
+  - type: DataModel
+    url: data-model/axle-energy-data-model.yml
+  - type: Sandbox
+    url: sandbox/axle-energy-sandbox.yml
+  - type: Conventions
+    url: conventions/axle-energy-conventions.yml
+  - type: Conformance
+    url: conformance/axle-energy-conformance.yml
+  - type: Webhooks
+    url: asyncapi/axle-energy-dispatch-webhooks.yml
+- aid: axle-energy:axle-energy-6-rewards-api
+  name: Axle Energy 6. Rewards API
+  description: >-
+    Determine how much your users have earned by participating with Axle; allow balance withdrawal
+  humanURL: https://docs.axle.energy/introduction
+  baseURL: https://api.axle.energy
+  tags:
+  - 6. Rewards
+  properties:
+  - type: OpenAPI
+    url: openapi/axle-energy-6-rewards-api-openapi.yml
+  - type: ErrorCatalog
+    url: errors/axle-energy-problem-types.yml
+  - type: DataModel
+    url: data-model/axle-energy-data-model.yml
+  - type: Sandbox
+    url: sandbox/axle-energy-sandbox.yml
+  - type: Conventions
+    url: conventions/axle-energy-conventions.yml
+  - type: Conformance
+    url: conformance/axle-energy-conformance.yml
+  - type: Webhooks
+    url: asyncapi/axle-energy-dispatch-webhooks.yml
+- aid: axle-energy:axle-energy-7-validation-api
+  name: Axle Energy 7. Validation API
+  description: Validate structured data against Axle's rules
+  humanURL: https://docs.axle.energy/introduction
+  baseURL: https://api.axle.energy
+  tags:
+  - 7. Validation
+  properties:
+  - type: OpenAPI
+    url: openapi/axle-energy-7-validation-api-openapi.yml
+  - type: ErrorCatalog
+    url: errors/axle-energy-problem-types.yml
+  - type: DataModel
+    url: data-model/axle-energy-data-model.yml
+  - type: Sandbox
+    url: sandbox/axle-energy-sandbox.yml
+  - type: Conventions
+    url: conventions/axle-energy-conventions.yml
+  - type: Conformance
+    url: conformance/axle-energy-conformance.yml
+  - type: Webhooks
+    url: asyncapi/axle-energy-dispatch-webhooks.yml
+- aid: axle-energy:axle-energy-8-examples-api
+  name: Axle Energy 8. Examples API
+  description: Get example data for testing
+  humanURL: https://docs.axle.energy/introduction
+  baseURL: https://api.axle.energy
+  tags:
+  - 8. Examples
+  properties:
+  - type: OpenAPI
+    url: openapi/axle-energy-8-examples-api-openapi.yml
+  - type: ErrorCatalog
+    url: errors/axle-energy-problem-types.yml
+  - type: DataModel
+    url: data-model/axle-energy-data-model.yml
+  - type: Sandbox
+    url: sandbox/axle-energy-sandbox.yml
+  - type: Conventions
+    url: conventions/axle-energy-conventions.yml
+  - type: Conformance
+    url: conformance/axle-energy-conformance.yml
+  - type: Webhooks
+    url: asyncapi/axle-energy-dispatch-webhooks.yml
 common:
+- type: DeveloperPortal
+  url: https://docs.axle.energy/
+- type: Documentation
+  url: https://docs.axle.energy/introduction
+- type: APIReference
+  url: https://docs.axle.energy/api-reference
+- type: GettingStarted
+  url: https://docs.axle.energy/components/getting-started/introduction
+- type: Blog
+  url: https://www.axle.energy/blog
+- type: GitHubOrganization
+  url: https://github.com/axle-energy
+- type: Support
+  url: mailto:support@axle.energy
+- type: Idempotency
+  url: conventions/axle-energy-conventions.yml
+- type: Deprecation
+  url: lifecycle/axle-energy-lifecycle.yml
+- type: Lifecycle
+  url: lifecycle/axle-energy-lifecycle.yml
+- type: Packages
+  url: packages/axle-energy-packages.yml
+- type: SDKs
+  url: packages/axle-energy-packages.yml
+- type: Components
+  url: components/axle-energy-components.yml
+- type: MCPServer
+  url: mcp/axle-energy-mcp.yml
+- type: AgentSkill
+  url: skills/_index.yml
+- type: LLMsTxt
+  url: llms/axle-energy-llms.txt
+- type: WellKnown
+  url: well-known/axle-energy-well-known.yml
+- type: DomainSecurity
+  url: security/axle-energy-domain-security.yml
+- type: AgenticAccess
+  url: agentic-access/axle-energy-agentic-access.yml
+- type: Authentication
+  url: authentication/axle-energy-authentication.yml
 - type: Website
   url: https://www.axle.energy/
+x-enrichment:
+  date: '2026-07-19'
+  status: backfilled
+  pass: local-v1
+  note: backfilled from .gitignore signal + verified work evidence

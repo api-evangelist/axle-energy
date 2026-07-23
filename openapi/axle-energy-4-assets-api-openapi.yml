@@ -1,0 +1,1328 @@
+openapi: 3.1.0
+info:
+  title: Axle 1. Authentication 4. Assets API
+  description: For full documentation please see our official docs at <a href='http://docs.axle.energy'>docs.axle.energy</a>
+  version: 1.4.6
+servers:
+- url: https://api.axle.energy
+tags:
+- name: 4. Assets
+  description: Register your assets with Axle
+paths:
+  /entities/asset:
+    get:
+      tags:
+      - 4. Assets
+      summary: Get Assets
+      description: 'Get all assets with pagination.
+
+
+        Returns a page of assets with the total count and the requested subset of asset records. Use the limit and offset parameters to navigate through pages of results.'
+      operationId: get_assets_entities_asset_get
+      parameters:
+      - description: Maximum number of assets to return (1-5000)
+        required: false
+        schema:
+          type: integer
+          maximum: 5000.0
+          minimum: 1.0
+          title: Limit
+          description: Maximum number of assets to return (1-5000)
+          default: 10
+        name: limit
+        in: query
+      - description: Number of assets to skip for pagination
+        required: false
+        schema:
+          type: integer
+          minimum: 0.0
+          title: Offset
+          description: Number of assets to skip for pagination
+          default: 0
+        name: offset
+        in: query
+      responses:
+        '200':
+          description: Page of assets with pagination info
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AssetResponsePage'
+        '500':
+          description: Server error while retrieving assets
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - OAuth2PasswordBearer: []
+    post:
+      tags:
+      - 4. Assets
+      summary: Create Asset
+      description: 'Create a new asset.
+
+
+        The asset must be associated with an existing site. Returns the created asset details including the assigned UUID.'
+      operationId: create_asset_entities_asset_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AssetRequest'
+        required: true
+      responses:
+        '200':
+          description: Successfully created asset
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AssetResponse'
+        '400':
+          description: Invalid request
+        '404':
+          description: Referenced site not found
+        '409':
+          description: Asset already exists
+        '500':
+          description: Server error while creating asset
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - OAuth2PasswordBearer: []
+  /entities/asset/{asset_id}:
+    get:
+      tags:
+      - 4. Assets
+      summary: Get Asset
+      description: 'Get a specific asset by its Axle UUID.
+
+
+        Returns the asset details if it exists.'
+      operationId: get_asset_entities_asset__asset_id__get
+      parameters:
+      - required: true
+        schema:
+          type: string
+          format: uuid
+          title: Asset Id
+        name: asset_id
+        in: path
+      responses:
+        '200':
+          description: Asset details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AssetResponse'
+        '404':
+          description: Asset not found or not authorized to access
+        '500':
+          description: Server error while retrieving asset
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - OAuth2PasswordBearer: []
+    delete:
+      tags:
+      - 4. Assets
+      summary: Delete Asset
+      description: 'Delete an asset by its Axle UUID.
+
+
+        The asset will be deleted if it exists. Returns a confirmation message upon successful deletion.'
+      operationId: delete_asset_entities_asset__asset_id__delete
+      parameters:
+      - required: true
+        schema:
+          type: string
+          format: uuid
+          title: Asset Id
+        name: asset_id
+        in: path
+      responses:
+        '204':
+          description: Asset successfully deleted
+        '404':
+          description: Asset not found or not authorized to access
+        '500':
+          description: Server error while deleting asset
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - OAuth2PasswordBearer: []
+    patch:
+      tags:
+      - 4. Assets
+      summary: Update Asset
+      description: 'Update an existing asset''s properties, asset model, and/or installation date.
+
+
+        All fields are optional. Returns the updated asset details.'
+      operationId: update_asset_entities_asset__asset_id__patch
+      parameters:
+      - required: true
+        schema:
+          type: string
+          format: uuid
+          title: Asset Id
+        name: asset_id
+        in: path
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AssetUpdateRequest'
+        required: true
+      responses:
+        '200':
+          description: Successfully updated asset
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AssetResponse'
+        '400':
+          description: Invalid request data
+        '404':
+          description: Asset not found or not authorized to access
+        '500':
+          description: Server error while updating asset
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - OAuth2PasswordBearer: []
+  /entities/asset/external-id/{external_id}:
+    get:
+      tags:
+      - 4. Assets
+      summary: Get Asset By External Id
+      description: 'Get a specific asset by its external ID (vendor-specific identifier).
+
+
+        Returns the asset details if it exists. This is useful for integrations where the external system ID is known but not the Axle UUID.'
+      operationId: get_asset_by_external_id_entities_asset_external_id__external_id__get
+      parameters:
+      - required: true
+        schema:
+          type: string
+          title: External Id
+        name: external_id
+        in: path
+      responses:
+        '200':
+          description: Asset details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AssetResponse'
+        '404':
+          description: Asset not found or not authorized to access
+        '500':
+          description: Server error while retrieving asset
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - OAuth2PasswordBearer: []
+  /entities/asset/{asset_id}/callback/{event_id}:
+    post:
+      tags:
+      - 4. Assets
+      summary: Event Handling Status Update
+      description: 'Provide an update on the handling of a given event by a given asset.
+
+
+        This endpoint allows asset controllers to report back the status of event handling. The `asset_id` can be either the Axle UUID or an external ID if `asset_id_is_external` is true.
+
+
+        Note: This will not work for non-UUID external asset IDs.'
+      operationId: event_handling_status_update_entities_asset__asset_id__callback__event_id__post
+      parameters:
+      - required: true
+        schema:
+          type: string
+          format: uuid
+          title: Asset Id
+        name: asset_id
+        in: path
+      - required: true
+        schema:
+          type: string
+          title: Event Id
+        name: event_id
+        in: path
+      - required: false
+        schema:
+          type: boolean
+          title: Asset Id Is External
+          default: false
+        name: asset_id_is_external
+        in: query
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EventResponse'
+        required: true
+      responses:
+        '200':
+          description: Status update successfully recorded
+          content:
+            application/json:
+              schema: {}
+        '404':
+          description: Asset not found or not authorized to access
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - OAuth2PasswordBearer: []
+  /entities/asset/{asset_id}/event:
+    post:
+      tags:
+      - 4. Assets
+      summary: Asset Event
+      description: 'Send notification of an event happening on an asset.
+
+
+        This endpoint allows reporting various events related to an asset, such as:
+
+        - Plug-in/plug-out events
+
+        - Updates to charging intent
+
+        - Charge now events
+
+
+        If a tariff is included, it must comply with the OSM opening hours standard (https://wiki.openstreetmap.org/wiki/Key:opening_hours) for off-peak times and have a valid timezone, or a 400 error will be returned.'
+      operationId: asset_event_entities_asset__asset_id__event_post
+      parameters:
+      - required: true
+        schema:
+          type: string
+          format: uuid
+          title: Asset Id
+        name: asset_id
+        in: path
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AssetEventRequest'
+        required: true
+      responses:
+        '200':
+          description: Event successfully processed
+          content:
+            application/json:
+              schema: {}
+        '400':
+          description: Invalid event data
+        '404':
+          description: Asset not found or not authorized to access
+        '500':
+          description: Server error while processing event
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - OAuth2PasswordBearer: []
+  /entities/asset/{asset_id}/event/plug-in:
+    post:
+      tags:
+      - 4. Assets
+      summary: Asset Plug In Event
+      description: 'Send notification of a car being plugged in.
+
+
+        Tariff, vehicle and intent information may be optionally provided.
+
+        If a tariff is included, it must comply with the OSM opening hours standard (https://wiki.openstreetmap.org/wiki/Key:opening_hours) for off-peak times and have a valid timezone, or a 400 error will be returned.'
+      operationId: asset_plug_in_event_entities_asset__asset_id__event_plug_in_post
+      parameters:
+      - required: true
+        schema:
+          type: string
+          format: uuid
+          title: Asset Id
+        name: asset_id
+        in: path
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PlugInEventRequest'
+        required: true
+      responses:
+        '200':
+          description: Plug-in event successfully processed
+          content:
+            application/json:
+              schema: {}
+        '400':
+          description: Invalid tariff format or timezone
+        '404':
+          description: Asset not found or not authorized to access
+        '500':
+          description: Server error while processing event
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - OAuth2PasswordBearer: []
+  /entities/asset/{asset_id}/event/plug-out:
+    post:
+      tags:
+      - 4. Assets
+      summary: Asset Plug Out Event
+      description: Send notification of a car being unplugged from an asset.
+      operationId: asset_plug_out_event_entities_asset__asset_id__event_plug_out_post
+      parameters:
+      - required: true
+        schema:
+          type: string
+          format: uuid
+          title: Asset Id
+        name: asset_id
+        in: path
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PlugOutEventRequest'
+        required: true
+      responses:
+        '200':
+          description: Plug-out event successfully processed
+          content:
+            application/json:
+              schema: {}
+        '404':
+          description: Asset not found or not authorized to access
+        '500':
+          description: Server error while processing event
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - OAuth2PasswordBearer: []
+  /entities/asset/{asset_id}/event/intent:
+    post:
+      tags:
+      - 4. Assets
+      summary: Asset Intent Update Event
+      description: Send notification of an intent being updated on an asset.
+      operationId: asset_intent_update_event_entities_asset__asset_id__event_intent_post
+      parameters:
+      - required: true
+        schema:
+          type: string
+          format: uuid
+          title: Asset Id
+        name: asset_id
+        in: path
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IntentEventRequest'
+        required: true
+      responses:
+        '200':
+          description: Intent event successfully processed
+          content:
+            application/json:
+              schema: {}
+        '404':
+          description: Asset not found or not authorized to access
+        '500':
+          description: Server error while processing event
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - OAuth2PasswordBearer: []
+  /entities/asset/{asset_id}/event/charge-now:
+    post:
+      tags:
+      - 4. Assets
+      summary: Asset Charge Now Event
+      description: Send notification of a charge now request for an asset.
+      operationId: asset_charge_now_event_entities_asset__asset_id__event_charge_now_post
+      parameters:
+      - required: true
+        schema:
+          type: string
+          format: uuid
+          title: Asset Id
+        name: asset_id
+        in: path
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChargeNowEventRequest'
+        required: true
+      responses:
+        '200':
+          description: Charge now event successfully processed
+          content:
+            application/json:
+              schema: {}
+        '404':
+          description: Asset not found or not authorized to access
+        '500':
+          description: Server error while processing event
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - OAuth2PasswordBearer: []
+  /entities/asset/{asset_id}/event/charge-now-deleted:
+    post:
+      tags:
+      - 4. Assets
+      summary: Asset Charge Now Deleted Event
+      description: Send notification of a charge now request being deleted for an asset.
+      operationId: asset_charge_now_deleted_event_entities_asset__asset_id__event_charge_now_deleted_post
+      parameters:
+      - required: true
+        schema:
+          type: string
+          format: uuid
+          title: Asset Id
+        name: asset_id
+        in: path
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChargeNowDeletedEventRequest'
+        required: true
+      responses:
+        '200':
+          description: Charge now deleted event successfully processed
+          content:
+            application/json:
+              schema: {}
+        '404':
+          description: Asset not found or not authorized to access
+        '500':
+          description: Server error while processing event
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - OAuth2PasswordBearer: []
+  /entities/asset/{asset_id}/event/tariff-update:
+    post:
+      tags:
+      - 4. Assets
+      summary: Asset Tariff Update Event
+      description: 'Send notification of a tariff update for an asset.
+
+
+        The `off_peak_times` field must comply with the OSM opening hours standard (https://wiki.openstreetmap.org/wiki/Key:opening_hours) and have a valid timezone, or a 400 error will be returned.
+
+
+        The same off-peak times apply every day, day-of-week selectors are not supported. Use `,` to separate multiple time ranges. Common examples:
+
+        - Same-day off-peak (e.g. midnight to 7am): `00:00-07:00`
+
+        - Overnight off-peak (e.g. 11:30pm to 5:30am): `00:00-05:30, 23:30-24:00`'
+      operationId: asset_tariff_update_event_entities_asset__asset_id__event_tariff_update_post
+      parameters:
+      - required: true
+        schema:
+          type: string
+          format: uuid
+          title: Asset Id
+        name: asset_id
+        in: path
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TariffUpdateEventRequest'
+        required: true
+      responses:
+        '200':
+          description: Tariff update event successfully processed
+          content:
+            application/json:
+              schema: {}
+        '400':
+          description: Invalid tariff format or timezone
+        '404':
+          description: Asset not found or not authorized to access
+        '500':
+          description: Server error while processing event
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - OAuth2PasswordBearer: []
+  /entities/asset/{asset_id}/intent:
+    get:
+      tags:
+      - 4. Assets
+      summary: Get Latest Intent
+      description: Get the last recorded intent.
+      operationId: get_latest_intent_entities_asset__asset_id__intent_get
+      parameters:
+      - required: true
+        schema:
+          type: string
+          format: uuid
+          title: Asset Id
+        name: asset_id
+        in: path
+      responses:
+        '200':
+          description: Last intent successfully retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IntentResponse'
+        '404':
+          description: Intent not found or not authorized to access
+        '500':
+          description: Server error while retrieving event
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - OAuth2PasswordBearer: []
+  /entities/asset/{asset_id}/battery-schedule:
+    get:
+      tags:
+      - 4. Assets
+      summary: Get Battery Schedule
+      description: Get the active battery schedule.
+      operationId: get_battery_schedule_entities_asset__asset_id__battery_schedule_get
+      parameters:
+      - required: true
+        schema:
+          type: string
+          format: uuid
+          title: Asset Id
+        name: asset_id
+        in: path
+      responses:
+        '200':
+          description: Battery schedule successfully retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BatteryScheduleResponse'
+        '403':
+          description: Permission denied
+        '404':
+          description: Battery not found or not authorized to access
+        '500':
+          description: Server error while retrieving event
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - OAuth2PasswordBearer: []
+  /entities/asset/{asset_id}/event/plug-in-schedule:
+    post:
+      tags:
+      - 4. Assets
+      summary: Asset Plug In Schedule Event
+      description: Submit a charging schedule and receive a modified schedule.
+      operationId: asset_plug_in_schedule_event_entities_asset__asset_id__event_plug_in_schedule_post
+      parameters:
+      - required: true
+        schema:
+          type: string
+          format: uuid
+          title: Asset Id
+        name: asset_id
+        in: path
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PlugInScheduleEventRequest'
+        required: true
+      responses:
+        '200':
+          description: Modified charging schedule successfully retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlugInScheduleEventResponse'
+        '403':
+          description: Site lacking required limited_pause dispatch consent
+        '404':
+          description: Charger not found or not authorized to access
+        '500':
+          description: Server error while scheduling charging
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - OAuth2PasswordBearer: []
+  /entities/asset/{asset_id}/price-curve:
+    get:
+      tags:
+      - 4. Assets
+      summary: Get Price Curve
+      description: Half-hourly data of prices per MWh of flexed energy for the asset. Prices are returned from the current Settlement Period until 23:00 UK time on the same day or next day. Next day prices are available from 14:00 UK time.
+      operationId: get_price_curve_entities_asset__asset_id__price_curve_get
+      parameters:
+      - required: true
+        schema:
+          type: string
+          format: uuid
+          title: Asset Id
+        name: asset_id
+        in: path
+      responses:
+        '200':
+          description: Price curve successfully retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PriceCurveResponse'
+        '403':
+          description: Permission denied
+        '404':
+          description: Asset not found or not authorized to access
+        '500':
+          description: Server error while retrieving price curve
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - OAuth2PasswordBearer: []
+components:
+  schemas:
+    AssetUpdateRequest:
+      properties:
+        properties:
+          allOf:
+          - $ref: '#/components/schemas/AssetProperties'
+          title: Properties
+          description: Asset properties to update
+        asset_model:
+          type: string
+          title: Asset Model
+          description: Name of the AssetModel to assign (looked up by name)
+        installation_date:
+          type: string
+          format: date
+          title: Installation Date
+          description: Date when the asset was installed
+      type: object
+      title: AssetUpdateRequest
+      description: Request model for updating an existing asset.
+    ChargeNowEventRequest:
+      properties:
+        end_at:
+          type: string
+          format: date-time
+          title: End At
+          description: End time for the charge now request.
+      type: object
+      required:
+      - end_at
+      title: ChargeNowEventRequest
+      description: Request model for a user's charge now request.
+    BatteryScheduleAction:
+      type: string
+      enum:
+      - charge_max
+      - discharge_max
+      - avoid_export
+      - avoid_import
+      title: BatteryScheduleAction
+      description: 'Action to be taken during a schedule step.
+
+
+        - charge_max: Charge the battery at maximum capacity.
+
+        - discharge_max: Discharge the battery at maximum capacity.
+
+        - avoid_export: Avoid exporting energy, but allow import.
+
+        - avoid_import: Avoid importing energy, but allow export.'
+    AssetResponsePage:
+      properties:
+        assets:
+          items:
+            $ref: '#/components/schemas/AssetResponse'
+          type: array
+          title: Assets
+          description: List of assets for the current page
+        total_num_assets:
+          type: integer
+          title: Total Num Assets
+          description: Total number of assets available
+        total_num_pages:
+          type: integer
+          title: Total Num Pages
+          description: Total number of pages available
+        page_number:
+          type: integer
+          title: Page Number
+          description: Current page number (1-based)
+      type: object
+      required:
+      - assets
+      - total_num_assets
+      - total_num_pages
+      - page_number
+      title: AssetResponsePage
+      description: Paginated response for asset listings.
+    TariffUpdateEventRequest:
+      properties:
+        tariff:
+          allOf:
+          - $ref: '#/components/schemas/Tariff'
+          title: Tariff
+          description: Updated tariff information.
+      type: object
+      required:
+      - tariff
+      title: TariffUpdateEventRequest
+      description: Request model for a user's tariff update.
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    AssetEventRequest:
+      properties:
+        event_type:
+          $ref: '#/components/schemas/AssetEventType'
+        intent:
+          allOf:
+          - $ref: '#/components/schemas/Intent'
+          title: Intent
+          description: Intent to charge the vehicle. This should only be included for "plug_in" and "intent_update" events
+        vehicle:
+          allOf:
+          - $ref: '#/components/schemas/Vehicle'
+          title: Vehicle
+          description: Vehicle information. This should only be included for "plug_in" and "intent_update" events
+        tariff:
+          allOf:
+          - $ref: '#/components/schemas/Tariff'
+          title: Tariff
+          description: Tariff information. This should only be included for "plug_in" and "intent_update" events
+        end_at:
+          type: string
+          format: date-time
+          title: End At
+          description: End time for the charge. This should only be included for "charge_now" events
+      type: object
+      required:
+      - event_type
+      title: AssetEventRequest
+    Intent:
+      properties:
+        energy_required_kwh:
+          type: number
+          title: Energy Required Kwh
+        ready_by:
+          type: string
+          format: date-time
+          title: Ready By
+          description: 'Deprecated: use ready_by_local_time instead. The date component is discarded; only used to derive local time when ready_by_local_time is absent.'
+        ready_by_local_time:
+          type: string
+          format: time
+          title: Ready By Local Time
+          description: Local time by which energy is required (wall time)
+        energy_estimated:
+          type: boolean
+          title: Energy Estimated
+          description: False if energy_required_kwh is derived from target %SOC set on vehicle (e.g. via Enode), True if the energy_required_kwh is purely a user input
+        may_charge_peak:
+          type: boolean
+          title: May Charge Peak
+          description: If True, the vehicle may be charged in peak periods but only if all off-peak periods are used up and the energy requirement is not met.
+          default: false
+        charging_mode:
+          allOf:
+          - $ref: '#/components/schemas/ChargingMode'
+          description: 'Charging strategy: maximise_charging_time (charge all available periods) or minimise_charging_time (charge only up to the user''s stated intent in kWh)'
+          default: maximise_charging_time
+      type: object
+      required:
+      - energy_required_kwh
+      - ready_by
+      title: Intent
+      description: This is the received intent from a user
+    ChargingMode:
+      type: string
+      enum:
+      - maximise_charging_time
+      - minimise_charging_time
+      title: ChargingMode
+      description: An enumeration.
+    PriceCurveResponse:
+      properties:
+        half_hourly_traded_prices:
+          items:
+            $ref: '#/components/schemas/HalfHourlyPrice'
+          type: array
+          title: Half Hourly Traded Prices
+      type: object
+      required:
+      - half_hourly_traded_prices
+      title: PriceCurveResponse
+      description: Response model for getting the price curve for a dispatchable asset (battery / charger).
+    PlugOutEventRequest:
+      properties: {}
+      type: object
+      title: PlugOutEventRequest
+      description: 'Request model for plug-out events.
+
+
+        This is an empty request model to allow for future updates.'
+    CreatableAssetType:
+      type: string
+      enum:
+      - charger
+      - battery
+      - heat pump
+      - electric_vehicle
+      - hot water tank
+      title: CreatableAssetType
+      description: Asset types that can be created through the API.
+    AssetRequest:
+      properties:
+        external_id:
+          type: string
+          title: External Id
+          description: Vendor-specific identifier for the asset
+        type:
+          allOf:
+          - $ref: '#/components/schemas/CreatableAssetType'
+          description: Type of asset being created
+        site_id:
+          type: string
+          format: uuid
+          title: Site Id
+          description: ID of the site where the asset is located
+        properties:
+          allOf:
+          - $ref: '#/components/schemas/AssetProperties'
+          title: Properties
+          description: Optional asset properties
+        asset_model:
+          type: string
+          title: Asset Model
+          description: Name of the AssetModel to assign (looked up by name)
+        installation_date:
+          type: string
+          format: date
+          title: Installation Date
+          description: Date when the asset was installed
+        serial_number:
+          type: string
+          title: Serial Number
+          description: The serial number of the asset
+      type: object
+      required:
+      - external_id
+      - type
+      - site_id
+      title: AssetRequest
+      description: Request model for creating a new asset.
+    IntentEventRequest:
+      properties:
+        intent:
+          allOf:
+          - $ref: '#/components/schemas/Intent'
+          title: Intent
+          description: Intent to charge the vehicle.
+      type: object
+      required:
+      - intent
+      title: IntentEventRequest
+      description: This event should be triggered when the end user updates their charging preferences.
+    BatteryScheduleStep:
+      properties:
+        start_timestamp:
+          type: string
+          format: date-time
+          title: Start Timestamp
+          description: Start timestamp of the schedule step, tz-aware
+        end_timestamp:
+          type: string
+          format: date-time
+          title: End Timestamp
+          description: End timestamp of the schedule step, tz-aware
+        action:
+          allOf:
+          - $ref: '#/components/schemas/BatteryScheduleAction'
+          description: Action to be taken during this schedule step
+        allow_deviation:
+          type: boolean
+          title: Allow Deviation
+          description: Whether the battery is allowed to deviate from the schedule
+      type: object
+      required:
+      - start_timestamp
+      - end_timestamp
+      - action
+      - allow_deviation
+      title: BatteryScheduleStep
+    PlugInEventRequest:
+      properties:
+        intent:
+          allOf:
+          - $ref: '#/components/schemas/Intent'
+          title: Intent
+          description: Intent to charge the vehicle.
+        vehicle:
+          allOf:
+          - $ref: '#/components/schemas/Vehicle'
+          title: Vehicle
+          description: Vehicle information.
+        tariff:
+          allOf:
+          - $ref: '#/components/schemas/Tariff'
+          title: Tariff
+          description: Tariff information.
+      type: object
+      title: PlugInEventRequest
+      description: 'A minimal plug-in event requires no data.
+
+        Optionally `intent`, `tariff` and `vehicle` information can be supplied here too.'
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    BatteryScheduleResponse:
+      properties:
+        schedule_steps:
+          items:
+            $ref: '#/components/schemas/BatteryScheduleStep'
+          type: array
+          title: Schedule Steps
+          description: List of schedule steps for the asset
+        schedule_last_updated:
+          type: string
+          format: date-time
+          title: Schedule Last Updated
+          description: When the schedule was last recalculated
+      type: object
+      required:
+      - schedule_steps
+      - schedule_last_updated
+      title: BatteryScheduleResponse
+    ChargeNowDeletedEventRequest:
+      properties: {}
+      type: object
+      title: ChargeNowDeletedEventRequest
+      description: 'Request model for charge-now-deleted events.
+
+
+        This is an empty request model to allow for future updates.'
+    HalfHourlyPrice:
+      properties:
+        start_timestamp:
+          type: string
+          format: date-time
+          title: Start Timestamp
+        price_gbp_per_mwh:
+          type: number
+          title: Price Gbp Per Mwh
+          description: Price in £/MWh (2dp)
+      type: object
+      required:
+      - start_timestamp
+      - price_gbp_per_mwh
+      title: HalfHourlyPrice
+      description: 'Represents the market price for a given half-hour period.
+
+
+        If the asset is not participating in the market for that period, price_gbp_per_mwh will be None.'
+    EventStatus:
+      type: string
+      enum:
+      - RECEIVED
+      - ACCEPTED
+      - REJECTED
+      - FAILED
+      - EXECUTED
+      title: EventStatus
+      description: 'Status values for asset event handling.
+
+
+        - RECEIVED: Event was received by the system
+
+        - ACCEPTED: Event was accepted for processing
+
+        - REJECTED: Event was rejected (invalid or not applicable)
+
+        - FAILED: Event processing failed
+
+        - EXECUTED: Event was successfully executed'
+    AssetResponse:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+          description: Axle's internal UUID for the asset
+        external_id:
+          type: string
+          title: External Id
+          description: Vendor-specific identifier for the asset
+        type:
+          allOf:
+          - $ref: '#/components/schemas/AssetType'
+          description: Type of asset
+        site_id:
+          type: string
+          format: uuid
+          title: Site Id
+          description: ID of the site where the asset is located
+        properties:
+          allOf:
+          - $ref: '#/components/schemas/AssetProperties'
+          title: Properties
+          description: Optional asset properties
+      type: object
+      required:
+      - id
+      - external_id
+      - type
+      - site_id
+      title: AssetResponse
+      description: Response model for asset information.
+    Vehicle:
+      properties:
+        charging_rate_kw:
+          type: number
+          title: Charging Rate Kw
+      type: object
+      required:
+      - charging_rate_kw
+      title: Vehicle
+    TariffType:
+      type: string
+      enum:
+      - single_rate
+      - dual_rate
+      - dynamic
+      - smart
+      - unknown
+      title: TariffType
+      description: An enumeration.
+    PlugInScheduleEventResponse:
+      properties:
+        modified_charging_schedule:
+          items:
+            $ref: '#/components/schemas/ChargingScheduleBlock'
+          type: array
+          title: Modified Charging Schedule
+      type: object
+      required:
+      - modified_charging_schedule
+      title: PlugInScheduleEventResponse
+      description: 'This is the modified charging schedule which will be returned to the client.
+
+        Used in WSLite integration model.'
+    PlugInScheduleEventRequest:
+      properties:
+        charging_schedule:
+          items:
+            $ref: '#/components/schemas/ChargingScheduleBlock'
+          type: array
+          title: Charging Schedule
+      type: object
+      required:
+      - charging_schedule
+      title: PlugInScheduleEventRequest
+      description: 'This is the original charging schedule which will be modified and returned to the client in the response.
+
+        Used in WSLite integration model.'
+    AssetType:
+      type: string
+      enum:
+      - boundary meter
+      - charger
+      - battery
+      - heat pump
+      - hot water tank
+      - frequency meter
+      - electric_vehicle
+      - pv inverter
+      title: AssetType
+      description: An enumeration.
+    IntentResponse:
+      properties:
+        intent:
+          $ref: '#/components/schemas/Intent'
+        received_at:
+          type: string
+          format: date-time
+          title: Received At
+      type: object
+      required:
+      - intent
+      - received_at
+      title: IntentResponse
+      description: An intent and the time it was received.
+    ChargingScheduleBlock:
+      properties:
+        start_timestamp:
+          type: string
+          title: Start Timestamp
+        end_timestamp:
+          type: string
+          title: End Timestamp
+      type: object
+      required:
+      - start_timestamp
+      - end_timestamp
+      title: ChargingScheduleBlock
+      description: Sync has defined this simple schedule structure which we will use for initial WSLite integration.
+    AssetEventType:
+      type: string
+      enum:
+      - plug_in
+      - plug_out
+      - intent_update
+      - charge_now
+      - charge_now_deleted
+      title: AssetEventType
+      description: An enumeration.
+    EventResponse:
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+          title: Timestamp
+          description: Timestamp for the response (UTC)
+        status:
+          $ref: '#/components/schemas/EventStatus'
+      type: object
+      required:
+      - timestamp
+      - status
+      title: EventResponse
+      description: Response for an asset event status update.
+    Tariff:
+      properties:
+        off_peak_times:
+          type: string
+          title: Off Peak Times
+        timezone:
+          type: string
+          title: Timezone
+        tariff_type:
+          $ref: '#/components/schemas/TariffType'
+      type: object
+      required:
+      - off_peak_times
+      - timezone
+      title: Tariff
+    AssetProperties:
+      properties:
+        power_kw:
+          type: number
+          minimum: 0.0
+          title: Power Kw
+          description: Power rating in kW
+        capacity_kwh:
+          type: number
+          minimum: 0.0
+          title: Capacity Kwh
+          description: Capacity in kWh
+      type: object
+      title: AssetProperties
+      description: Optional properties for an asset.
+  securitySchemes:
+    OAuth2PasswordBearer:
+      type: oauth2
+      flows:
+        password:
+          scopes: {}
+          tokenUrl: auth/token-form

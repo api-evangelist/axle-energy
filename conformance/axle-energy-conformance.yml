@@ -1,0 +1,32 @@
+generated: '2026-07-18'
+method: derived
+source: openapi/axle-energy-openapi-original.json
+summary: Cross-cutting standards conformance derived from the OpenAPI and docs. Not a provider compliance claim.
+standards:
+  - id: openapi-3.1
+    conforms: true
+    evidence: Document declares openapi 3.1.0 with 55 operations, all with unique operationIds.
+  - id: oauth2
+    conforms: true
+    evidence: securitySchemes OAuth2PasswordBearer, oauth2 password flow, tokenUrl auth/token-form.
+  - id: oauth2-scopes
+    conforms: false
+    evidence: oauth2 password flow declares an empty scopes map (no scope surface).
+  - id: oidc
+    conforms: false
+  - id: rfc9457-problem-details
+    conforms: false
+    evidence: Errors use FastAPI HTTP status bodies (HTTPValidationError), not application/problem+json.
+  - id: pagination
+    conforms: true
+    evidence: Offset/limit pagination on list endpoints (GET /entities/site, /entities/asset).
+  - id: idempotency
+    conforms: true
+    evidence: Onboard/initialise documented as idempotent and atomic via upsert-by-external-id.
+  - id: webhooks
+    conforms: partial
+    evidence: Outbound dispatch webhook documented (beta) but not yet exposed by the API.
+  - id: fhir-r4
+    conforms: false
+  - id: fapi
+    conforms: false

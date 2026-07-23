@@ -1,0 +1,1900 @@
+openapi: 3.1.0
+info:
+  title: Axle 1. Authentication 3. Sites API
+  description: For full documentation please see our official docs at <a href='http://docs.axle.energy'>docs.axle.energy</a>
+  version: 1.4.6
+servers:
+- url: https://api.axle.energy
+tags:
+- name: 3. Sites
+  description: Register your sites with Axle; configure market participation
+paths:
+  /entities/site:
+    get:
+      tags:
+      - 3. Sites
+      summary: Get Sites
+      description: 'Retrieve sites, optionally filtering by MPAN or postcode.
+
+
+        Returns a page of sites with the total count and the requested subset of site records. Use the limit and offset parameters to navigate through pages of results.'
+      operationId: get_sites_entities_site_get
+      parameters:
+      - description: Filter sites by MPAN
+        required: false
+        schema:
+          type: string
+          title: Mpan
+          description: Filter sites by MPAN
+        name: mpan
+        in: query
+      - description: Filter sites by postcode
+        required: false
+        schema:
+          type: string
+          title: Postcode
+          description: Filter sites by postcode
+        name: postcode
+        in: query
+      - description: Maximum number of sites to return (1-5000)
+        required: false
+        schema:
+          type: integer
+          maximum: 5000.0
+          minimum: 1.0
+          title: Limit
+          description: Maximum number of sites to return (1-5000)
+          default: 10
+        name: limit
+        in: query
+      - description: Number of sites to skip for pagination
+        required: false
+        schema:
+          type: integer
+          minimum: 0.0
+          title: Offset
+          description: Number of sites to skip for pagination
+          default: 0
+        name: offset
+        in: query
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SiteResponsePage'
+        '500':
+          description: Internal server error
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - OAuth2PasswordBearer: []
+    post:
+      tags:
+      - 3. Sites
+      summary: Create Site
+      description: 'Register a new site.
+
+
+        The site must have a valid address and postcode. If a site with the same address already exists, a 409 error will be returned with the existing site ID.'
+      operationId: create_site_entities_site_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SiteRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SiteResponse'
+        '400':
+          description: Invalid request or site already exists
+        '404':
+          description: Referenced entity not found
+        '409':
+          description: Site with same address already exists
+        '422':
+          description: Unprocessable Content
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorWithDetail'
+        '500':
+          description: Internal server error
+      security:
+      - OAuth2PasswordBearer: []
+  /entities/site/initialise:
+    post:
+      tags:
+      - 3. Sites
+      summary: Initialise Site
+      description: 'Initialise a site with one or more assets.
+
+
+        This endpoint upserts the site and assets (creating them if they don''t exist, or filling in missing fields if they do), and returns eligibility information.
+
+
+        **No enrollment side effects**: Use the `/enrol` endpoint to commit to enrollment.'
+      operationId: initialise_site_entities_site_initialise_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InitialiseRequest'
+        required: true
+      responses:
+        '200':
+          description: Successfully initialised site and assets
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InitialiseResponse'
+        '400':
+          description: Invalid request (e.g. missing boundary meter consent T&Cs)
+        '404':
+          description: Referenced entity not found
+        '409':
+          description: Asset conflict (e.g. asset type mismatch or asset registered to a different site)
+        '500':
+          description: Server error during initialisation
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - OAuth2PasswordBearer: []
+  /entities/site/check-eligibility:
+    post:
+      tags:
+      - 3. Sites
+      summary: Check Eligibility
+      description: Check whether an MPAN, optionally combined with an asset model, is eligible for enrolment. No data is persisted.
+      operationId: check_eligibility_entities_site_check_eligibility_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EligibilityCheckRequest'
+        required: true
+      responses:
+        '200':
+          description: Eligibility evaluated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EligibilityCheckResponse'
+        '404':
+          description: Referenced entity not found (e.g. unknown asset_model)
+        '500':
+          description: Server error during eligibility check
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - OAuth2PasswordBearer: []
+  /entities/site/{site_id}/enrol:
+    post:
+      tags:
+      - 3. Sites
+      summary: Enrol Site
+      description: 'Enrol a site in a proposition.
+
+
+        This is the commitment point — it activates the proposition for the site.
+
+
+        Idempotent: if the site is already enrolled, returns `already_enrolled` without making changes.
+
+
+        If the site previously withdrew from this proposition, returns 422. Set `override_withdrawal` to true to re-enrol.'
+      operationId: enrol_site_entities_site__site_id__enrol_post
+      parameters:
+      - required: true
+        schema:
+          type: string
+          format: uuid
+          title: Site Id
+        name: site_id
+        in: path
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EnrolRequest'
+        required: true
+      responses:
+        '200':
+          description: Successfully enrolled or already enrolled
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EnrolResponse'
+        '404':
+          description: Site not found or not authorized
+        '422':
+          description: Eligibility prerequisites not met or previously withdrew consent
+        '500':
+          description: Internal server error
+      security:
+      - OAuth2PasswordBearer: []
+  /entities/site/onboard:
+    post:
+      tags:
+      - 3. Sites
+      summary: Onboard
+      description: 'Initialise a site and its assets, and enrol them in a proposition in a single call.
+
+
+        This endpoint will:
+
+        1. Upsert the site and asset(s)
+
+        2. Enrol in the relevant flex proposition
+
+
+        The response returns the site and asset IDs you''ll use in subsequent calls, and the enrolment outcome.
+
+
+        Onboarding is idempotent and atomic — sending the same site or asset returns the existing record with any new fields merged in; if enrolment fails, nothing is stored.'
+      operationId: onboard_entities_site_onboard_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OnboardRequest'
+        required: true
+      responses:
+        '200':
+          description: Site and assets persisted, site enrolled in proposition
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OnboardResponse'
+              example:
+                site:
+                  site_id: a1b2c3d4-e5f6-7890-abcd-ef1234567890
+                  site_created: true
+                  fields_updated: []
+                  warnings: []
+                assets:
+                - asset_id: b2c3d4e5-f6a7-8901-bcde-f23456789012
+                  external_id: charger-001
+                  asset_created: true
+                  fields_updated: []
+                  warnings: []
+                enrolment:
+                  site_id: a1b2c3d4-e5f6-7890-abcd-ef1234567890
+                  status: enrolled
+        '400':
+          description: Invalid request (missing meter consent, invalid email, etc.)
+        '404':
+          description: Referenced entity not found
+        '409':
+          description: Asset conflict (e.g. asset type mismatch or asset registered to a different site)
+        '422':
+          description: Eligibility prerequisites not met or previously withdrew consent
+        '500':
+          description: Server error
+      security:
+      - OAuth2PasswordBearer: []
+  /entities/site/{site_id}/unenrol:
+    post:
+      tags:
+      - 3. Sites
+      summary: Unenrol Site
+      description: 'Unenrol a site from a proposition.
+
+
+        Withdraws the site from the proposition and prevents further scheduling. Does not delete the site or its assets.
+
+
+        Use when the user is opting out of this proposition specifically — for example, they toggled it off in your app. The site and assets are kept, any other propositions they''re enrolled in (such as Capacity Market) are unaffected, and the user can re-enrol later and still access their payments.
+
+
+        If the user is leaving entirely (moving house, support-led removal, etc.), use `offboard-site-and-assets` instead.
+
+
+        Idempotent: if the site is already unenrolled, returns `already_unenrolled` without making changes.'
+      operationId: unenrol_site_entities_site__site_id__unenrol_post
+      parameters:
+      - required: true
+        schema:
+          type: string
+          format: uuid
+          title: Site Id
+        name: site_id
+        in: path
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UnenrolRequest'
+        required: true
+      responses:
+        '200':
+          description: Successfully unenrolled or already unenrolled
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnenrolResponse'
+        '404':
+          description: Site not found or not authorized
+        '500':
+          description: Internal server error
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - OAuth2PasswordBearer: []
+  /entities/site/onboard-site-and-asset:
+    post:
+      tags:
+      - 3. Sites
+      summary: Onboard Site And Asset
+      description: '**Deprecated** — prefer [`/onboard`](/api-reference/entities/site/onboard) instead.
+
+
+        The new `/onboard` endpoint supports multiple assets per site in a single call and includes improvements in idempotency, resilience and response details.
+
+
+        ---
+
+
+        Register a site, asset, and dispatch consent in a single call.
+
+
+        Creates the site and asset, grants consent, and enrols in the relevant flex proposition.
+
+
+        This endpoint will:
+
+        1. Create the site
+
+        2. Create the asset associated with the site
+
+        3. Enrol in the relevant flex proposition
+
+
+        Returns the created site and asset, including their IDs. Fails if the site or asset already exists.'
+      operationId: onboard_site_and_asset_entities_site_onboard_site_and_asset_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OnboardingRequest'
+        required: true
+      responses:
+        '200':
+          description: Successfully onboarded site and asset
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OnboardingResponse'
+        '400':
+          description: Invalid request
+        '409':
+          description: Site or asset already exists
+        '422':
+          description: Eligibility prerequisites not met for the requested dispatch method
+        '500':
+          description: Server error during onboarding
+      deprecated: true
+      security:
+      - OAuth2PasswordBearer: []
+  /entities/site/{site_id}/offboard-site-and-assets:
+    post:
+      tags:
+      - 3. Sites
+      summary: Offboard Site And Assets
+      description: 'Offboard a site and all its associated assets in a single operation.
+
+
+        Unenrols from every proposition, and deletes the site and assets in accordance with data retention policies.
+
+
+        Use when the user is leaving entirely — for example, they''ve moved house, or your support team is removing them. Payments can no longer be accessed afterwards.
+
+
+        If the user is only opting out of one proposition (e.g. toggling Flex Lite off in your app), use `unenrol` instead — it preserves the site and any other propositions they''re enrolled in.'
+      operationId: offboard_site_and_assets_entities_site__site_id__offboard_site_and_assets_post
+      parameters:
+      - required: true
+        schema:
+          type: string
+          format: uuid
+          title: Site Id
+        name: site_id
+        in: path
+      responses:
+        '200':
+          description: Successfully offboarded site and asset
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OnboardingResponse'
+        '400':
+          description: Invalid request
+        '404':
+          description: Site not found or not authorized to access
+        '500':
+          description: Server error during offboarding
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - OAuth2PasswordBearer: []
+  /entities/site/{site_id}:
+    get:
+      tags:
+      - 3. Sites
+      summary: Get Site
+      description: 'Retrieve a specific site by its UUID.
+
+
+        Returns the site details if it exists.'
+      operationId: get_site_entities_site__site_id__get
+      parameters:
+      - required: true
+        schema:
+          type: string
+          format: uuid
+          title: Site Id
+        name: site_id
+        in: path
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SiteResponse'
+        '404':
+          description: Site not found or not authorized to access
+        '500':
+          description: Internal server error
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - OAuth2PasswordBearer: []
+    delete:
+      tags:
+      - 3. Sites
+      summary: Delete Site
+      description: 'Delete an existing site by its UUID.
+
+
+        The site will only be deleted if it has no associated assets or other objects. Returns a confirmation message upon successful deletion.'
+      operationId: delete_site_entities_site__site_id__delete
+      parameters:
+      - required: true
+        schema:
+          type: string
+          format: uuid
+          title: Site Id
+        name: site_id
+        in: path
+      responses:
+        '204':
+          description: Site successfully deleted
+        '400':
+          description: Site cannot be deleted due to associated objects
+        '404':
+          description: Site not found or not authorized to access
+        '500':
+          description: Internal server error
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - OAuth2PasswordBearer: []
+    patch:
+      tags:
+      - 3. Sites
+      summary: Update Site
+      description: 'Update an existing site''s information.
+
+
+        Only fields included in the request will be updated. Returns the updated site details.'
+      operationId: update_site_entities_site__site_id__patch
+      parameters:
+      - required: true
+        schema:
+          type: string
+          format: uuid
+          title: Site Id
+        name: site_id
+        in: path
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SiteUpdateRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SiteResponse'
+        '404':
+          description: Site not found or not authorized to access
+        '500':
+          description: Internal server error
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - OAuth2PasswordBearer: []
+  /entities/site/{site_id}/eligibility:
+    get:
+      tags:
+      - 3. Sites
+      summary: Get Site Eligibility
+      description: Read-only eligibility breakdown for a site and its assets. Returns the list of propositions the site can enrol in, along with per-asset eligibility detail.
+      operationId: get_site_eligibility_entities_site__site_id__eligibility_get
+      parameters:
+      - required: true
+        schema:
+          type: string
+          format: uuid
+          title: Site Id
+        name: site_id
+        in: path
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SiteEligibilityDetail'
+        '404':
+          description: Site not found or not authorized
+        '500':
+          description: Internal server error
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - OAuth2PasswordBearer: []
+  /entities/site/{site_id}/meter-consent:
+    post:
+      tags:
+      - 3. Sites
+      summary: Add Site Meter Consent
+      description: 'Add boundary meter consent for a site.
+
+
+        Confirm that the site has consented for Axle to retrieve its boundary meter readings. This is required for participation in the wholesale market for assets that do not have CoP11 approval, but may also be provided via other endpoints (e.g. during site onboarding). Returns the updated site details with the new consent timestamp.'
+      operationId: add_site_meter_consent_entities_site__site_id__meter_consent_post
+      parameters:
+      - required: true
+        schema:
+          type: string
+          format: uuid
+          title: Site Id
+        name: site_id
+        in: path
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SiteMeterConsentRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SiteResponse'
+        '400':
+          description: Invalid request
+        '404':
+          description: Site not found or not authorized to access
+        '500':
+          description: Internal server error
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - OAuth2PasswordBearer: []
+  /entities/site/{site_id}/dispatch-consent:
+    post:
+      tags:
+      - 3. Sites
+      summary: Add Site Dispatch Consent
+      description: 'Add dispatch consent for a site to particpate in flex markets.
+
+
+        This enables the site to participate with the specified dispatch consent methods. Returns the updated site details with the new dispatch consent information.'
+      operationId: add_site_dispatch_consent_entities_site__site_id__dispatch_consent_post
+      parameters:
+      - required: true
+        schema:
+          type: string
+          format: uuid
+          title: Site Id
+        name: site_id
+        in: path
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SiteDispatchConsentRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SiteResponse'
+        '404':
+          description: Site not found or not authorized to access
+        '500':
+          description: Internal server error
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - OAuth2PasswordBearer: []
+  /entities/site/{site_id}/dispatch-deconsent:
+    post:
+      tags:
+      - 3. Sites
+      summary: Remove Site Dispatch Consent
+      description: 'Remove dispatch consent for a site to stop participation in flex markets.
+
+
+        This disables the site''s participation with the specified dispatch consent methods. Returns the updated site details with the consent information removed.'
+      operationId: remove_site_dispatch_consent_entities_site__site_id__dispatch_deconsent_post
+      parameters:
+      - required: true
+        schema:
+          type: string
+          format: uuid
+          title: Site Id
+        name: site_id
+        in: path
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SiteDispatchConsentRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SiteResponse'
+        '404':
+          description: Site not found or not authorized to access
+        '500':
+          description: Internal server error
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - OAuth2PasswordBearer: []
+  /entities/site/{site_id}/token:
+    post:
+      tags:
+      - 3. Sites
+      summary: Add Site Auth Token
+      description: 'Provide an auth token to Axle, for dispatching the site''s assets.
+
+
+        This token should provide access to all of the assets registered against the specified site.
+
+
+        This is only required where Axle is not able to access this site via an aggregated API in your systems.'
+      operationId: add_site_auth_token_entities_site__site_id__token_post
+      parameters:
+      - required: true
+        schema:
+          type: string
+          format: uuid
+          title: Site Id
+        name: site_id
+        in: path
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SiteAuthTokenRequest'
+        required: true
+      responses:
+        '200':
+          description: Token successfully processed
+          content:
+            application/json:
+              schema: {}
+        '404':
+          description: Site not found or not authorized to access
+        '500':
+          description: Internal server error
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - OAuth2PasswordBearer: []
+  /entities/site/{site_id}/flex-events:
+    get:
+      tags:
+      - 3. Sites
+      summary: Get Site Flex Events
+      description: 'Get info on flex events the site has participated in, including estimated and final gross revenues.
+
+
+        These estimates can be used for a variety of purposes, including paying out end-users before the final settlement data is available.However, to avoid overpayments it is recommended to only pay out a percentage of the estimated revenue initially, and top-up once final revenues are available.
+
+
+        Note: it is possible for gross revenues to be negative in some scenarios, e.g. if the site flexed in the wrong direction by consuming more energy while it was instructed to consume less.'
+      operationId: get_site_flex_events_entities_site__site_id__flex_events_get
+      parameters:
+      - required: true
+        schema:
+          type: string
+          format: uuid
+          title: Site Id
+        name: site_id
+        in: path
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SiteFlexEventsResponse'
+        '404':
+          description: Site not found or not authorized to access
+        '500':
+          description: Internal server error
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - OAuth2PasswordBearer: []
+  /entities/site/{site_id}/price-curve:
+    get:
+      tags:
+      - 3. Sites
+      summary: Get Price Curve
+      description: Half-hourly data of prices per MWh of flexed energy for the asset. Prices are returned from the current Settlement Period until 23:00 UK time on the same day or next day. Next day prices are available from 14:00 UK time.
+      operationId: get_price_curve_entities_site__site_id__price_curve_get
+      parameters:
+      - required: true
+        schema:
+          type: string
+          format: uuid
+          title: Site Id
+        name: site_id
+        in: path
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PriceCurveResponse'
+        '404':
+          description: Site not found or not authorized to access
+        '500':
+          description: Internal server error
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - OAuth2PasswordBearer: []
+  /entities/site/{site_id}/oauth/{provider}/initiate:
+    get:
+      tags:
+      - 3. Sites
+      summary: Initiate Site Oauth
+      description: Initiates OAuth flow by returning the provider's authorisation URL for the client to redirect to
+      operationId: initiate_site_oauth_entities_site__site_id__oauth__provider__initiate_get
+      parameters:
+      - required: true
+        schema:
+          $ref: '#/components/schemas/OAuthProvider'
+        name: provider
+        in: path
+      - required: true
+        schema:
+          type: string
+          format: uuid
+          title: Site Id
+        name: site_id
+        in: path
+      responses:
+        '200':
+          description: Returns OAuth authorisation URL
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OAuthInitiateResponse'
+        '400':
+          description: Unsupported OAuth provider or not configured
+        '500':
+          description: Internal server error
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - OAuth2PasswordBearer: []
+components:
+  schemas:
+    FlexEventResponse:
+      properties:
+        start_at:
+          type: string
+          format: date-time
+          title: Start At
+          description: UTC start time of the flex event
+        end_at:
+          type: string
+          format: date-time
+          title: End At
+          description: UTC end time of the flex event
+        estimated_gross_revenue_gbp:
+          type: number
+          title: Estimated Gross Revenue Gbp
+          description: Estimated gross revenue earned in GBP for the event, before data has been submitted and reviewed by the relevant market bodies. Gross earnings are total flex earnings before any Axle and end-user revenue sharing deductions.
+        final_gross_revenue_gbp:
+          type: number
+          title: Final Gross Revenue Gbp
+          description: Final gross revenue earned in GBP for the event. This will be completed before the final settlement run of the event month (in UK Time), which runs at the end of the following month. Gross earnings are total flex earnings before any Axle and end-user revenue sharing deductions.
+      type: object
+      required:
+      - start_at
+      - end_at
+      - estimated_gross_revenue_gbp
+      title: FlexEventResponse
+    MarketResponse:
+      type: string
+      enum:
+      - cm
+      - dfs
+      - dno
+      - lcm
+      - sffr
+      - wholesale
+      title: MarketResponse
+      description: 'Market types available for participation.
+
+
+        - CM: Capacity Market
+
+        - DFS: Dynamic Frequency Service
+
+        - DNO: Distribution Network Operator flexibility services
+
+        - LCM: Local Capacity Market
+
+        - SFFR: Static Firm Frequency Response
+
+        - WHOLESALE: Wholesale energy market'
+    DispatchMethodResponse:
+      type: string
+      enum:
+      - cm_infrequent_dispatch
+      - full_asset_schedule_control
+      - limited_pause
+      - vpp_limited_control
+      title: DispatchMethodResponse
+      description: Axle propositions that a site can enrol into.
+    EnrolResponse:
+      properties:
+        site_id:
+          type: string
+          format: uuid
+          title: Site Id
+          description: ID of the enrolled site
+          examples:
+          - a1b2c3d4-e5f6-7890-abcd-ef1234567890
+        status:
+          type: string
+          enum:
+          - enrolled
+          - already_enrolled
+          title: Status
+          description: Outcome of the enrolment attempt. Both `enrolled` and `already_enrolled` indicate success.
+          examples:
+          - enrolled
+      type: object
+      required:
+      - site_id
+      - status
+      title: EnrolResponse
+      description: Outcome of an enrolment attempt.
+    EnrolRequest:
+      properties:
+        proposition:
+          type: string
+          enum:
+          - limited_pause
+          - full_asset_schedule_control
+          title: Proposition
+          description: Proposition to enrol for
+        override_withdrawal:
+          type: boolean
+          title: Override Withdrawal
+          description: Set to true to re-enrol regardless of previous withdrawals. If this is a user-initated action, overriding previous withdrawals is recommended.
+          default: false
+          examples:
+          - false
+        gave_boundary_meter_consent_at:
+          type: string
+          format: date-time
+          title: Gave Boundary Meter Consent At
+          description: Optional timezone-aware ISO 8601 timestamp recording when the household gave boundary meter consent. If provided, overwrites any existing meter consent timestamp on the site.
+      type: object
+      required:
+      - proposition
+      title: EnrolRequest
+      description: Request model for enrolling a site in a proposition.
+    OAuthProvider:
+      type: string
+      enum:
+      - foxess
+      - solaredge
+      - solax
+      - huawei
+      - myenergi
+      - nexblue
+      - givenergy
+      - volvo
+      - deye
+      - ideal
+      title: OAuthProvider
+      description: OAuth 2 providers supported for asset connections.
+    SiteProperties:
+      properties:
+        is_half_hourly_settled:
+          type: boolean
+          title: Is Half Hourly Settled
+        has_meter_consent:
+          type: boolean
+          title: Has Meter Consent
+      type: object
+      required:
+      - is_half_hourly_settled
+      - has_meter_consent
+      title: SiteProperties
+      description: Site-level properties relevant to eligibility evaluation.
+    OnboardRequest:
+      properties:
+        site:
+          allOf:
+          - $ref: '#/components/schemas/SiteRequest'
+          title: Site
+          description: Site information
+          examples:
+          - mpan: '1234567890123'
+            postcode: SW1A 1AA
+            street_address: 10 Downing Street
+            email: resident@example.com
+            gave_boundary_meter_consent_at: '2026-01-15T10:30:00Z'
+        assets:
+          items:
+            $ref: '#/components/schemas/OnboardingAssetRequest'
+          type: array
+          title: Assets
+          description: One or more assets to register at the site
+          examples:
+          - - external_id: charger-001
+              type: charger
+              asset_model: zappi
+              installation_date: '2025-06-15'
+              properties:
+                power_kw: 7.4
+        proposition:
+          type: string
+          enum:
+          - limited_pause
+          - full_asset_schedule_control
+          title: Proposition
+          description: Proposition to enrol the site in
+        override_withdrawal:
+          type: boolean
+          title: Override Withdrawal
+          description: Set to true to re-enrol regardless of previous withdrawals.
+          default: false
+          examples:
+          - false
+      type: object
+      required:
+      - site
+      - assets
+      - proposition
+      title: OnboardRequest
+      description: Request model for the onboard endpoint.
+    PropositionEligibility:
+      properties:
+        proposition:
+          type: string
+          enum:
+          - limited_pause
+          - full_asset_schedule_control
+          title: Proposition
+          examples:
+          - limited_pause
+        is_eligible:
+          type: boolean
+          title: Is Eligible
+        issues:
+          items:
+            $ref: '#/components/schemas/EligibilityCode'
+          type: array
+          default: []
+      type: object
+      required:
+      - proposition
+      - is_eligible
+      title: PropositionEligibility
+      description: Eligibility detail for a single proposition.
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    OnboardResponse:
+      properties:
+        site:
+          allOf:
+          - $ref: '#/components/schemas/InitialiseSiteResult'
+          title: Site
+          description: Site result metadata
+        assets:
+          items:
+            $ref: '#/components/schemas/InitialiseAssetResult'
+          type: array
+          title: Assets
+          description: Per-asset result metadata
+        enrolment:
+          allOf:
+          - $ref: '#/components/schemas/EnrolResponse'
+          title: Enrolment
+          description: Enrolment result
+      type: object
+      required:
+      - site
+      - assets
+      - enrolment
+      title: OnboardResponse
+      description: Response model for the onboard endpoint.
+    SiteMeterConsentRequest:
+      properties:
+        gave_boundary_meter_consent_at:
+          type: string
+          format: date-time
+          title: Gave Boundary Meter Consent At
+          description: Timezone-aware ISO 8601 timestamp (e.g. '2026-01-01T12:34:56Z') indicating when the household gave consent for Axle to access readings from their boundary meter, if consent was given.
+      type: object
+      required:
+      - gave_boundary_meter_consent_at
+      title: SiteMeterConsentRequest
+      description: Request model for adding boundary meter consent for a site.
+    PriceCurveResponse:
+      properties:
+        half_hourly_traded_prices:
+          items:
+            $ref: '#/components/schemas/HalfHourlyPrice'
+          type: array
+          title: Half Hourly Traded Prices
+      type: object
+      required:
+      - half_hourly_traded_prices
+      title: PriceCurveResponse
+      description: Response model for getting the price curve for a dispatchable asset (battery / charger).
+    EligibilityCheckResponse:
+      properties:
+        is_half_hourly_settled:
+          type: boolean
+          title: Is Half Hourly Settled
+          description: Whether the site is half-hourly settled, per ECOES.
+        propositions:
+          items:
+            $ref: '#/components/schemas/PropositionEligibility'
+          type: array
+          title: Propositions
+          description: Per-proposition eligibility for the supplied MPAN + asset model combination.
+          default: []
+      type: object
+      required:
+      - is_half_hourly_settled
+      title: EligibilityCheckResponse
+      description: Response model for the ephemeral eligibility check endpoint.
+    CreatableAssetType:
+      type: string
+      enum:
+      - charger
+      - battery
+      - heat pump
+      - electric_vehicle
+      - hot water tank
+      title: CreatableAssetType
+      description: Asset types that can be created through the API.
+    TariffResponse:
+      properties:
+        tariff_type:
+          allOf:
+          - $ref: '#/components/schemas/TariffType'
+          description: Type of tariff
+        tariff_cheap_start_time:
+          type: string
+          format: time
+          title: Tariff Cheap Start Time
+          description: Start time for off-peak/cheap rate period
+        tariff_cheap_end_time:
+          type: string
+          format: time
+          title: Tariff Cheap End Time
+          description: End time for off-peak/cheap rate period
+      type: object
+      title: TariffResponse
+      description: Response model for tariff information.
+    SiteUpdateRequest:
+      properties:
+        tariff:
+          allOf:
+          - $ref: '#/components/schemas/TariffRequest'
+          title: Tariff
+          description: Tariff information to update
+        address:
+          type: string
+          title: Address
+          description: Full address for the site
+        postcode:
+          type: string
+          title: Postcode
+          description: UK postcode for the site
+        mpan:
+          type: string
+          title: Mpan
+          description: Meter Point Administration Number
+        email:
+          type: string
+          title: Email
+          description: Email address for the site
+      type: object
+      title: SiteUpdateRequest
+      description: Request model for updating site information.
+    TariffRequest:
+      properties:
+        tariff_cheap_start_time:
+          type: string
+          format: time
+          title: Tariff Cheap Start Time
+          description: Start time for off-peak/cheap rate period
+        tariff_cheap_end_time:
+          type: string
+          format: time
+          title: Tariff Cheap End Time
+          description: End time for off-peak/cheap rate period
+        tariff_type:
+          allOf:
+          - $ref: '#/components/schemas/TariffType'
+          description: Type of tariff
+      type: object
+      required:
+      - tariff_type
+      title: TariffRequest
+      description: Request model for updating tariff information.
+    SiteFlexEventsResponse:
+      properties:
+        site_id:
+          type: string
+          format: uuid
+          title: Site Id
+          description: ID of the site
+        events:
+          items:
+            $ref: '#/components/schemas/FlexEventResponse'
+          type: array
+          title: Events
+          description: List of flex events the site participated in
+      type: object
+      required:
+      - site_id
+      - events
+      title: SiteFlexEventsResponse
+    SiteDispatchConsentRequest:
+      properties:
+        dispatch_methods:
+          items:
+            $ref: '#/components/schemas/DispatchMethodResponse'
+          type: array
+          uniqueItems: true
+          description: Dispatch methods to consent to or remove consent from. Leave empty to not consent to any dispatch methods.
+      type: object
+      required:
+      - dispatch_methods
+      title: SiteDispatchConsentRequest
+      description: Request model for updating dispatch consent for a site.
+    SiteResponse:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+          description: Axle's internal UUID for the site
+        mpan:
+          type: string
+          title: Mpan
+          description: Meter Point Administration Number for the site
+        postcode:
+          type: string
+          title: Postcode
+          description: UK postcode for the site
+        address:
+          type: string
+          title: Address
+          description: Full address for the site
+        asset_ids:
+          items:
+            type: string
+            format: uuid
+          type: array
+          title: Asset Ids
+          description: List of asset IDs associated with this site
+          default: []
+        markets:
+          items:
+            $ref: '#/components/schemas/MarketResponse'
+          type: array
+          uniqueItems: true
+          description: Markets the site is participating in
+        dispatch_methods:
+          items:
+            $ref: '#/components/schemas/DispatchMethodResponse'
+          type: array
+          uniqueItems: true
+          description: Dispatch methods allowed for the site
+        tariff:
+          allOf:
+          - $ref: '#/components/schemas/TariffResponse'
+          title: Tariff
+          description: Tariff information for the site
+        gave_boundary_meter_consent_at:
+          type: string
+          format: date-time
+          title: Gave Boundary Meter Consent At
+          description: Timestamp when boundary meter consent was given
+      type: object
+      required:
+      - id
+      title: SiteResponse
+      description: Response model for site information.
+    InitialiseRequest:
+      properties:
+        site:
+          allOf:
+          - $ref: '#/components/schemas/SiteRequest'
+          title: Site
+          description: Site information
+          examples:
+          - mpan: '1234567890123'
+            postcode: SW1A 1AA
+            street_address: 10 Downing Street
+            email: resident@example.com
+            gave_boundary_meter_consent_at: '2026-01-15T10:30:00Z'
+        assets:
+          items:
+            $ref: '#/components/schemas/OnboardingAssetRequest'
+          type: array
+          title: Assets
+          description: One or more assets to register at the site
+          examples:
+          - - external_id: charger-001
+              type: charger
+              asset_model: zappi
+              installation_date: '2025-06-15'
+              properties:
+                power_kw: 7.4
+      type: object
+      required:
+      - site
+      - assets
+      title: InitialiseRequest
+      description: 'Request model for initialising a site with one or more assets.
+
+
+        Upserts the site and assets, returning eligibility information.
+
+        No enrollment side effects (no dispatch consent, no bonus, no email).'
+    UnenrolResponse:
+      properties:
+        site_id:
+          type: string
+          format: uuid
+          title: Site Id
+          description: ID of the unenrolled site
+          examples:
+          - a1b2c3d4-e5f6-7890-abcd-ef1234567890
+        status:
+          type: string
+          enum:
+          - unenrolled
+          - already_unenrolled
+          title: Status
+          examples:
+          - unenrolled
+      type: object
+      required:
+      - site_id
+      - status
+      title: UnenrolResponse
+      description: Response model for the unenrol endpoint.
+    SiteRequest:
+      properties:
+        mpan:
+          type: string
+          title: Mpan
+          description: Meter Point Administration Number
+        postcode:
+          type: string
+          title: Postcode
+          description: UK postcode for the site
+        street_address:
+          type: string
+          title: Street Address
+          description: Street address for the site
+        email:
+          type: string
+          title: Email
+          description: Email address for the site. Include to enable 2FA for payment withdrawals.
+        gave_boundary_meter_consent_at:
+          type: string
+          format: date-time
+          title: Gave Boundary Meter Consent At
+          description: Timezone-aware ISO 8601 timestamp (e.g. '2026-01-01T12:34:56Z') indicating when the household gave consent for Axle to access readings from their boundary meter, if consent was given.
+      type: object
+      required:
+      - mpan
+      - postcode
+      title: SiteRequest
+      description: Request model for creating a new site.
+    ErrorWithDetail:
+      properties:
+        detail:
+          type: string
+          title: Detail
+      type: object
+      required:
+      - detail
+      title: ErrorWithDetail
+      description: Standard error response with a detailed message.
+    EligibilityCode:
+      type: string
+      enum:
+      - asset_model_not_set
+      - asset_model_not_found
+      - asset_model_not_cop11_qualified
+      - asset_installation_date_not_set
+      - asset_model_enrol_eligibility_override
+      - non_domestic_site
+      title: EligibilityCode
+      description: Codes identifying specific eligibility issues for an asset.
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    InitialiseSiteResult:
+      properties:
+        site_id:
+          type: string
+          format: uuid
+          title: Site Id
+          description: Axle's internal UUID for the site
+        site_created:
+          type: boolean
+          title: Site Created
+          description: True if the site was newly created, False if it was upserted
+        fields_updated:
+          items:
+            type: string
+          type: array
+          title: Fields Updated
+          description: List of site fields that were updated on upsert
+        warnings:
+          items:
+            type: string
+          type: array
+          title: Warnings
+          description: Site-level warnings generated during initialisation
+      type: object
+      required:
+      - site_id
+      - site_created
+      title: InitialiseSiteResult
+      description: Result metadata for a site after upsert.
+    OnboardingResponse:
+      properties:
+        site:
+          allOf:
+          - $ref: '#/components/schemas/SiteResponse'
+          title: Site
+          description: Created site details
+        asset:
+          allOf:
+          - $ref: '#/components/schemas/AssetResponse'
+          title: Asset
+          description: Created asset details
+      type: object
+      required:
+      - site
+      - asset
+      title: OnboardingResponse
+      description: Response model for onboarding operation.
+    SiteEligibilityDetail:
+      properties:
+        eligible_propositions:
+          items:
+            type: string
+            enum:
+            - limited_pause
+            - full_asset_schedule_control
+          type: array
+          title: Eligible Propositions
+          default: []
+        site_id:
+          type: string
+          format: uuid
+          title: Site Id
+          examples:
+          - a1b2c3d4-e5f6-7890-abcd-ef1234567890
+        site_properties:
+          allOf:
+          - $ref: '#/components/schemas/SiteProperties'
+          title: Site Properties
+          examples:
+          - is_half_hourly_settled: false
+            has_meter_consent: true
+        assets:
+          items:
+            $ref: '#/components/schemas/AssetEligibilityDetail'
+          type: array
+          title: Assets
+          default: []
+      type: object
+      required:
+      - site_id
+      - site_properties
+      title: SiteEligibilityDetail
+      description: Eligibility detail for a site's proposition eligibility check.
+    SiteResponsePage:
+      properties:
+        sites:
+          items:
+            $ref: '#/components/schemas/SiteResponse'
+          type: array
+          title: Sites
+          description: List of sites for the current page
+        total_num_sites:
+          type: integer
+          title: Total Num Sites
+          description: Total number of sites available
+        total_num_pages:
+          type: integer
+          title: Total Num Pages
+          description: Total number of pages available
+        page_number:
+          type: integer
+          title: Page Number
+          description: Current page number (1-based)
+      type: object
+      required:
+      - sites
+      - total_num_sites
+      - total_num_pages
+      - page_number
+      title: SiteResponsePage
+      description: Paginated response for site listings.
+    HalfHourlyPrice:
+      properties:
+        start_timestamp:
+          type: string
+          format: date-time
+          title: Start Timestamp
+        price_gbp_per_mwh:
+          type: number
+          title: Price Gbp Per Mwh
+          description: Price in £/MWh (2dp)
+      type: object
+      required:
+      - start_timestamp
+      - price_gbp_per_mwh
+      title: HalfHourlyPrice
+      description: 'Represents the market price for a given half-hour period.
+
+
+        If the asset is not participating in the market for that period, price_gbp_per_mwh will be None.'
+    AssetEligibilityDetail:
+      properties:
+        asset_id:
+          type: string
+          format: uuid
+          title: Asset Id
+          examples:
+          - b2c3d4e5-f6a7-8901-bcde-f23456789012
+        external_id:
+          type: string
+          title: External Id
+          examples:
+          - charger-001
+        propositions:
+          items:
+            $ref: '#/components/schemas/PropositionEligibility'
+          type: array
+          title: Propositions
+          default: []
+      type: object
+      required:
+      - asset_id
+      - external_id
+      title: AssetEligibilityDetail
+      description: Eligibility detail for a single asset across all propositions.
+    InitialiseAssetResult:
+      properties:
+        asset_id:
+          type: string
+          format: uuid
+          title: Asset Id
+          description: Axle's internal UUID for the asset
+        external_id:
+          type: string
+          title: External Id
+          description: Vendor-specific identifier for the asset
+        asset_created:
+          type: boolean
+          title: Asset Created
+          description: True if the asset was newly created, False if it was upserted
+        fields_updated:
+          items:
+            type: string
+          type: array
+          title: Fields Updated
+          description: List of fields that were updated on upsert
+        warnings:
+          items:
+            type: string
+          type: array
+          title: Warnings
+          description: Per-asset warnings generated during initialisation
+      type: object
+      required:
+      - asset_id
+      - external_id
+      - asset_created
+      title: InitialiseAssetResult
+      description: Result metadata for a single asset after upsert.
+    OnboardingRequest:
+      properties:
+        site:
+          allOf:
+          - $ref: '#/components/schemas/SiteRequest'
+          title: Site
+          description: Site information
+          examples:
+          - mpan: '1234567890123'
+            postcode: SW1A 1AA
+            street_address: 10 Downing Street
+            gave_boundary_meter_consent_at: '2025-01-01T12:00:00Z'
+            email: test@example.com
+        asset:
+          allOf:
+          - $ref: '#/components/schemas/OnboardingAssetRequest'
+          title: Asset
+          description: Asset information
+          examples:
+          - external_id: charger-001
+            type: charger
+            properties:
+              power_kw: 7.4
+        dispatch_consent:
+          allOf:
+          - $ref: '#/components/schemas/SiteDispatchConsentRequest'
+          title: Dispatch Consent
+          description: Dispatch consent methods
+          examples:
+          - dispatch_methods:
+            - limited_pause
+      type: object
+      required:
+      - site
+      - asset
+      - dispatch_consent
+      title: OnboardingRequest
+      description: Request model for onboarding a site with an asset and dispatch consent in a single call.
+    AssetResponse:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+          description: Axle's internal UUID for the asset
+        external_id:
+          type: string
+          title: External Id
+          description: Vendor-specific identifier for the asset
+        type:
+          allOf:
+          - $ref: '#/components/schemas/AssetType'
+          description: Type of asset
+        site_id:
+          type: string
+          format: uuid
+          title: Site Id
+          description: ID of the site where the asset is located
+        properties:
+          allOf:
+          - $ref: '#/components/schemas/AssetProperties'
+          title: Properties
+          description: Optional asset properties
+      type: object
+      required:
+      - id
+      - external_id
+      - type
+      - site_id
+      title: AssetResponse
+      description: Response model for asset information.
+    OnboardingAssetRequest:
+      properties:
+        external_id:
+          type: string
+          title: External Id
+          description: Vendor-specific identifier for the asset
+          examples:
+          - charger-001
+        type:
+          allOf:
+          - $ref: '#/components/schemas/CreatableAssetType'
+          description: Type of asset being created
+          examples:
+          - charger
+        properties:
+          allOf:
+          - $ref: '#/components/schemas/AssetProperties'
+          title: Properties
+          description: Optional asset properties
+          examples:
+          - power_kw: 7.4
+        asset_model:
+          type: string
+          title: Asset Model
+          description: Name of the AssetModel to assign (looked up by name). Required for CoP11 eligibility.
+          examples:
+          - axle_charger_v1
+        installation_date:
+          type: string
+          format: date
+          title: Installation Date
+          description: Date when the asset was installed. Required alongside asset_model for CoP11 eligibility.
+          examples:
+          - '2025-06-15'
+      type: object
+      required:
+      - external_id
+      - type
+      title: OnboardingAssetRequest
+      description: Request model for creating an asset during onboarding (without site_id).
+    TariffType:
+      type: string
+      enum:
+      - single_rate
+      - dual_rate
+      - dynamic
+      - smart
+      - unknown
+      title: TariffType
+      description: An enumeration.
+    UnenrolRequest:
+      properties:
+        proposition:
+          type: string
+          enum:
+          - limited_pause
+          - full_asset_schedule_control
+          title: Proposition
+          description: Proposition to unenrol from
+      type: object
+      required:
+      - proposition
+      title: UnenrolRequest
+      description: Request model for unenrolling a site from a proposition.
+    EligibilityCheckRequest:
+      properties:
+        mpan:
+          type: string
+          title: Mpan
+          description: Meter Point Administration Number. Used to determine whether the site is half-hourly settled.
+          examples:
+          - '1234567890123'
+        asset_model:
+          type: string
+          title: Asset Model
+          description: Optional value of the AssetModel to evaluate against. Required for CoP11-route eligibility; half-hourly settled sites qualify regardless of asset model.
+          examples:
+          - axle_charger_v1
+      type: object
+      required:
+      - mpan
+      title: EligibilityCheckRequest
+      description: Request model for the ephemeral eligibility check endpoint.
+    AssetType:
+      type: string
+      enum:
+      - boundary meter
+      - charger
+      - battery
+      - heat pump
+      - hot water tank
+      - frequency meter
+      - electric_vehicle
+      - pv inverter
+      title: AssetType
+      description: An enumeration.
+    InitialiseResponse:
+      properties:
+        site:
+          allOf:
+          - $ref: '#/components/schemas/InitialiseSiteResult'
+          title: Site
+          description: Site result metadata
+        assets:
+          items:
+            $ref: '#/components/schemas/InitialiseAssetResult'
+          type: array
+          title: Assets
+          description: Per-asset result metadata
+        eligibility:
+          allOf:
+          - $ref: '#/components/schemas/SiteEligibilityDetail'
+          title: Eligibility
+          description: Eligibility information for the site and its assets
+      type: object
+      required:
+      - site
+      - assets
+      - eligibility
+      title: InitialiseResponse
+      description: Response model for the initialise endpoint.
+    SiteAuthTokenRequest:
+      properties:
+        refresh_token:
+          type: string
+          title: Refresh Token
+          description: Refresh token for acquiring fresh access tokens after they expire; required, except for 'API_KEY'-type submissions
+        access_token:
+          type: string
+          title: Access Token
+          description: Access token for dispatching and monitoring assets
+        token_type:
+          type: string
+          title: Token Type
+          description: Type of token (e.g. 'Bearer' or 'API_KEY')
+        expires_utc:
+          type: string
+          format: date-time
+          title: Expires Utc
+          description: Time in UTC at which the token expires
+        expires_in:
+          type: integer
+          title: Expires In
+          description: Time in seconds until the token expires
+      type: object
+      title: SiteAuthTokenRequest
+      description: Request model for providing an auth token to enable Axle to access assets at a site.
+    OAuthInitiateResponse:
+      properties:
+        authorization_url:
+          type: string
+          title: Authorization Url
+          description: Third party URL to redirect the user to for OAuth authorisation
+      type: object
+      required:
+      - authorization_url
+      title: OAuthInitiateResponse
+      description: Response for initiating OAuth flow with a third party service (e.g. FoxESS)
+    AssetProperties:
+      properties:
+        power_kw:
+          type: number
+          minimum: 0.0
+          title: Power Kw
+          description: Power rating in kW
+        capacity_kwh:
+          type: number
+          minimum: 0.0
+          title: Capacity Kwh
+          description: Capacity in kWh
+      type: object
+      title: AssetProperties
+      description: Optional properties for an asset.
+  securitySchemes:
+    OAuth2PasswordBearer:
+      type: oauth2
+      flows:
+        password:
+          scopes: {}
+          tokenUrl: auth/token-form

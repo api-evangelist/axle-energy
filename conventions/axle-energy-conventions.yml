@@ -1,0 +1,52 @@
+generated: '2026-07-18'
+method: searched
+source: https://docs.axle.energy/
+summary: Cross-cutting request/response semantics for the Axle API, captured from the docs and derived from the OpenAPI.
+authentication:
+  style: oauth2-password-bearer
+  detail: >-
+    Exchange API credentials for a bearer token at POST /auth/token-form (organisation token,
+    valid 1 hour). Component tokens created via POST /auth/component-token are site-scoped and
+    valid 24 hours, intended for end-user sessions. Send the token as `Authorization: Bearer <token>`.
+  token_url: https://api.axle.energy/auth/token-form
+  docs: https://docs.axle.energy/api-reference/auth/token-form
+idempotency:
+  supported: true
+  mechanism: upsert-by-identity
+  detail: >-
+    Onboarding and initialise calls are idempotent and atomic — sending the same site or asset
+    returns the existing record with any new fields merged in; if enrolment fails, nothing is
+    stored. Assets/sites are addressable by an external id (external_id) so repeated create/onboard
+    calls are safe to retry. Component-token user fields upsert onto the user record, safe to set
+    on every call.
+  header: null  # no Idempotency-Key header; idempotency is via stable external identifiers + upsert
+  docs: https://docs.axle.energy/api-reference/entities/site/onboard
+pagination:
+  style: offset-limit
+  params: [limit, offset]
+  applies_to: [GET /entities/site, GET /entities/asset]
+  docs: https://docs.axle.energy/api-reference/entities/asset/list
+external_ids:
+  detail: >-
+    Assets and sites carry a vendor-specific `external_id`; assets can be fetched by external id
+    (GET /entities/asset/external-id/{external_id}) and the `asset_id_is_external` flag lets callers
+    address assets by their own id.
+versioning:
+  scheme: semver-document
+  current: 1.4.6
+  detail: >-
+    The OpenAPI document is versioned (info.version 1.4.6); the HTTP surface is unversioned (no
+    /v1 path prefix). Deprecated operations are marked `deprecated: true` and documented with a
+    recommended replacement.
+error_envelope:
+  detail: >-
+    FastAPI-style HTTP status errors. 422 validation errors return HTTPValidationError with a
+    `detail[]` array of {loc, msg, type}. Other errors return operation-specific bodies
+    (e.g. MPANValidationError) or a plain `detail` message.
+  cross_ref: errors/axle-energy-problem-types.yml
+rate_limit_signaling:
+  detail: Not documented in the public docs or OpenAPI as of this capture.
+cross_references:
+  authentication: authentication/axle-energy-authentication.yml
+  errors: errors/axle-energy-problem-types.yml
+  lifecycle: lifecycle/axle-energy-lifecycle.yml

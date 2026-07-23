@@ -1,0 +1,53 @@
+generated: '2026-07-18'
+method: derived
+source: openapi/axle-energy-openapi-original.json
+format: http-status  # FastAPI HTTP status errors; 422 uses HTTPValidationError (detail[] of {loc,msg,type})
+envelope:
+  validation: {schema: HTTPValidationError, field: detail, item: {loc: array, msg: string, type: string}}
+  note: non-422 errors return operation-specific bodies (e.g. MPANValidationError) or a plain detail message
+problems:
+  - status: 400
+    title: Bad request
+    occurrences: 15
+    example_description: "Invalid request"
+    remediation: "Check request path/query/body against the OpenAPI schema."
+  - status: 401
+    title: Unauthorized
+    occurrences: 2
+    example_description: "Incorrect username or password"
+    remediation: "Obtain a fresh bearer token from POST /auth/token-form (tokens expire after 1 hour)."
+  - status: 403
+    title: Forbidden
+    occurrences: 4
+    example_description: "Permission denied"
+    remediation: "The authenticated org lacks access to this site/asset or operation; verify ownership and consent."
+  - status: 404
+    title: Not found
+    occurrences: 39
+    example_description: "Asset not found or not authorized to access"
+    remediation: "Verify the site_id / asset_id / meter reference exists; some resources are created on demand."
+  - status: 409
+    title: Conflict
+    occurrences: 5
+    example_description: "Asset conflict (e.g. asset type mismatch or asset registered to a different site)"
+    remediation: "A conflicting state exists (e.g. already enrolled/consented); reconcile before retrying."
+  - status: 422
+    title: Validation error
+    occurrences: 52
+    example_description: "Validation Error"
+    remediation: "Request body failed validation; inspect the detail[] array (loc/msg/type) in the response."
+  - status: 500
+    title: Internal server error
+    occurrences: 48
+    example_description: "Internal server error"
+    remediation: "Transient server error; retry with backoff and contact support@axle.energy if it persists."
+  - status: 503
+    title: Service unavailable
+    occurrences: 4
+    example_description: "Request to meter data provider failed"
+    remediation: "An upstream/market dependency is unavailable; retry with backoff."
+  - status: 504
+    title: Gateway timeout
+    occurrences: 5
+    example_description: "Request to meter data provider timed out"
+    remediation: "Upstream timeout; retry with backoff."

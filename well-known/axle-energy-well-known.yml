@@ -1,0 +1,22 @@
+generated: '2026-07-18'
+method: searched
+summary: Probed /.well-known/ discovery surface on the API and web hosts. No documents were served.
+hosts:
+  - host: https://api.axle.energy
+    documents:
+      - {path: /.well-known/security.txt, status: 404}
+      - {path: /.well-known/openid-configuration, status: 404}
+      - {path: /.well-known/oauth-authorization-server, status: 404}
+      - {path: /.well-known/api-catalog, status: 404}
+      - {path: /.well-known/ai-plugin.json, status: 404}
+  - host: https://api-sandbox.axle.energy
+    documents:
+      - {path: /.well-known/security.txt, status: 404}
+      - {path: /.well-known/openid-configuration, status: 404}
+      - {path: /.well-known/oauth-authorization-server, status: 404}
+  - host: https://www.axle.energy
+    documents:
+      - {path: /.well-known/security.txt, status: 404}
+  - host: https://docs.axle.energy
+    documents:
+      - {path: /.well-known/security.txt, status: 404}

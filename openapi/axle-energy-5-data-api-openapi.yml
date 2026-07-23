@@ -1,0 +1,224 @@
+openapi: 3.1.0
+info:
+  title: Axle 1. Authentication 5. Data API
+  description: For full documentation please see our official docs at <a href='http://docs.axle.energy'>docs.axle.energy</a>
+  version: 1.4.6
+servers:
+- url: https://api.axle.energy
+tags:
+- name: 5. Data
+  description: Send asset metrics to Axle, for analysis and optimisation purposes
+paths:
+  /data/readings:
+    post:
+      tags:
+      - 5. Data
+      summary: Post Readings
+      description: 'Send asset readings data to Axle using the generic readings format.
+
+
+        This endpoint accepts compressed data using gzip encoding. Returns statuses of the processed readings, indicating whether each reading was accepted or rejected.
+
+
+        **Direction convention:** for readings that can be either positive or negative (e.g. `boundary_import_kw`, `battery_inverter_import_kw`), a positive value denotes *import* (power flowing in from the grid, or into the battery) and a negative value denotes *export* (power flowing out to the grid, or out of the battery). All other reading types are unidirectional; the required sign for each `label` is documented in the `ReadingDataPointLabel` schema below.'
+      operationId: post_readings_data_readings_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReadingsDataPoints'
+        required: true
+      responses:
+        '200':
+          description: Successfully recorded readings with processing summary
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReadingsResponse'
+        '400':
+          description: Invalid data format or validation error
+        '403':
+          description: Permission denied
+        '500':
+          description: Server error while recording readings
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - OAuth2PasswordBearer: []
+components:
+  schemas:
+    ReadingDataPoint:
+      properties:
+        asset_id:
+          type: string
+          format: uuid
+          title: Asset Id
+          description: ID of the asset
+        start_timestamp:
+          type: string
+          format: date-time
+          title: Start Timestamp
+          description: Start time of the reading
+        end_timestamp:
+          type: string
+          format: date-time
+          title: End Timestamp
+          description: End time of the reading
+        value:
+          type: number
+          title: Value
+          description: Value of the reading
+        label:
+          allOf:
+          - $ref: '#/components/schemas/ReadingDataPointLabel'
+          description: Label for the reading
+      type: object
+      required:
+      - asset_id
+      - start_timestamp
+      - end_timestamp
+      - value
+      - label
+      title: ReadingDataPoint
+      description: Reading data for a single asset.
+    ReadingsDataPoints:
+      properties:
+        readings:
+          items:
+            $ref: '#/components/schemas/ReadingDataPoint'
+          type: array
+          title: Readings
+          description: List of readings to be submitted
+      type: object
+      required:
+      - readings
+      title: ReadingsDataPoints
+      description: Readings data for multiple assets.
+    ReadingDataPointLabel:
+      type: string
+      enum:
+      - boundary_import_kw
+      - battery_inverter_import_kw
+      - charger_consumption_energy_kwh
+      - charger_lifetime_consumption_energy_kwh
+      - boundary_lifetime_import_energy_kwh
+      - boundary_lifetime_export_energy_kwh
+      - provisional_consumption_kwh
+      - solar_power_kw
+      - battery_state_of_charge_pct
+      - battery_stored_energy_kwh
+      title: ReadingDataPointLabel
+      description: 'The type of reading being submitted.
+
+
+        - boundary_import_kw: Instantaneous power import from the grid in kW. Positive indicates power imported from the grid, negative indicates power exported to the grid.
+
+        - battery_inverter_import_kw: Instantaneous inverter power into the battery in kW. Positive indicates power into the battery (charging), negative indicates power out of the battery (discharging).
+
+        - charger_consumption_energy_kwh: Total energy consumed by the charger in kWh in a 30min interval. Must be >= 0.
+
+        - charger_lifetime_consumption_energy_kwh: Total energy consumed by the charger in kWh in its lifetime. Must be >= 0.
+
+        - boundary_lifetime_import_energy_kwh: Cumulative lifetime energy imported across the site boundary in kWh. A monotonic non-decreasing register; must be >= 0.
+
+        - boundary_lifetime_export_energy_kwh: Cumulative lifetime energy exported across the site boundary in kWh. A monotonic non-decreasing register; must be >= 0.
+
+        - provisional_consumption_kwh: Provisional consumption data in kWh. Must be >= 0.
+
+        - solar_power_kw: Instantaneous solar generation in kW. Must be >= 0.
+
+        - battery_state_of_charge_pct: Instantaneous state of charge of the battery in percentage. Must be between 0 and 100 (inclusive).
+
+        - battery_stored_energy_kwh: Stored energy in the battery in kWh. Must be >= 0.'
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    ReadingsResponse:
+      properties:
+        responses:
+          items:
+            $ref: '#/components/schemas/ReadingResponse'
+          type: array
+          title: Responses
+          description: List of responses for each reading submission
+      type: object
+      required:
+      - responses
+      title: ReadingsResponse
+      description: Response model for a batch of readings submissions.
+    ReadingResponse:
+      properties:
+        asset_id:
+          type: string
+          format: uuid
+          title: Asset Id
+          description: ID of the asset
+        start_timestamp:
+          type: string
+          format: date-time
+          title: Start Timestamp
+          description: Start time of the reading
+        end_timestamp:
+          type: string
+          format: date-time
+          title: End Timestamp
+          description: End time of the reading
+        label:
+          allOf:
+          - $ref: '#/components/schemas/ReadingDataPointLabel'
+          description: Label for the reading
+        accepted:
+          type: boolean
+          title: Accepted
+          description: Whether the reading was accepted
+        error:
+          type: string
+          title: Error
+          description: Error message if the reading was rejected
+      type: object
+      required:
+      - asset_id
+      - start_timestamp
+      - end_timestamp
+      - label
+      - accepted
+      title: ReadingResponse
+      description: Response model for a single reading submission.
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+  securitySchemes:
+    OAuth2PasswordBearer:
+      type: oauth2
+      flows:
+        password:
+          scopes: {}
+          tokenUrl: auth/token-form

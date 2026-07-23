@@ -1,0 +1,12 @@
+generated: '2026-07-18'
+method: generated
+source: openapi/axle-energy-openapi-original.json
+skills:
+  - file: axle-energy-onboard-and-enrol.md
+    name: Onboard a site and enrol it in a flexibility market
+    api: openapi/axle-energy-openapi-original.json
+    operations: [login_for_access_token_form_auth_token_form_post, check_eligibility_entities_site_check_eligibility_post, onboard_entities_site_onboard_post, get_site_eligibility_entities_site__site_id__eligibility_get, get_site_flex_events_entities_site__site_id__flex_events_get]
+  - file: axle-energy-ev-smart-charging.md
+    name: Run EV smart-charging flexibility for an asset
+    api: openapi/axle-energy-openapi-original.json
+    operations: [create_asset_entities_asset_post, asset_plug_in_event_entities_asset__asset_id__event_plug_in_post, asset_intent_update_event_entities_asset__asset_id__event_intent_post, get_price_curve_entities_asset__asset_id__price_curve_get, asset_plug_out_event_entities_asset__asset_id__event_plug_out_post]

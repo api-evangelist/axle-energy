@@ -1,0 +1,17 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for Axle API
+  version: 1.0.0
+extends: openapi/axle-energy-openapi-original.json
+actions:
+  - target: $.info
+    update:
+      x-apievangelist-enriched: '2026-07-18'
+      x-apievangelist-idempotency: upsert-by-external-id
+      x-apievangelist-auth: oauth2-password-bearer
+      x-apievangelist-webhooks: dispatch (development)
+  - target: $.info
+    update:
+      x-apievangelist-conventions: conventions/axle-energy-conventions.yml
+      x-apievangelist-errors: errors/axle-energy-problem-types.yml
+      x-apievangelist-data-model: data-model/axle-energy-data-model.yml

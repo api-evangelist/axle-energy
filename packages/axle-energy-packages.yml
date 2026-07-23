@@ -1,0 +1,33 @@
+generated: '2026-07-18'
+method: searched
+source: https://www.npmjs.com/org/axle-energy
+summary: First-party JavaScript/TypeScript client libraries for the Axle API, published under the @axle-energy npm org.
+packages:
+  - language: javascript
+    registry: npm
+    name: "@axle-energy/api"
+    url: https://www.npmjs.com/package/@axle-energy/api
+    install: npm install @axle-energy/api
+    description: OpenAPI client and types for accessing Axle's API.
+    official: true
+  - language: javascript
+    registry: npm
+    name: "@axle-energy/components"
+    url: https://www.npmjs.com/package/@axle-energy/components
+    install: npm install @axle-energy/components
+    description: Frontend (React) components for interacting with the Axle Energy API.
+    official: true
+  - language: javascript
+    registry: npm
+    name: "@axle-energy/core"
+    url: https://www.npmjs.com/package/@axle-energy/core
+    install: npm install @axle-energy/core
+    description: Shared types, objects and utility functions for Axle components.
+    official: true
+registries_checked:
+  - {registry: npm, result: found}
+  - {registry: pypi, result: none}
+  - {registry: nuget, result: not-checked}
+  - {registry: maven, result: not-checked}
+  - {registry: rubygems, result: not-checked}
+  - {registry: crates.io, result: not-checked}

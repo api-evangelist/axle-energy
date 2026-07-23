@@ -1,0 +1,127 @@
+# axle energy
+
+## Docs
+
+- [Component token](https://docs.axle.energy/api-reference/auth/component-token.md): Authenticate on behalf of an end user by supplying their external user ID.
+- [Authentication](https://docs.axle.energy/api-reference/auth/token-form.md): Authenticate using username and password submitted via form data.
+- [Send asset readings](https://docs.axle.energy/api-reference/data/readings.md): Send asset readings data to Axle using the generic readings format.
+- [Delete asset](https://docs.axle.energy/api-reference/entities/asset/delete.md): Delete an asset by its Axle UUID.
+- [Send charge-now event](https://docs.axle.energy/api-reference/entities/asset/event/charge-now.md): Send notification of a charge now request for an asset.
+- [Send charge-now-deleted event](https://docs.axle.energy/api-reference/entities/asset/event/charge-now-deleted.md): Send notification of a charge now request being deleted for an asset.
+- [Send intent update event](https://docs.axle.energy/api-reference/entities/asset/event/intent.md): Send notification of an intent being updated on an asset.
+- [Send plug-in event](https://docs.axle.energy/api-reference/entities/asset/event/plug-in.md): Send notification of a car being plugged in.
+- [Send plug-out event](https://docs.axle.energy/api-reference/entities/asset/event/plug-out.md): Send notification of a car being unplugged from an asset.
+- [Send asset event](https://docs.axle.energy/api-reference/entities/asset/event/post.md): Send notification of an event happening on an asset.
+- [Send tariff update event](https://docs.axle.energy/api-reference/entities/asset/event/tariff.md): Send notification of a tariff update for an asset.
+- [Get asset](https://docs.axle.energy/api-reference/entities/asset/get.md): Get a specific asset by its Axle UUID.
+- [Get asset by external id](https://docs.axle.energy/api-reference/entities/asset/get-by-external-id.md): Get a specific asset by its external ID (vendor-specific identifier).
+- [Get all assets](https://docs.axle.energy/api-reference/entities/asset/list.md): Get all assets with pagination.
+- [Create asset](https://docs.axle.energy/api-reference/entities/asset/post.md): Create a new asset.
+- [Get asset price curve](https://docs.axle.energy/api-reference/entities/asset/price-curve.md): Half-hourly data of prices per MWh of flexed energy for the asset. Prices are returned from the current Settlement Period until 23:00 UK time on the same day or next day. Next day prices are available from 14:00 UK time.
+- [Update Asset](https://docs.axle.energy/api-reference/entities/asset/update.md): Update an existing asset's properties, asset model, and/or installation date.
+- [Update event status](https://docs.axle.energy/api-reference/entities/asset/update-status.md): Provide an update on the handling of a given event by a given asset.
+- [Add site dispatch consent](https://docs.axle.energy/api-reference/entities/site/add-consent.md): Add dispatch consent for a site to particpate in flex markets.
+- [Add site boundary meter consent](https://docs.axle.energy/api-reference/entities/site/add-meter-consent.md): Add boundary meter consent for a site.
+- [Add site auth token](https://docs.axle.energy/api-reference/entities/site/add-token.md): Provide an auth token to Axle, for dispatching the site's assets.
+- [Delete site](https://docs.axle.energy/api-reference/entities/site/delete.md): Delete an existing site by its UUID.
+- [Check eligibility](https://docs.axle.energy/api-reference/entities/site/eligibility.md): Read-only eligibility breakdown for a site and its assets. Returns the list of propositions the site can enrol in, along with per-asset eligibility detail.
+- [Enrol site](https://docs.axle.energy/api-reference/entities/site/enrol.md): Enrol a site in a proposition.
+- [Get site flex events](https://docs.axle.energy/api-reference/entities/site/flex-events.md): Get info on flex events the site has participated in, including estimated and final gross revenues.
+- [Get site](https://docs.axle.energy/api-reference/entities/site/get.md): Retrieve a specific site by its UUID.
+- [Initialise site and assets](https://docs.axle.energy/api-reference/entities/site/initialise.md): Initialise a site with one or more assets.
+- [Get all sites](https://docs.axle.energy/api-reference/entities/site/list.md): Retrieve sites, optionally filtering by MPAN or postcode.
+- [Offboard site and assets](https://docs.axle.energy/api-reference/entities/site/offboard.md): Offboard a site and all its associated assets in a single operation.
+- [Onboard](https://docs.axle.energy/api-reference/entities/site/onboard.md): Initialise a site and its assets, and enrol them in a proposition in a single call.
+- [Onboard site and asset (legacy)](https://docs.axle.energy/api-reference/entities/site/onboard-site-and-asset.md): **Deprecated** — prefer [`/onboard`](/api-reference/entities/site/onboard) instead.
+- [Create site](https://docs.axle.energy/api-reference/entities/site/post.md): Register a new site.
+- [Get site price curve](https://docs.axle.energy/api-reference/entities/site/price-curve.md): Half-hourly data of prices per MWh of flexed energy for the asset. Prices are returned from the current Settlement Period until 23:00 UK time on the same day or next day. Next day prices are available from 14:00 UK time.
+- [Remove site dispatch consent](https://docs.axle.energy/api-reference/entities/site/remove-consent.md): Remove dispatch consent for a site to stop participation in flex markets.
+- [Unenrol site](https://docs.axle.energy/api-reference/entities/site/unenrol.md): Unenrol a site from a proposition.
+- [Update site](https://docs.axle.energy/api-reference/entities/site/update.md): Update an existing site's information.
+- [Get example dispatch event](https://docs.axle.energy/api-reference/examples/get-example-dispatch-event.md): Get an example dispatch event.
+- [Get example OCPP charging profile](https://docs.axle.energy/api-reference/examples/get-example-ocpp-charging-profile.md): Get an example OCPP charging profile.
+- [Get meter info by address](https://docs.axle.energy/api-reference/meter/get-by-address.md): Retrieve detailed information about a meter using its address.
+- [Get meter info by MPAN](https://docs.axle.energy/api-reference/meter/get-by-mpan.md): Retrieve detailed information about a meter using its MPAN.
+- [Get meter info by meter ref](https://docs.axle.energy/api-reference/meter/get-by-ref.md): Retrieve meter information using an encrypted reference.
+- [Search meters](https://docs.axle.energy/api-reference/meter/search.md): Search for all electricity meters in the vicinity of a given postcode/ address.
+- [Get Balance Info](https://docs.axle.energy/api-reference/rewards/balance-info.md): Get info about current balance and total earnings for the site. Requires an organisational bearer token.
+- [Get transaction history](https://docs.axle.energy/api-reference/rewards/transactions.md): Get history of transactions for the site. Requires an organisational bearer token.
+- [Get Balance Withdrawal URL](https://docs.axle.energy/api-reference/rewards/withdrawal-url.md): Get a temporary link to an Axle-hosted form through which users can view and withdraw rewards. Requires an organisational bearer token.
+- [Setting up an environment](https://docs.axle.energy/api-reference/sandbox.md): Get started with a sandbox environment
+- [Validate an MPAN](https://docs.axle.energy/api-reference/validation/mpan.md): Validates the provided MPAN as one that is well-formatted and is associated with a connected import meter
+- [Batteries](https://docs.axle.energy/assets/batteries.md)
+- [Cars](https://docs.axle.energy/assets/cars.md)
+- [Chargers](https://docs.axle.energy/assets/chargers.md)
+- [HVAC](https://docs.axle.energy/assets/heating.md)
+- [Address Collection](https://docs.axle.energy/components/components/address.md)
+- [Smart charging intent](https://docs.axle.energy/components/components/smart-charging.md)
+- [Tariff](https://docs.axle.energy/components/components/tariff.md)
+- [Smart charging app](https://docs.axle.energy/components/getting-started/hosted-app.md)
+- [Hosted Components](https://docs.axle.energy/components/getting-started/hosted-components.md)
+- [Introduction and Authentication](https://docs.axle.energy/components/getting-started/introduction.md)
+- [React Components](https://docs.axle.energy/components/getting-started/react-components.md)
+- [Integrating with native Enode Link SDK](https://docs.axle.energy/components/guides/enode-integration.md)
+- [Theming](https://docs.axle.energy/components/guides/theming.md): Apply per-partner branding to the smart charging experience using CSS variables.
+- [Participating in flexibility markets](https://docs.axle.energy/flex-lifecycle.md): The lifecycle of a flexibility asset
+- [Access flexibility markets with ease](https://docs.axle.energy/introduction.md): Register and prequalify assets, participate in flexibility markets, and monetize.
+- [Denmark](https://docs.axle.energy/markets/denmark.md)
+- [France](https://docs.axle.energy/markets/france.md)
+- [Great Britain](https://docs.axle.energy/markets/gb.md)
+- [Germany](https://docs.axle.energy/markets/germany.md)
+- [Netherlands](https://docs.axle.energy/markets/netherlands.md)
+- [Sweden](https://docs.axle.energy/markets/sweden.md)
+- [Asset and boundary telemetry](https://docs.axle.energy/tutorial/telemetry.md): What data we need to participate, and how to send it
+- [Site and asset lifecycle](https://docs.axle.energy/workflows/asset-lifecycle.md): How sites and assets move through the platform, and how to manage them as your users change
+- [Authentication](https://docs.axle.energy/workflows/axle-vpp/api-reference/auth.md): Authenticate using username and password submitted via form data.
+- [Dispatch webhook](https://docs.axle.energy/workflows/axle-vpp/api-reference/dispatch.md): The dispatch instruction Axle sends to your webhook during a grid event
+- [Offboard site and assets](https://docs.axle.energy/workflows/axle-vpp/api-reference/offboard.md): Offboard a site and all its associated assets in a single operation.
+- [Onboard site and asset](https://docs.axle.energy/workflows/axle-vpp/api-reference/onboard.md): **Deprecated** — prefer [`/onboard`](/api-reference/entities/site/onboard) instead.
+- [Send telemetry](https://docs.axle.energy/workflows/axle-vpp/api-reference/telemetry.md): Send asset readings data to Axle using the generic readings format.
+- [Integration](https://docs.axle.energy/workflows/axle-vpp/integration.md): Integrate your battery fleet directly with the Axle VPP
+- [Overview](https://docs.axle.energy/workflows/axle-vpp/overview.md): Optimise behind-the-meter batteries against tariffs and flexibility markets
+- [Collecting and validating addresses](https://docs.axle.energy/workflows/collecting-addresses.md): Market participation starts with an address we can associate to a meter
+- [Migrating to Smart Charging](https://docs.axle.energy/workflows/ev-charging/advanced/migrating-to-smart-charging.md): Upgrade from Flex Lite to Smart Charging for full schedule control and higher revenue
+- [Eligibility & Consent](https://docs.axle.energy/workflows/ev-charging/eligibility-and-consent.md): Determine which users can participate in EV charging flexibility and get them signed up
+- [Overview](https://docs.axle.energy/workflows/ev-charging/overview.md): Find the right EV charging flexibility solution for you
+- [Overview](https://docs.axle.energy/workflows/ev-charging/paying-users/earning.md): How users earn and manage their flexibility rewards
+- [Get balance withdrawal URL](https://docs.axle.energy/workflows/ev-charging/paying-users/payments.md): Get a temporary link to an Axle-hosted form through which users can view and withdraw rewards. Requires an organisational bearer token.
+- [Get transactions](https://docs.axle.energy/workflows/ev-charging/paying-users/transactions.md): Get history of transactions for the site. Requires an organisational bearer token.
+- [Retrieving meter details](https://docs.axle.energy/workflows/find-mpan.md): Identifying user MPANs and their eligibility
+- [Advanced Onboarding](https://docs.axle.energy/workflows/flex-lite/advanced-integration.md): Decompose onboarding into initialise + enrol when you need to do work between the two steps
+- [Authentication](https://docs.axle.energy/workflows/flex-lite/api-reference/auth.md): Authenticate using username and password submitted via form data.
+- [Enrol site](https://docs.axle.energy/workflows/flex-lite/api-reference/enrol.md): Enrol a site in a proposition.
+- [Initialise site and assets](https://docs.axle.energy/workflows/flex-lite/api-reference/initialise.md): Initialise a site with one or more assets.
+- [Offboard site and assets](https://docs.axle.energy/workflows/flex-lite/api-reference/offboard.md): Offboard a site and all its associated assets in a single operation.
+- [Onboard](https://docs.axle.energy/workflows/flex-lite/api-reference/onboard.md): Initialise a site and its assets, and enrol them in a proposition in a single call.
+- [Send plug-in event with schedule](https://docs.axle.energy/workflows/flex-lite/api-reference/plug-in-schedule.md): Submit a charging schedule and receive a modified schedule.
+- [Unenrol site](https://docs.axle.energy/workflows/flex-lite/api-reference/unenrol.md): Unenrol a site from a proposition.
+- [Integration](https://docs.axle.energy/workflows/flex-lite/integration.md): Integrate Flex Lite scheduling into your EV charging platform
+- [Overview](https://docs.axle.energy/workflows/flex-lite/overview.md): Monetize flexibility while maintaining user control over charging schedules
+- [Integration Guide](https://docs.axle.energy/workflows/payments/integration.md): How to integrate the Axle payments portal into your application
+- [Overview](https://docs.axle.energy/workflows/payments/overview.md): Pay users for their flexible energy usage with Axle's payments portal
+- [User Flow](https://docs.axle.energy/workflows/payments/user-flow.md): Deep dive into the payments portal user experience
+- [White-Labelling](https://docs.axle.energy/workflows/payments/white-labelling.md): Customise the payments portal with your own branding
+- [Authentication](https://docs.axle.energy/workflows/price-curves/api-reference/auth.md): Authenticate using username and password submitted via form data.
+- [Offboard site and assets](https://docs.axle.energy/workflows/price-curves/api-reference/offboard.md): Offboard a site and all its associated assets in a single operation.
+- [Onboard site and asset](https://docs.axle.energy/workflows/price-curves/api-reference/onboard.md): **Deprecated** — prefer [`/onboard`](/api-reference/entities/site/onboard) instead.
+- [Get site price curve](https://docs.axle.energy/workflows/price-curves/api-reference/price-curve.md): Half-hourly data of prices per MWh of flexed energy for the asset. Prices are returned from the current Settlement Period until 23:00 UK time on the same day or next day. Next day prices are available from 14:00 UK time.
+- [Send asset readings](https://docs.axle.energy/workflows/price-curves/api-reference/readings.md): Send asset readings data to Axle using the generic readings format.
+- [Overview](https://docs.axle.energy/workflows/price-curves/overview.md): Integrate flex into your existing asset optimisation
+- [Tutorial](https://docs.axle.energy/workflows/price-curves/tutorial.md): Onboard a site and pull your first price curve
+- [Authentication](https://docs.axle.energy/workflows/smart-charging/api-reference/auth.md): Authenticate using username and password submitted via form data.
+- [Send intent](https://docs.axle.energy/workflows/smart-charging/api-reference/intent.md): Send notification of an intent being updated on an asset.
+- [Offboard site and assets](https://docs.axle.energy/workflows/smart-charging/api-reference/offboard.md): Offboard a site and all its associated assets in a single operation.
+- [Onboard](https://docs.axle.energy/workflows/smart-charging/api-reference/onboard.md): Initialise a site and its assets, and enrol them in a proposition in a single call.
+- [Plug-in event](https://docs.axle.energy/workflows/smart-charging/api-reference/plug-in.md): Send notification of a car being plugged in.
+- [Plug-out event](https://docs.axle.energy/workflows/smart-charging/api-reference/plug-out.md): Send notification of a car being unplugged from an asset.
+- [Send readings](https://docs.axle.energy/workflows/smart-charging/api-reference/readings.md): Send asset readings data to Axle using the generic readings format.
+- [Send tariff](https://docs.axle.energy/workflows/smart-charging/api-reference/tariff.md): Send notification of a tariff update for an asset.
+- [Unenrol site](https://docs.axle.energy/workflows/smart-charging/api-reference/unenrol.md): Unenrol a site from a proposition.
+- [Integration](https://docs.axle.energy/workflows/smart-charging/integration.md): Integrate Smart Charging into your platform
+- [Overview](https://docs.axle.energy/workflows/smart-charging/overview.md): Monetize flexibility through managed charging
+- [Charging scenarios](https://docs.axle.energy/workflows/smart-charging/scenarios.md): Worked examples showing how intents and tariffs affect the schedules Axle sends
+
+## OpenAPI Specs
+
+- [swagger](https://docs.axle.energy/swagger.json)
+- [flex-lite-openapi](https://docs.axle.energy/workflows/flex-lite/flex-lite-openapi.json)
