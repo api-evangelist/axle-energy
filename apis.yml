@@ -228,6 +228,8 @@ apis:
   - type: Webhooks
     url: asyncapi/axle-energy-dispatch-webhooks.yml
 common:
+- type: Overlay
+  url: overlays/axle-energy-api-overlay.yaml
 - type: DeveloperPortal
   url: https://docs.axle.energy/
 - type: Documentation
