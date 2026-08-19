@@ -1,0 +1,1938 @@
+{
+  "item": [
+    {
+      "id": "4ca37339-26af-4d51-856e-5e4752938491",
+      "name": "2. Meters",
+      "description": {
+        "content": "Find key info about your sites",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "eeaa0adf-18d8-433f-bc03-09b11ce5381b",
+          "name": "Get Meter Info By Address",
+          "request": {
+            "name": "Get Meter Info By Address",
+            "description": {
+              "content": "Retrieve detailed information about a meter using its address.\n\nThis endpoint allows direct lookup of meter information by address, when the MPAN is not already known (if the MPAN is known, use the /meter/{mpan} endpoint).",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "meter",
+                "by-address"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "accessTokenUrl",
+                  "value": "auth/token-form"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "password_credentials"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"address\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "b9c4c1b2-bf7b-445d-8569-3e0d08c8d5e0",
+              "name": "Meter information for the requested address",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "meter",
+                    "by-address"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"address\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"mpan\": \"string\",\n  \"eligible_markets\": [\n    \"cm\",\n    \"wholesale\"\n  ],\n  \"half_hourly_settled\": true,\n  \"supplier_mpid\": \"string\",\n  \"supplier_name\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "726fc727-355a-4ebf-85f0-359059399273",
+              "name": "Unique meter was not found for the requested address (no meter or ambiguous address)",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "meter",
+                    "by-address"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"address\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Accepted",
+              "code": 202,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "8039ebd2-bce5-4b7c-b3ff-1b806904e41e",
+              "name": "Provided address input was invalid/ ambiguous",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "meter",
+                    "by-address"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"address\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "1dc42b81-f5c0-43be-8a3b-f1ebd5e4cd05",
+              "name": "Something went wrong whilst processing the request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "meter",
+                    "by-address"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"address\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "1ce19fd2-ef04-43b9-8440-f70a02ec3b1e",
+              "name": "Request to meter data provider failed",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "meter",
+                    "by-address"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"address\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "42808939-bd0d-48f2-9545-e75ad80ef055",
+              "name": "Request to meter data provider timed out",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "meter",
+                    "by-address"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"address\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Gateway Timeout",
+              "code": 504,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "30cff211-c19a-4d57-b2f4-2fbcf816453c",
+          "name": "Get Meter Info By Mpan",
+          "request": {
+            "name": "Get Meter Info By Mpan",
+            "description": {
+              "content": "Retrieve detailed information about a meter using its MPAN.\n\nThis endpoint allows direct lookup of meter information when the MPAN is already known.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "meter",
+                "by-mpan"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "accessTokenUrl",
+                  "value": "auth/token-form"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "password_credentials"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"mpan\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "605fde7b-680f-4c8d-8e71-15e2c65add8c",
+              "name": "Meter information for the requested MPAN",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "meter",
+                    "by-mpan"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"mpan\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"mpan\": \"string\",\n  \"eligible_markets\": [\n    \"cm\",\n    \"wholesale\"\n  ],\n  \"half_hourly_settled\": true,\n  \"supplier_mpid\": \"string\",\n  \"supplier_name\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e6c0da04-d8e8-4b53-bff7-49253cd5c063",
+              "name": "No meter was found for the requested MPAN",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "meter",
+                    "by-mpan"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"mpan\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Accepted",
+              "code": 202,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "36398823-937d-4ca3-aae5-72ff7e98c650",
+              "name": "Invalid MPAN or meter not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "meter",
+                    "by-mpan"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"mpan\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f600742d-439d-4076-819e-136db031d92d",
+              "name": "Request to meter data provider timed out",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "meter",
+                    "by-mpan"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"mpan\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Gateway Timeout",
+              "code": 504,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "a29dda6e-30dc-4624-b2f5-344b5ada98f5",
+          "name": "Get Meter Info By Address Deprecated",
+          "request": {
+            "name": "Get Meter Info By Address Deprecated",
+            "description": {
+              "content": "Retrieve detailed information about a meter using its address.\n\nThis endpoint allows direct lookup of meter information by address, when the MPAN is not already known (if the MPAN is known, use the /meter/{mpan} endpoint).",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "meter",
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "address",
+                  "value": "<string>",
+                  "description": "(Required) Full address string, e.g. '221B Baker Street, London, NW1 6XE'. Must include postcode and begin with house number/ name or other uniquely-identifying information. May be constructed from individual address components, concatenated with separating commas. Better formatting may increase the chance of a meter being found."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "accessTokenUrl",
+                  "value": "auth/token-form"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "password_credentials"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "21c69750-0e27-4430-8227-09c6c37c1cb8",
+              "name": "Meter information for the requested address",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "meter",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "address",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"mpan\": \"string\",\n  \"eligible_markets\": [\n    \"cm\",\n    \"wholesale\"\n  ],\n  \"half_hourly_settled\": true,\n  \"supplier_mpid\": \"string\",\n  \"supplier_name\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a1d413c2-dab4-4f09-8a3a-2f676a2dd670",
+              "name": "Invalid/ ambiguous address, or no meter found at address",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "meter",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "address",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "05b7153e-6700-4c12-bca6-f03cc19dbd5a",
+              "name": "Something went wrong whilst processing the request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "meter",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "address",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e9f9f479-6477-4462-b1fb-89a75ada7d36",
+              "name": "Request to meter data provider failed",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "meter",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "address",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "be3eff49-e48c-4487-ab8c-0d90f1932379",
+              "name": "Request to meter data provider timed out",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "meter",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "address",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Gateway Timeout",
+              "code": 504,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "e673f387-6951-4074-9a04-1ae6e53a281a",
+          "name": "Search Meters",
+          "request": {
+            "name": "Search Meters",
+            "description": {
+              "content": "Search for all electricity meters in the vicinity of a given postcode/ address.\n\nThis endpoint allows searching for meters by postcode and optionally by building identifier. For data protection and contractual reasons, meter details are returned in an encrypted format that can be used in subsequent API calls to retrieve the full meter information.\n\nThe search works in three steps:\n1. Search for meters at the specified address using this endpoint\n2. Ask the end-user to select the correct address from the list\n3. Call the `/meter/by-ref/{meter_ref}` endpoint with the corresponding reference to get the full meter details\n\nNB: This should not be used with procedural address matching; it is intended for end-user interaction only. For precise address matching, use the `/meter/by-address` endpoint instead, which will perform matching for you.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "meter",
+                "search"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "postcode",
+                  "value": "<string>",
+                  "description": "(Required) Postcode at which the requested meter is registered"
+                },
+                {
+                  "disabled": false,
+                  "key": "building_identifier",
+                  "value": "<string>",
+                  "description": "House number or house/building name, e.g. '3', '10A', 'Flat 4', 'The Old Barn'"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "accessTokenUrl",
+                  "value": "auth/token-form"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "password_credentials"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "38845b47-3157-462c-99fe-fa7ba53fb661",
+              "name": "List of meters matching the address; may be empty",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "meter",
+                    "search"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "postcode",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "building_identifier",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"ref\": \"string\",\n    \"address\": \"string\"\n  },\n  {\n    \"ref\": \"string\",\n    \"address\": \"string\"\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b15390a4-1622-4444-9f42-1295c8628c61",
+              "name": "Invalid postcode or no meters found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "meter",
+                    "search"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "postcode",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "building_identifier",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "948504a1-20b7-4498-9b41-08f1b28a14ac",
+              "name": "Something went wrong whilst processing the request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "meter",
+                    "search"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "postcode",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "building_identifier",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5fbb675f-b4fb-426a-9b9d-6878e7028518",
+              "name": "Request to meter data provider failed",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "meter",
+                    "search"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "postcode",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "building_identifier",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "acdc8416-386a-4d33-87fe-63d35e5a0bb1",
+              "name": "Request to meter data provider timed out",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "meter",
+                    "search"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "postcode",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "building_identifier",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Gateway Timeout",
+              "code": 504,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "feff4327-1ec2-40a3-b094-6437b8244740",
+          "name": "Get Meter Info By Meter Ref",
+          "request": {
+            "name": "Get Meter Info By Meter Ref",
+            "description": {
+              "content": "This endpoint is deprecated. Use the `/by-ref/{meter_ref}` instead.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "meter",
+                ":meter_ref",
+                "mpan"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "meter_ref",
+                  "description": "(Required) Encrypted reference of the meter whose info is requested, as returned from the /meter/search endpoint"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "accessTokenUrl",
+                  "value": "auth/token-form"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "password_credentials"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "0b3942d2-ac71-4c9f-b4cf-fae6fcd1f730",
+              "name": "Meter information for the requested reference",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "meter",
+                    ":meter_ref",
+                    "mpan"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "meter_ref",
+                      "description": "(Required) Encrypted reference of the meter whose info is requested, as returned from the /meter/search endpoint"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"mpan\": \"string\",\n  \"eligible_markets\": [\n    \"cm\",\n    \"wholesale\"\n  ],\n  \"half_hourly_settled\": true,\n  \"supplier_mpid\": \"string\",\n  \"supplier_name\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "3ada58c2-d4b1-493c-ab7f-ab627dfcb551",
+              "name": "Invalid meter reference",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "meter",
+                    ":meter_ref",
+                    "mpan"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "meter_ref",
+                      "description": "(Required) Encrypted reference of the meter whose info is requested, as returned from the /meter/search endpoint"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "d85463b5-7e7f-484e-8e4b-f9a7fa5018fa",
+          "name": "Get Meter Info By Meter Ref",
+          "request": {
+            "name": "Get Meter Info By Meter Ref",
+            "description": {
+              "content": "Retrieve meter information using an encrypted reference.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "meter",
+                "by-ref",
+                ":meter_ref"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "meter_ref",
+                  "description": "(Required) Encrypted reference of the meter whose info is requested, as returned from the /meter/search endpoint"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "accessTokenUrl",
+                  "value": "auth/token-form"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "password_credentials"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "2fbbacc0-2dfd-4a1d-9d5e-bcdc939d22f9",
+              "name": "Meter information for the requested reference",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "meter",
+                    "by-ref",
+                    ":meter_ref"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "meter_ref",
+                      "description": "(Required) Encrypted reference of the meter whose info is requested, as returned from the /meter/search endpoint"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"mpan\": \"string\",\n  \"eligible_markets\": [\n    \"cm\",\n    \"wholesale\"\n  ],\n  \"half_hourly_settled\": true,\n  \"supplier_mpid\": \"string\",\n  \"supplier_name\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "2ac237f8-eb6e-4b32-a593-33b085998b18",
+              "name": "Invalid meter reference",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "meter",
+                    "by-ref",
+                    ":meter_ref"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "meter_ref",
+                      "description": "(Required) Encrypted reference of the meter whose info is requested, as returned from the /meter/search endpoint"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "f67d4736-4eeb-4648-bcb6-678973b31267",
+          "name": "Get Meter Info By Mpan Deprecated",
+          "request": {
+            "name": "Get Meter Info By Mpan Deprecated",
+            "description": {
+              "content": "Retrieve detailed information about a meter using its MPAN.\n\nThis endpoint allows direct lookup of meter information when the MPAN is already known.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "meter",
+                ":mpan"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "mpan",
+                  "description": "(Required) 13-digit Meter Point Administration Number (MPAN) whose meter info is requested"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "accessTokenUrl",
+                  "value": "auth/token-form"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "password_credentials"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "1366d939-99d3-4b7c-ae64-c3eacee2a3bb",
+              "name": "Meter information for the requested MPAN",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "meter",
+                    ":mpan"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "mpan",
+                      "description": "(Required) 13-digit Meter Point Administration Number (MPAN) whose meter info is requested"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"mpan\": \"string\",\n  \"eligible_markets\": [\n    \"cm\",\n    \"wholesale\"\n  ],\n  \"half_hourly_settled\": true,\n  \"supplier_mpid\": \"string\",\n  \"supplier_name\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e7458a64-5ad8-4f34-a1c7-9fc0651f2b62",
+              "name": "Invalid MPAN or meter not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "meter",
+                    ":mpan"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "mpan",
+                      "description": "(Required) 13-digit Meter Point Administration Number (MPAN) whose meter info is requested"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c117436d-d4f7-41f3-9365-5f0d05bd903b",
+              "name": "Something went wrong whilst processing the request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "meter",
+                    ":mpan"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "mpan",
+                      "description": "(Required) 13-digit Meter Point Administration Number (MPAN) whose meter info is requested"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "8d72b57f-2649-4c4c-a902-c399d1ae44c8",
+              "name": "Request to meter data provider failed",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "meter",
+                    ":mpan"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "mpan",
+                      "description": "(Required) 13-digit Meter Point Administration Number (MPAN) whose meter info is requested"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6ad78c95-27d3-43ff-b36c-43b043f7d440",
+              "name": "Request to meter data provider timed out",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "meter",
+                    ":mpan"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "mpan",
+                      "description": "(Required) 13-digit Meter Point Administration Number (MPAN) whose meter info is requested"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Gateway Timeout",
+              "code": 504,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.axle.energy",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "a21ef054-bbbd-4620-9753-4659d6790bba",
+    "name": "Axle 1. Authentication 2. Meters API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "For full documentation please see our official docs at <a href='http://docs.axle.energy'>docs.axle.energy</a>",
+      "type": "text/plain"
+    }
+  }
+}

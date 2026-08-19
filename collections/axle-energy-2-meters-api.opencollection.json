@@ -1,0 +1,212 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Axle 1. Authentication 2. Meters API",
+    "version": "1.4.6"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "2. Meters",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get Meter Info By Address",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.axle.energy/meter/by-address",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "resource_owner_password_credentials",
+              "accessTokenUrl": "auth/token-form",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Retrieve detailed information about a meter using its address.\n\nThis endpoint allows direct lookup of meter information by address, when the MPAN is not already known (if the MPAN is known, use the /meter/{mpan} endpoint)."
+        },
+        {
+          "info": {
+            "name": "Get Meter Info By Mpan",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.axle.energy/meter/by-mpan",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "resource_owner_password_credentials",
+              "accessTokenUrl": "auth/token-form",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Retrieve detailed information about a meter using its MPAN.\n\nThis endpoint allows direct lookup of meter information when the MPAN is already known."
+        },
+        {
+          "info": {
+            "name": "Get Meter Info By Address Deprecated",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.axle.energy/meter/",
+            "params": [
+              {
+                "name": "address",
+                "value": "",
+                "type": "query",
+                "description": "Full address string, e.g. '221B Baker Street, London, NW1 6XE'. Must include postcode and begin with house number/ name or other uniquely-identifying information. May be constructed from individual address components, concatenated with separating commas. Better formatting may increase the chance of a meter being found."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "resource_owner_password_credentials",
+              "accessTokenUrl": "auth/token-form",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Retrieve detailed information about a meter using its address.\n\nThis endpoint allows direct lookup of meter information by address, when the MPAN is not already known (if the MPAN is known, use the /meter/{mpan} endpoint)."
+        },
+        {
+          "info": {
+            "name": "Search Meters",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.axle.energy/meter/search",
+            "params": [
+              {
+                "name": "postcode",
+                "value": "",
+                "type": "query",
+                "description": "Postcode at which the requested meter is registered"
+              },
+              {
+                "name": "building_identifier",
+                "value": "",
+                "type": "query",
+                "description": "House number or house/building name, e.g. '3', '10A', 'Flat 4', 'The Old Barn'"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "resource_owner_password_credentials",
+              "accessTokenUrl": "auth/token-form",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Search for all electricity meters in the vicinity of a given postcode/ address.\n\nThis endpoint allows searching for meters by postcode and optionally by building identifier. For data protection and contractual reasons, meter details are returned in an encrypted format that can be used in subsequent API calls to retrieve the full meter information.\n\nThe search works in three steps:\n1. Search for meters at the specified address using this endpoint\n2. Ask the end-user to select the correct address "
+        },
+        {
+          "info": {
+            "name": "Get Meter Info By Meter Ref",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.axle.energy/meter/:meter_ref/mpan",
+            "params": [
+              {
+                "name": "meter_ref",
+                "value": "",
+                "type": "path",
+                "description": "Encrypted reference of the meter whose info is requested, as returned from the /meter/search endpoint"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "resource_owner_password_credentials",
+              "accessTokenUrl": "auth/token-form",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "This endpoint is deprecated. Use the `/by-ref/{meter_ref}` instead."
+        },
+        {
+          "info": {
+            "name": "Get Meter Info By Meter Ref",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.axle.energy/meter/by-ref/:meter_ref",
+            "params": [
+              {
+                "name": "meter_ref",
+                "value": "",
+                "type": "path",
+                "description": "Encrypted reference of the meter whose info is requested, as returned from the /meter/search endpoint"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "resource_owner_password_credentials",
+              "accessTokenUrl": "auth/token-form",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Retrieve meter information using an encrypted reference."
+        },
+        {
+          "info": {
+            "name": "Get Meter Info By Mpan Deprecated",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.axle.energy/meter/:mpan",
+            "params": [
+              {
+                "name": "mpan",
+                "value": "",
+                "type": "path",
+                "description": "13-digit Meter Point Administration Number (MPAN) whose meter info is requested"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "resource_owner_password_credentials",
+              "accessTokenUrl": "auth/token-form",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Retrieve detailed information about a meter using its MPAN.\n\nThis endpoint allows direct lookup of meter information when the MPAN is already known."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,913 @@
+{
+  "item": [
+    {
+      "id": "cfeafbbe-d1a2-4337-aafe-13c29636580d",
+      "name": "6. Rewards",
+      "description": {
+        "content": "Determine how much your users have earned by participating with Axle; allow balance withdrawal",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "e8eadb60-5dbe-4e4f-b351-8a81e3fc91d4",
+          "name": "Get Balance Info",
+          "request": {
+            "name": "Get Balance Info",
+            "description": {
+              "content": "Get info about current balance and total earnings for the site. Requires an organisational bearer token.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "rewards",
+                ":site_id",
+                "info"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "site_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "accessTokenUrl",
+                  "value": "auth/token-form"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "password_credentials"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "d5f0e9ed-bb29-4feb-8965-a1196e96fbc3",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "rewards",
+                    ":site_id",
+                    "info"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "site_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"current_balance_pence\": 3049,\n  \"total_earnings_pence\": 5475,\n  \"minimum_withdrawal_threshold_pence\": 8754,\n  \"withdrawal_min_wait_days\": 7873,\n  \"can_withdraw\": true\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "bf77b1dd-2bc9-4a7e-99dd-c960c48cc46c",
+              "name": "Site not found or not authorized to access",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "rewards",
+                    ":site_id",
+                    "info"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "site_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "be5c8e31-f539-4afe-8e28-c78680e52972",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "rewards",
+                    ":site_id",
+                    "info"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "site_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\"\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "3e7b2a58-1047-44f7-9eed-286ea88e279a",
+              "name": "Internal server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "rewards",
+                    ":site_id",
+                    "info"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "site_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "798d5392-5c65-4ae5-8cf7-e8c1d7f0d159",
+          "name": "Get Rewards Balance Withdrawal Url",
+          "request": {
+            "name": "Get Rewards Balance Withdrawal Url",
+            "description": {
+              "content": "Get a temporary link to an Axle-hosted form through which users can view and withdraw rewards. Requires an organisational bearer token.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "rewards",
+                ":site_id",
+                "url",
+                "balance"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "enforce_two_factor_auth",
+                  "value": "<boolean>",
+                  "description": "Require email verification before the user can link a bank account. Balance and transaction-history views are not gated. When omitted, falls back to the organisation's configured 2FA posture."
+                },
+                {
+                  "disabled": false,
+                  "key": "redirect_uri",
+                  "value": "<string>",
+                  "description": "(Required) Where to redirect after completion"
+                },
+                {
+                  "disabled": false,
+                  "key": "hide_transactions",
+                  "value": "false",
+                  "description": "Hide transaction history from the user"
+                },
+                {
+                  "disabled": false,
+                  "key": "auto_redirect_to_setup",
+                  "value": "false",
+                  "description": "Skip the balance page and go straight to bank setup if no account exists"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "site_id",
+                  "description": "(Required) The ID on Axle's system for this user. The site_id can be easily retrieved from the get-by-external-id endpoint."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "accessTokenUrl",
+                  "value": "auth/token-form"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "password_credentials"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "cb9a2eb9-7c46-43b9-a04a-81444e63014a",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "rewards",
+                    ":site_id",
+                    "url",
+                    "balance"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "enforce_two_factor_auth",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "redirect_uri",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "hide_transactions",
+                      "value": "false"
+                    },
+                    {
+                      "key": "auto_redirect_to_setup",
+                      "value": "false"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "site_id",
+                      "description": "(Required) The ID on Axle's system for this user. The site_id can be easily retrieved from the get-by-external-id endpoint."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"balance_withdrawal_url\": \"string\",\n  \"url_expiry_timestamp\": \"2011-06-12T22:49:49.611Z\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "1044ac20-6d6e-4c26-a0f9-27b86cfa430e",
+              "name": "Site not found or not authorized to access",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "rewards",
+                    ":site_id",
+                    "url",
+                    "balance"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "enforce_two_factor_auth",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "redirect_uri",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "hide_transactions",
+                      "value": "false"
+                    },
+                    {
+                      "key": "auto_redirect_to_setup",
+                      "value": "false"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "site_id",
+                      "description": "(Required) The ID on Axle's system for this user. The site_id can be easily retrieved from the get-by-external-id endpoint."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "756482bf-9700-46ed-ae94-f4a78664c75c",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "rewards",
+                    ":site_id",
+                    "url",
+                    "balance"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "enforce_two_factor_auth",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "redirect_uri",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "hide_transactions",
+                      "value": "false"
+                    },
+                    {
+                      "key": "auto_redirect_to_setup",
+                      "value": "false"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "site_id",
+                      "description": "(Required) The ID on Axle's system for this user. The site_id can be easily retrieved from the get-by-external-id endpoint."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\"\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "8557fd72-3e8e-43d4-9efa-94f74a760d7b",
+              "name": "Internal server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "rewards",
+                    ":site_id",
+                    "url",
+                    "balance"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "enforce_two_factor_auth",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "redirect_uri",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "hide_transactions",
+                      "value": "false"
+                    },
+                    {
+                      "key": "auto_redirect_to_setup",
+                      "value": "false"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "site_id",
+                      "description": "(Required) The ID on Axle's system for this user. The site_id can be easily retrieved from the get-by-external-id endpoint."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "ba8b7449-3d22-4d98-9a70-09620f4dcf2b",
+          "name": "Get Transaction History",
+          "request": {
+            "name": "Get Transaction History",
+            "description": {
+              "content": "Get history of transactions for the site. Requires an organisational bearer token.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "rewards",
+                ":site_id",
+                "transactions"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "site_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "accessTokenUrl",
+                  "value": "auth/token-form"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "password_credentials"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "dcd5ac57-4b5c-4b6e-91ba-d40afddbec26",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "rewards",
+                    ":site_id",
+                    "transactions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "site_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"site_id\": \"efceb42f-71f1-246d-1db5-fe80feb3acb9\",\n  \"transactions\": [\n    {\n      \"transaction_id\": \"0301a673-97b2-3b7e-21e9-0cb1c2fd8af0\",\n      \"credit_pence\": 8094,\n      \"transaction_type\": \"Referrer Credit\",\n      \"start_time\": \"2013-11-04T06:02:19.962Z\",\n      \"end_time\": \"1963-09-22T10:41:42.306Z\",\n      \"settlement_date\": \"2006-08-08\",\n      \"flex_kwh\": 1533.1077194895959,\n      \"payment_status\": \"failed\"\n    },\n    {\n      \"transaction_id\": \"216dfa7b-b4e9-a056-883a-702ce4a5162d\",\n      \"credit_pence\": 3751,\n      \"transaction_type\": \"FR SC Referred Credit\",\n      \"start_time\": \"1950-10-28T09:16:43.443Z\",\n      \"end_time\": \"1974-11-10T20:23:53.006Z\",\n      \"settlement_date\": \"2021-12-11\",\n      \"flex_kwh\": 9757.856162338576,\n      \"payment_status\": \"failed\"\n    }\n  ],\n  \"is_below_withdrawal_minimum\": false,\n  \"days_until_minimum_wait_time_met\": 7771\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d3843f8b-dfd9-4d34-aa27-1c09d19c0eda",
+              "name": "Site not found or not authorized to access",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "rewards",
+                    ":site_id",
+                    "transactions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "site_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "fd99941a-84f9-421c-9032-d6d84e1dca6c",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "rewards",
+                    ":site_id",
+                    "transactions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "site_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\"\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d40b0180-0cca-4160-99a0-925106d9579e",
+              "name": "Internal server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "rewards",
+                    ":site_id",
+                    "transactions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "site_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.axle.energy",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "99d84f4d-bd53-49d5-930d-af5ca636ecd6",
+    "name": "Axle 1. Authentication 6. Rewards API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "For full documentation please see our official docs at <a href='http://docs.axle.energy'>docs.axle.energy</a>",
+      "type": "text/plain"
+    }
+  }
+}

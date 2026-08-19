@@ -1,0 +1,824 @@
+{
+  "item": [
+    {
+      "id": "335c0ca5-1023-4f38-a5d0-38880b7b2fc5",
+      "name": "1. Authentication",
+      "description": {
+        "content": "Authenticate yourself with the Axle API",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "5373aad1-b708-45fa-b955-e439e397e730",
+          "name": "Login For Access Token Form",
+          "request": {
+            "name": "Login For Access Token Form",
+            "description": {
+              "content": "Authenticate using username and password submitted via form data.\n\nThis endpoint is compatible with standard OAuth2 clients that use form-based authentication. Returns an access token upon successful authentication.\n\nThe returned token is valid for 1 hour, after which a new token must be requested.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "auth",
+                "token-form"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/x-www-form-urlencoded"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "disabled": false,
+                  "key": "username",
+                  "value": "<string>",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "password",
+                  "value": "<string>",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "grant_type",
+                  "value": "password"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "30491423-9762-4d9a-8f62-e5150cf60950",
+              "name": "Successfully authenticated with access token",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "auth",
+                    "token-form"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "username",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "password",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "grant_type",
+                      "value": "password"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"access_token\": \"string\",\n  \"token_type\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "62b7863a-0722-4534-abdf-5a0a12c2077a",
+              "name": "Incorrect username or password",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "auth",
+                    "token-form"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "username",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "password",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "grant_type",
+                      "value": "password"
+                    }
+                  ]
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "ce96d477-7c3c-42cc-bb01-ffb1eefb7fcf",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "auth",
+                    "token-form"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "username",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "password",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "grant_type",
+                      "value": "password"
+                    }
+                  ]
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\"\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "d3470445-48e4-44d5-b57b-b3ebf4de56bc",
+          "name": "Read Users Me",
+          "request": {
+            "name": "Read Users Me",
+            "description": {
+              "content": "Get information about the currently authenticated user.\n\nReturns the user details for the authenticated user based on the provided access token.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "auth",
+                "users",
+                "me",
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "accessTokenUrl",
+                  "value": "auth/token-form"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "password_credentials"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "4fa0851a-4d23-42ee-8631-4796c21d3075",
+              "name": "Current user information",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "auth",
+                    "users",
+                    "me",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"username\": \"string\",\n  \"roles\": [\n    \"string\",\n    \"string\"\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "cbfd5814-a559-4f17-885b-a2110689e7cc",
+              "name": "Not authenticated",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "auth",
+                    "users",
+                    "me",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "ca7d3a7b-ede3-4532-935e-71819917d8d1",
+          "name": "Create Component Token",
+          "request": {
+            "name": "Create Component Token",
+            "description": {
+              "content": "Authenticate on behalf of an end user by supplying their external user ID.\n\nThis endpoint is used by authenticated API clients to create a user-scoped access token for a specific end user (referenced by their external ID) in the API client's organisation. If no such end user exists, one will be created on demand.\n\nReturns a bearer access token scoped to this end user upon success.\n\nThis token is site-scoped and valid for 24 hours, longer-lived than the standard organisation token (1 hour) as it is intended for end-user sessions.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "auth",
+                "component-token"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/x-www-form-urlencoded"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "accessTokenUrl",
+                  "value": "auth/token-form"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "password_credentials"
+                }
+              ]
+            },
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "disabled": false,
+                  "key": "external_user_id",
+                  "value": "<string>",
+                  "description": "(Required) Your ID for this end user; a site is created on demand if unknown"
+                },
+                {
+                  "disabled": false,
+                  "key": "allowed_origin",
+                  "value": "<string>",
+                  "description": "(Required) Origin allowed to embed the Axle-hosted flow"
+                },
+                {
+                  "disabled": false,
+                  "key": "user_email",
+                  "value": "<string>",
+                  "description": "The email of the user, to be added for new users or upserted for existing users."
+                },
+                {
+                  "disabled": false,
+                  "key": "gave_boundary_meter_consent_at",
+                  "value": "<dateTime>",
+                  "description": "Timezone-aware ISO 8601 timestamp (e.g. '2026-01-01T12:34:56Z') indicating when the household gave consent for Axle to access readings from their boundary meter, if consent was given.\n\nUnless explicitly exempted, this must be provided on the first call for a new `external_user_id`. It can optionally be included in later calls for the same `external_user_id`; the value submitted most recently will be kept on record."
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "53cb7c0a-4514-4cb7-8376-90c2f26e32c2",
+              "name": "Successfully authenticated with a user-scoped access token",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "auth",
+                    "component-token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) Your ID for this end user; a site is created on demand if unknown",
+                        "type": "text/plain"
+                      },
+                      "key": "external_user_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) Origin allowed to embed the Axle-hosted flow",
+                        "type": "text/plain"
+                      },
+                      "key": "allowed_origin",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "The email of the user, to be added for new users or upserted for existing users.",
+                        "type": "text/plain"
+                      },
+                      "key": "user_email",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "Timezone-aware ISO 8601 timestamp (e.g. '2026-01-01T12:34:56Z') indicating when the household gave consent for Axle to access readings from their boundary meter, if consent was given.\n\nUnless explicitly exempted, this must be provided on the first call for a new `external_user_id`. It can optionally be included in later calls for the same `external_user_id`; the value submitted most recently will be kept on record.",
+                        "type": "text/plain"
+                      },
+                      "key": "gave_boundary_meter_consent_at",
+                      "value": "<dateTime>"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"dd01c297-a582-abe0-8c2b-d2a24b4e32c8\",\n  \"access_token\": \"string\",\n  \"token_type\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ffbb4db2-bb4a-466b-94af-e85eea8af239",
+              "name": "Error trying to find organisation",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "auth",
+                    "component-token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) Your ID for this end user; a site is created on demand if unknown",
+                        "type": "text/plain"
+                      },
+                      "key": "external_user_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) Origin allowed to embed the Axle-hosted flow",
+                        "type": "text/plain"
+                      },
+                      "key": "allowed_origin",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "The email of the user, to be added for new users or upserted for existing users.",
+                        "type": "text/plain"
+                      },
+                      "key": "user_email",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "Timezone-aware ISO 8601 timestamp (e.g. '2026-01-01T12:34:56Z') indicating when the household gave consent for Axle to access readings from their boundary meter, if consent was given.\n\nUnless explicitly exempted, this must be provided on the first call for a new `external_user_id`. It can optionally be included in later calls for the same `external_user_id`; the value submitted most recently will be kept on record.",
+                        "type": "text/plain"
+                      },
+                      "key": "gave_boundary_meter_consent_at",
+                      "value": "<dateTime>"
+                    }
+                  ]
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "6143302b-0603-49d5-bdf7-3a8dc6c2be49",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "auth",
+                    "component-token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) Your ID for this end user; a site is created on demand if unknown",
+                        "type": "text/plain"
+                      },
+                      "key": "external_user_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) Origin allowed to embed the Axle-hosted flow",
+                        "type": "text/plain"
+                      },
+                      "key": "allowed_origin",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "The email of the user, to be added for new users or upserted for existing users.",
+                        "type": "text/plain"
+                      },
+                      "key": "user_email",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "Timezone-aware ISO 8601 timestamp (e.g. '2026-01-01T12:34:56Z') indicating when the household gave consent for Axle to access readings from their boundary meter, if consent was given.\n\nUnless explicitly exempted, this must be provided on the first call for a new `external_user_id`. It can optionally be included in later calls for the same `external_user_id`; the value submitted most recently will be kept on record.",
+                        "type": "text/plain"
+                      },
+                      "key": "gave_boundary_meter_consent_at",
+                      "value": "<dateTime>"
+                    }
+                  ]
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\"\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f974053d-2a07-4803-93e8-05645bde92ba",
+              "name": "Server error when trying to find or create the user",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "auth",
+                    "component-token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) Your ID for this end user; a site is created on demand if unknown",
+                        "type": "text/plain"
+                      },
+                      "key": "external_user_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) Origin allowed to embed the Axle-hosted flow",
+                        "type": "text/plain"
+                      },
+                      "key": "allowed_origin",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "The email of the user, to be added for new users or upserted for existing users.",
+                        "type": "text/plain"
+                      },
+                      "key": "user_email",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "Timezone-aware ISO 8601 timestamp (e.g. '2026-01-01T12:34:56Z') indicating when the household gave consent for Axle to access readings from their boundary meter, if consent was given.\n\nUnless explicitly exempted, this must be provided on the first call for a new `external_user_id`. It can optionally be included in later calls for the same `external_user_id`; the value submitted most recently will be kept on record.",
+                        "type": "text/plain"
+                      },
+                      "key": "gave_boundary_meter_consent_at",
+                      "value": "<dateTime>"
+                    }
+                  ]
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.axle.energy",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "9ec7bdb2-ab56-415f-9495-50b040b6221e",
+    "name": "Axle 1. Authentication API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "For full documentation please see our official docs at <a href='http://docs.axle.energy'>docs.axle.energy</a>",
+      "type": "text/plain"
+    }
+  }
+}

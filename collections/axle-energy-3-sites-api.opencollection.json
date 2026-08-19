@@ -1,0 +1,595 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Axle 1. Authentication 3. Sites API",
+    "version": "1.4.6"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "3. Sites",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get Sites",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.axle.energy/entities/site",
+            "params": [
+              {
+                "name": "mpan",
+                "value": "",
+                "type": "query",
+                "description": "Filter sites by MPAN"
+              },
+              {
+                "name": "postcode",
+                "value": "",
+                "type": "query",
+                "description": "Filter sites by postcode"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of sites to return (1-5000)"
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "Number of sites to skip for pagination"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "resource_owner_password_credentials",
+              "accessTokenUrl": "auth/token-form",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Retrieve sites, optionally filtering by MPAN or postcode.\n\nReturns a page of sites with the total count and the requested subset of site records. Use the limit and offset parameters to navigate through pages of results."
+        },
+        {
+          "info": {
+            "name": "Create Site",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.axle.energy/entities/site",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "resource_owner_password_credentials",
+              "accessTokenUrl": "auth/token-form",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Register a new site.\n\nThe site must have a valid address and postcode. If a site with the same address already exists, a 409 error will be returned with the existing site ID."
+        },
+        {
+          "info": {
+            "name": "Initialise Site",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.axle.energy/entities/site/initialise",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "resource_owner_password_credentials",
+              "accessTokenUrl": "auth/token-form",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Initialise a site with one or more assets.\n\nThis endpoint upserts the site and assets (creating them if they don't exist, or filling in missing fields if they do), and returns eligibility information.\n\n**No enrollment side effects**: Use the `/enrol` endpoint to commit to enrollment."
+        },
+        {
+          "info": {
+            "name": "Check Eligibility",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.axle.energy/entities/site/check-eligibility",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "resource_owner_password_credentials",
+              "accessTokenUrl": "auth/token-form",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Check whether an MPAN, optionally combined with an asset model, is eligible for enrolment. No data is persisted."
+        },
+        {
+          "info": {
+            "name": "Enrol Site",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.axle.energy/entities/site/:site_id/enrol",
+            "params": [
+              {
+                "name": "site_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "resource_owner_password_credentials",
+              "accessTokenUrl": "auth/token-form",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Enrol a site in a proposition.\n\nThis is the commitment point — it activates the proposition for the site.\n\nIdempotent: if the site is already enrolled, returns `already_enrolled` without making changes.\n\nIf the site previously withdrew from this proposition, returns 422. Set `override_withdrawal` to true to re-enrol."
+        },
+        {
+          "info": {
+            "name": "Onboard",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.axle.energy/entities/site/onboard",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "resource_owner_password_credentials",
+              "accessTokenUrl": "auth/token-form",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Initialise a site and its assets, and enrol them in a proposition in a single call.\n\nThis endpoint will:\n1. Upsert the site and asset(s)\n2. Enrol in the relevant flex proposition\n\nThe response returns the site and asset IDs you'll use in subsequent calls, and the enrolment outcome.\n\nOnboarding is idempotent and atomic — sending the same site or asset returns the existing record with any new fields merged in; if enrolment fails, nothing is stored."
+        },
+        {
+          "info": {
+            "name": "Unenrol Site",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.axle.energy/entities/site/:site_id/unenrol",
+            "params": [
+              {
+                "name": "site_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "resource_owner_password_credentials",
+              "accessTokenUrl": "auth/token-form",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Unenrol a site from a proposition.\n\nWithdraws the site from the proposition and prevents further scheduling. Does not delete the site or its assets.\n\nUse when the user is opting out of this proposition specifically — for example, they toggled it off in your app. The site and assets are kept, any other propositions they're enrolled in (such as Capacity Market) are unaffected, and the user can re-enrol later and still access their payments.\n\nIf the user is leaving entirely (moving house, support-l"
+        },
+        {
+          "info": {
+            "name": "Onboard Site And Asset",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.axle.energy/entities/site/onboard-site-and-asset",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "resource_owner_password_credentials",
+              "accessTokenUrl": "auth/token-form",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "**Deprecated** — prefer [`/onboard`](/api-reference/entities/site/onboard) instead.\n\nThe new `/onboard` endpoint supports multiple assets per site in a single call and includes improvements in idempotency, resilience and response details.\n\n---\n\nRegister a site, asset, and dispatch consent in a single call.\n\nCreates the site and asset, grants consent, and enrols in the relevant flex proposition.\n\nThis endpoint will:\n1. Create the site\n2. Create the asset associated with the site\n3. Enrol in the r"
+        },
+        {
+          "info": {
+            "name": "Offboard Site And Assets",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.axle.energy/entities/site/:site_id/offboard-site-and-assets",
+            "params": [
+              {
+                "name": "site_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "resource_owner_password_credentials",
+              "accessTokenUrl": "auth/token-form",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Offboard a site and all its associated assets in a single operation.\n\nUnenrols from every proposition, and deletes the site and assets in accordance with data retention policies.\n\nUse when the user is leaving entirely — for example, they've moved house, or your support team is removing them. Payments can no longer be accessed afterwards.\n\nIf the user is only opting out of one proposition (e.g. toggling Flex Lite off in your app), use `unenrol` instead — it preserves the site and any other propos"
+        },
+        {
+          "info": {
+            "name": "Get Site",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.axle.energy/entities/site/:site_id",
+            "params": [
+              {
+                "name": "site_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "resource_owner_password_credentials",
+              "accessTokenUrl": "auth/token-form",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Retrieve a specific site by its UUID.\n\nReturns the site details if it exists."
+        },
+        {
+          "info": {
+            "name": "Update Site",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.axle.energy/entities/site/:site_id",
+            "params": [
+              {
+                "name": "site_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "resource_owner_password_credentials",
+              "accessTokenUrl": "auth/token-form",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Update an existing site's information.\n\nOnly fields included in the request will be updated. Returns the updated site details."
+        },
+        {
+          "info": {
+            "name": "Delete Site",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.axle.energy/entities/site/:site_id",
+            "params": [
+              {
+                "name": "site_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "resource_owner_password_credentials",
+              "accessTokenUrl": "auth/token-form",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Delete an existing site by its UUID.\n\nThe site will only be deleted if it has no associated assets or other objects. Returns a confirmation message upon successful deletion."
+        },
+        {
+          "info": {
+            "name": "Get Site Eligibility",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.axle.energy/entities/site/:site_id/eligibility",
+            "params": [
+              {
+                "name": "site_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "resource_owner_password_credentials",
+              "accessTokenUrl": "auth/token-form",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Read-only eligibility breakdown for a site and its assets. Returns the list of propositions the site can enrol in, along with per-asset eligibility detail."
+        },
+        {
+          "info": {
+            "name": "Add Site Meter Consent",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.axle.energy/entities/site/:site_id/meter-consent",
+            "params": [
+              {
+                "name": "site_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "resource_owner_password_credentials",
+              "accessTokenUrl": "auth/token-form",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Add boundary meter consent for a site.\n\nConfirm that the site has consented for Axle to retrieve its boundary meter readings. This is required for participation in the wholesale market for assets that do not have CoP11 approval, but may also be provided via other endpoints (e.g. during site onboarding). Returns the updated site details with the new consent timestamp."
+        },
+        {
+          "info": {
+            "name": "Add Site Dispatch Consent",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.axle.energy/entities/site/:site_id/dispatch-consent",
+            "params": [
+              {
+                "name": "site_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "resource_owner_password_credentials",
+              "accessTokenUrl": "auth/token-form",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Add dispatch consent for a site to particpate in flex markets.\n\nThis enables the site to participate with the specified dispatch consent methods. Returns the updated site details with the new dispatch consent information."
+        },
+        {
+          "info": {
+            "name": "Remove Site Dispatch Consent",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.axle.energy/entities/site/:site_id/dispatch-deconsent",
+            "params": [
+              {
+                "name": "site_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "resource_owner_password_credentials",
+              "accessTokenUrl": "auth/token-form",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Remove dispatch consent for a site to stop participation in flex markets.\n\nThis disables the site's participation with the specified dispatch consent methods. Returns the updated site details with the consent information removed."
+        },
+        {
+          "info": {
+            "name": "Add Site Auth Token",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.axle.energy/entities/site/:site_id/token",
+            "params": [
+              {
+                "name": "site_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "resource_owner_password_credentials",
+              "accessTokenUrl": "auth/token-form",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Provide an auth token to Axle, for dispatching the site's assets.\n\nThis token should provide access to all of the assets registered against the specified site.\n\nThis is only required where Axle is not able to access this site via an aggregated API in your systems."
+        },
+        {
+          "info": {
+            "name": "Get Site Flex Events",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.axle.energy/entities/site/:site_id/flex-events",
+            "params": [
+              {
+                "name": "site_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "resource_owner_password_credentials",
+              "accessTokenUrl": "auth/token-form",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Get info on flex events the site has participated in, including estimated and final gross revenues.\n\nThese estimates can be used for a variety of purposes, including paying out end-users before the final settlement data is available.However, to avoid overpayments it is recommended to only pay out a percentage of the estimated revenue initially, and top-up once final revenues are available.\n\nNote: it is possible for gross revenues to be negative in some scenarios, e.g. if the site flexed in the w"
+        },
+        {
+          "info": {
+            "name": "Get Price Curve",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.axle.energy/entities/site/:site_id/price-curve",
+            "params": [
+              {
+                "name": "site_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "resource_owner_password_credentials",
+              "accessTokenUrl": "auth/token-form",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Half-hourly data of prices per MWh of flexed energy for the asset. Prices are returned from the current Settlement Period until 23:00 UK time on the same day or next day. Next day prices are available from 14:00 UK time."
+        },
+        {
+          "info": {
+            "name": "Initiate Site Oauth",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.axle.energy/entities/site/:site_id/oauth/:provider/initiate",
+            "params": [
+              {
+                "name": "provider",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "site_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "resource_owner_password_credentials",
+              "accessTokenUrl": "auth/token-form",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Initiates OAuth flow by returning the provider's authorisation URL for the client to redirect to"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

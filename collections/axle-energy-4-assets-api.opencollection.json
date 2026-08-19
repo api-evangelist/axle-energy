@@ -1,0 +1,558 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Axle 1. Authentication 4. Assets API",
+    "version": "1.4.6"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "4. Assets",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get Assets",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.axle.energy/entities/asset",
+            "params": [
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of assets to return (1-5000)"
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "Number of assets to skip for pagination"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "resource_owner_password_credentials",
+              "accessTokenUrl": "auth/token-form",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Get all assets with pagination.\n\nReturns a page of assets with the total count and the requested subset of asset records. Use the limit and offset parameters to navigate through pages of results."
+        },
+        {
+          "info": {
+            "name": "Create Asset",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.axle.energy/entities/asset",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "resource_owner_password_credentials",
+              "accessTokenUrl": "auth/token-form",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Create a new asset.\n\nThe asset must be associated with an existing site. Returns the created asset details including the assigned UUID."
+        },
+        {
+          "info": {
+            "name": "Get Asset",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.axle.energy/entities/asset/:asset_id",
+            "params": [
+              {
+                "name": "asset_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "resource_owner_password_credentials",
+              "accessTokenUrl": "auth/token-form",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Get a specific asset by its Axle UUID.\n\nReturns the asset details if it exists."
+        },
+        {
+          "info": {
+            "name": "Update Asset",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.axle.energy/entities/asset/:asset_id",
+            "params": [
+              {
+                "name": "asset_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "resource_owner_password_credentials",
+              "accessTokenUrl": "auth/token-form",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Update an existing asset's properties, asset model, and/or installation date.\n\nAll fields are optional. Returns the updated asset details."
+        },
+        {
+          "info": {
+            "name": "Delete Asset",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.axle.energy/entities/asset/:asset_id",
+            "params": [
+              {
+                "name": "asset_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "resource_owner_password_credentials",
+              "accessTokenUrl": "auth/token-form",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Delete an asset by its Axle UUID.\n\nThe asset will be deleted if it exists. Returns a confirmation message upon successful deletion."
+        },
+        {
+          "info": {
+            "name": "Get Asset By External Id",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.axle.energy/entities/asset/external-id/:external_id",
+            "params": [
+              {
+                "name": "external_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "resource_owner_password_credentials",
+              "accessTokenUrl": "auth/token-form",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Get a specific asset by its external ID (vendor-specific identifier).\n\nReturns the asset details if it exists. This is useful for integrations where the external system ID is known but not the Axle UUID."
+        },
+        {
+          "info": {
+            "name": "Event Handling Status Update",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.axle.energy/entities/asset/:asset_id/callback/:event_id",
+            "params": [
+              {
+                "name": "asset_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "event_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "asset_id_is_external",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "resource_owner_password_credentials",
+              "accessTokenUrl": "auth/token-form",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Provide an update on the handling of a given event by a given asset.\n\nThis endpoint allows asset controllers to report back the status of event handling. The `asset_id` can be either the Axle UUID or an external ID if `asset_id_is_external` is true.\n\nNote: This will not work for non-UUID external asset IDs."
+        },
+        {
+          "info": {
+            "name": "Asset Event",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.axle.energy/entities/asset/:asset_id/event",
+            "params": [
+              {
+                "name": "asset_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "resource_owner_password_credentials",
+              "accessTokenUrl": "auth/token-form",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Send notification of an event happening on an asset.\n\nThis endpoint allows reporting various events related to an asset, such as:\n- Plug-in/plug-out events\n- Updates to charging intent\n- Charge now events\n\nIf a tariff is included, it must comply with the OSM opening hours standard (https://wiki.openstreetmap.org/wiki/Key:opening_hours) for off-peak times and have a valid timezone, or a 400 error will be returned."
+        },
+        {
+          "info": {
+            "name": "Asset Plug In Event",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.axle.energy/entities/asset/:asset_id/event/plug-in",
+            "params": [
+              {
+                "name": "asset_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "resource_owner_password_credentials",
+              "accessTokenUrl": "auth/token-form",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Send notification of a car being plugged in.\n\nTariff, vehicle and intent information may be optionally provided.\nIf a tariff is included, it must comply with the OSM opening hours standard (https://wiki.openstreetmap.org/wiki/Key:opening_hours) for off-peak times and have a valid timezone, or a 400 error will be returned."
+        },
+        {
+          "info": {
+            "name": "Asset Plug Out Event",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.axle.energy/entities/asset/:asset_id/event/plug-out",
+            "params": [
+              {
+                "name": "asset_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "resource_owner_password_credentials",
+              "accessTokenUrl": "auth/token-form",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Send notification of a car being unplugged from an asset."
+        },
+        {
+          "info": {
+            "name": "Asset Intent Update Event",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.axle.energy/entities/asset/:asset_id/event/intent",
+            "params": [
+              {
+                "name": "asset_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "resource_owner_password_credentials",
+              "accessTokenUrl": "auth/token-form",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Send notification of an intent being updated on an asset."
+        },
+        {
+          "info": {
+            "name": "Asset Charge Now Event",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.axle.energy/entities/asset/:asset_id/event/charge-now",
+            "params": [
+              {
+                "name": "asset_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "resource_owner_password_credentials",
+              "accessTokenUrl": "auth/token-form",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Send notification of a charge now request for an asset."
+        },
+        {
+          "info": {
+            "name": "Asset Charge Now Deleted Event",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.axle.energy/entities/asset/:asset_id/event/charge-now-deleted",
+            "params": [
+              {
+                "name": "asset_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "resource_owner_password_credentials",
+              "accessTokenUrl": "auth/token-form",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Send notification of a charge now request being deleted for an asset."
+        },
+        {
+          "info": {
+            "name": "Asset Tariff Update Event",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.axle.energy/entities/asset/:asset_id/event/tariff-update",
+            "params": [
+              {
+                "name": "asset_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "resource_owner_password_credentials",
+              "accessTokenUrl": "auth/token-form",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Send notification of a tariff update for an asset.\n\nThe `off_peak_times` field must comply with the OSM opening hours standard (https://wiki.openstreetmap.org/wiki/Key:opening_hours) and have a valid timezone, or a 400 error will be returned.\n\nThe same off-peak times apply every day, day-of-week selectors are not supported. Use `,` to separate multiple time ranges. Common examples:\n- Same-day off-peak (e.g. midnight to 7am): `00:00-07:00`\n- Overnight off-peak (e.g. 11:30pm to 5:30am): `00:00-05:"
+        },
+        {
+          "info": {
+            "name": "Get Latest Intent",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.axle.energy/entities/asset/:asset_id/intent",
+            "params": [
+              {
+                "name": "asset_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "resource_owner_password_credentials",
+              "accessTokenUrl": "auth/token-form",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Get the last recorded intent."
+        },
+        {
+          "info": {
+            "name": "Get Battery Schedule",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.axle.energy/entities/asset/:asset_id/battery-schedule",
+            "params": [
+              {
+                "name": "asset_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "resource_owner_password_credentials",
+              "accessTokenUrl": "auth/token-form",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Get the active battery schedule."
+        },
+        {
+          "info": {
+            "name": "Asset Plug In Schedule Event",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.axle.energy/entities/asset/:asset_id/event/plug-in-schedule",
+            "params": [
+              {
+                "name": "asset_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "resource_owner_password_credentials",
+              "accessTokenUrl": "auth/token-form",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Submit a charging schedule and receive a modified schedule."
+        },
+        {
+          "info": {
+            "name": "Get Price Curve",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.axle.energy/entities/asset/:asset_id/price-curve",
+            "params": [
+              {
+                "name": "asset_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "resource_owner_password_credentials",
+              "accessTokenUrl": "auth/token-form",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Half-hourly data of prices per MWh of flexed energy for the asset. Prices are returned from the current Settlement Period until 23:00 UK time on the same day or next day. Next day prices are available from 14:00 UK time."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

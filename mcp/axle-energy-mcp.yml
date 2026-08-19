@@ -2,283 +2,290 @@ generated: '2026-07-18'
 method: derived
 status: candidate
 source: openapi/axle-energy-openapi-original.json
-note: No official hosted MCP server found (checked docs, npm @modelcontextprotocol, registries). Candidate tool list derived one-per-operation from the OpenAPI.
+note: No official hosted MCP server found (checked docs, npm @modelcontextprotocol, registries). Candidate
+  tool list derived one-per-operation from the OpenAPI.
 server:
   name: axle-energy
   transport: http
 tools:
-  - name: get_assets_entities_asset_get
-    description: "Get Assets"
-    method: GET
-    path: /entities/asset
-    source_operation: openapi/axle-energy-openapi-original.json#get_assets_entities_asset_get
-  - name: create_asset_entities_asset_post
-    description: "Create Asset"
-    method: POST
-    path: /entities/asset
-    source_operation: openapi/axle-energy-openapi-original.json#create_asset_entities_asset_post
-  - name: get_asset_entities_asset__asset_id__get
-    description: "Get Asset"
-    method: GET
-    path: /entities/asset/{asset_id}
-    source_operation: openapi/axle-energy-openapi-original.json#get_asset_entities_asset__asset_id__get
-  - name: delete_asset_entities_asset__asset_id__delete
-    description: "Delete Asset"
-    method: DELETE
-    path: /entities/asset/{asset_id}
-    source_operation: openapi/axle-energy-openapi-original.json#delete_asset_entities_asset__asset_id__delete
-  - name: update_asset_entities_asset__asset_id__patch
-    description: "Update Asset"
-    method: PATCH
-    path: /entities/asset/{asset_id}
-    source_operation: openapi/axle-energy-openapi-original.json#update_asset_entities_asset__asset_id__patch
-  - name: get_asset_by_external_id_entities_asset_external_id__external_id__get
-    description: "Get Asset By External Id"
-    method: GET
-    path: /entities/asset/external-id/{external_id}
-    source_operation: openapi/axle-energy-openapi-original.json#get_asset_by_external_id_entities_asset_external_id__external_id__get
-  - name: event_handling_status_update_entities_asset__asset_id__callback__event_id__post
-    description: "Event Handling Status Update"
-    method: POST
-    path: /entities/asset/{asset_id}/callback/{event_id}
-    source_operation: openapi/axle-energy-openapi-original.json#event_handling_status_update_entities_asset__asset_id__callback__event_id__post
-  - name: asset_event_entities_asset__asset_id__event_post
-    description: "Asset Event"
-    method: POST
-    path: /entities/asset/{asset_id}/event
-    source_operation: openapi/axle-energy-openapi-original.json#asset_event_entities_asset__asset_id__event_post
-  - name: asset_plug_in_event_entities_asset__asset_id__event_plug_in_post
-    description: "Asset Plug In Event"
-    method: POST
-    path: /entities/asset/{asset_id}/event/plug-in
-    source_operation: openapi/axle-energy-openapi-original.json#asset_plug_in_event_entities_asset__asset_id__event_plug_in_post
-  - name: asset_plug_out_event_entities_asset__asset_id__event_plug_out_post
-    description: "Asset Plug Out Event"
-    method: POST
-    path: /entities/asset/{asset_id}/event/plug-out
-    source_operation: openapi/axle-energy-openapi-original.json#asset_plug_out_event_entities_asset__asset_id__event_plug_out_post
-  - name: asset_intent_update_event_entities_asset__asset_id__event_intent_post
-    description: "Asset Intent Update Event"
-    method: POST
-    path: /entities/asset/{asset_id}/event/intent
-    source_operation: openapi/axle-energy-openapi-original.json#asset_intent_update_event_entities_asset__asset_id__event_intent_post
-  - name: asset_charge_now_event_entities_asset__asset_id__event_charge_now_post
-    description: "Asset Charge Now Event"
-    method: POST
-    path: /entities/asset/{asset_id}/event/charge-now
-    source_operation: openapi/axle-energy-openapi-original.json#asset_charge_now_event_entities_asset__asset_id__event_charge_now_post
-  - name: asset_charge_now_deleted_event_entities_asset__asset_id__event_charge_now_deleted_post
-    description: "Asset Charge Now Deleted Event"
-    method: POST
-    path: /entities/asset/{asset_id}/event/charge-now-deleted
-    source_operation: openapi/axle-energy-openapi-original.json#asset_charge_now_deleted_event_entities_asset__asset_id__event_charge_now_deleted_post
-  - name: asset_tariff_update_event_entities_asset__asset_id__event_tariff_update_post
-    description: "Asset Tariff Update Event"
-    method: POST
-    path: /entities/asset/{asset_id}/event/tariff-update
-    source_operation: openapi/axle-energy-openapi-original.json#asset_tariff_update_event_entities_asset__asset_id__event_tariff_update_post
-  - name: get_latest_intent_entities_asset__asset_id__intent_get
-    description: "Get Latest Intent"
-    method: GET
-    path: /entities/asset/{asset_id}/intent
-    source_operation: openapi/axle-energy-openapi-original.json#get_latest_intent_entities_asset__asset_id__intent_get
-  - name: get_battery_schedule_entities_asset__asset_id__battery_schedule_get
-    description: "Get Battery Schedule"
-    method: GET
-    path: /entities/asset/{asset_id}/battery-schedule
-    source_operation: openapi/axle-energy-openapi-original.json#get_battery_schedule_entities_asset__asset_id__battery_schedule_get
-  - name: asset_plug_in_schedule_event_entities_asset__asset_id__event_plug_in_schedule_post
-    description: "Asset Plug In Schedule Event"
-    method: POST
-    path: /entities/asset/{asset_id}/event/plug-in-schedule
-    source_operation: openapi/axle-energy-openapi-original.json#asset_plug_in_schedule_event_entities_asset__asset_id__event_plug_in_schedule_post
-  - name: get_price_curve_entities_asset__asset_id__price_curve_get
-    description: "Get Price Curve"
-    method: GET
-    path: /entities/asset/{asset_id}/price-curve
-    source_operation: openapi/axle-energy-openapi-original.json#get_price_curve_entities_asset__asset_id__price_curve_get
-  - name: get_sites_entities_site_get
-    description: "Get Sites"
-    method: GET
-    path: /entities/site
-    source_operation: openapi/axle-energy-openapi-original.json#get_sites_entities_site_get
-  - name: create_site_entities_site_post
-    description: "Create Site"
-    method: POST
-    path: /entities/site
-    source_operation: openapi/axle-energy-openapi-original.json#create_site_entities_site_post
-  - name: initialise_site_entities_site_initialise_post
-    description: "Initialise Site"
-    method: POST
-    path: /entities/site/initialise
-    source_operation: openapi/axle-energy-openapi-original.json#initialise_site_entities_site_initialise_post
-  - name: check_eligibility_entities_site_check_eligibility_post
-    description: "Check Eligibility"
-    method: POST
-    path: /entities/site/check-eligibility
-    source_operation: openapi/axle-energy-openapi-original.json#check_eligibility_entities_site_check_eligibility_post
-  - name: enrol_site_entities_site__site_id__enrol_post
-    description: "Enrol Site"
-    method: POST
-    path: /entities/site/{site_id}/enrol
-    source_operation: openapi/axle-energy-openapi-original.json#enrol_site_entities_site__site_id__enrol_post
-  - name: onboard_entities_site_onboard_post
-    description: "Onboard"
-    method: POST
-    path: /entities/site/onboard
-    source_operation: openapi/axle-energy-openapi-original.json#onboard_entities_site_onboard_post
-  - name: unenrol_site_entities_site__site_id__unenrol_post
-    description: "Unenrol Site"
-    method: POST
-    path: /entities/site/{site_id}/unenrol
-    source_operation: openapi/axle-energy-openapi-original.json#unenrol_site_entities_site__site_id__unenrol_post
-  - name: onboard_site_and_asset_entities_site_onboard_site_and_asset_post
-    description: "Onboard Site And Asset"
-    method: POST
-    path: /entities/site/onboard-site-and-asset
-    source_operation: openapi/axle-energy-openapi-original.json#onboard_site_and_asset_entities_site_onboard_site_and_asset_post
-  - name: offboard_site_and_assets_entities_site__site_id__offboard_site_and_assets_post
-    description: "Offboard Site And Assets"
-    method: POST
-    path: /entities/site/{site_id}/offboard-site-and-assets
-    source_operation: openapi/axle-energy-openapi-original.json#offboard_site_and_assets_entities_site__site_id__offboard_site_and_assets_post
-  - name: get_site_entities_site__site_id__get
-    description: "Get Site"
-    method: GET
-    path: /entities/site/{site_id}
-    source_operation: openapi/axle-energy-openapi-original.json#get_site_entities_site__site_id__get
-  - name: delete_site_entities_site__site_id__delete
-    description: "Delete Site"
-    method: DELETE
-    path: /entities/site/{site_id}
-    source_operation: openapi/axle-energy-openapi-original.json#delete_site_entities_site__site_id__delete
-  - name: update_site_entities_site__site_id__patch
-    description: "Update Site"
-    method: PATCH
-    path: /entities/site/{site_id}
-    source_operation: openapi/axle-energy-openapi-original.json#update_site_entities_site__site_id__patch
-  - name: get_site_eligibility_entities_site__site_id__eligibility_get
-    description: "Get Site Eligibility"
-    method: GET
-    path: /entities/site/{site_id}/eligibility
-    source_operation: openapi/axle-energy-openapi-original.json#get_site_eligibility_entities_site__site_id__eligibility_get
-  - name: add_site_meter_consent_entities_site__site_id__meter_consent_post
-    description: "Add Site Meter Consent"
-    method: POST
-    path: /entities/site/{site_id}/meter-consent
-    source_operation: openapi/axle-energy-openapi-original.json#add_site_meter_consent_entities_site__site_id__meter_consent_post
-  - name: add_site_dispatch_consent_entities_site__site_id__dispatch_consent_post
-    description: "Add Site Dispatch Consent"
-    method: POST
-    path: /entities/site/{site_id}/dispatch-consent
-    source_operation: openapi/axle-energy-openapi-original.json#add_site_dispatch_consent_entities_site__site_id__dispatch_consent_post
-  - name: remove_site_dispatch_consent_entities_site__site_id__dispatch_deconsent_post
-    description: "Remove Site Dispatch Consent"
-    method: POST
-    path: /entities/site/{site_id}/dispatch-deconsent
-    source_operation: openapi/axle-energy-openapi-original.json#remove_site_dispatch_consent_entities_site__site_id__dispatch_deconsent_post
-  - name: add_site_auth_token_entities_site__site_id__token_post
-    description: "Add Site Auth Token"
-    method: POST
-    path: /entities/site/{site_id}/token
-    source_operation: openapi/axle-energy-openapi-original.json#add_site_auth_token_entities_site__site_id__token_post
-  - name: get_site_flex_events_entities_site__site_id__flex_events_get
-    description: "Get Site Flex Events"
-    method: GET
-    path: /entities/site/{site_id}/flex-events
-    source_operation: openapi/axle-energy-openapi-original.json#get_site_flex_events_entities_site__site_id__flex_events_get
-  - name: get_price_curve_entities_site__site_id__price_curve_get
-    description: "Get Price Curve"
-    method: GET
-    path: /entities/site/{site_id}/price-curve
-    source_operation: openapi/axle-energy-openapi-original.json#get_price_curve_entities_site__site_id__price_curve_get
-  - name: initiate_site_oauth_entities_site__site_id__oauth__provider__initiate_get
-    description: "Initiate Site Oauth"
-    method: GET
-    path: /entities/site/{site_id}/oauth/{provider}/initiate
-    source_operation: openapi/axle-energy-openapi-original.json#initiate_site_oauth_entities_site__site_id__oauth__provider__initiate_get
-  - name: get_meter_info_by_address_meter_by_address_post
-    description: "Get Meter Info By Address"
-    method: POST
-    path: /meter/by-address
-    source_operation: openapi/axle-energy-openapi-original.json#get_meter_info_by_address_meter_by_address_post
-  - name: get_meter_info_by_mpan_meter_by_mpan_post
-    description: "Get Meter Info By Mpan"
-    method: POST
-    path: /meter/by-mpan
-    source_operation: openapi/axle-energy-openapi-original.json#get_meter_info_by_mpan_meter_by_mpan_post
-  - name: get_meter_info_by_address_deprecated_meter__get
-    description: "Get Meter Info By Address Deprecated"
-    method: GET
-    path: /meter/
-    source_operation: openapi/axle-energy-openapi-original.json#get_meter_info_by_address_deprecated_meter__get
-  - name: search_meters_meter_search_get
-    description: "Search Meters"
-    method: GET
-    path: /meter/search
-    source_operation: openapi/axle-energy-openapi-original.json#search_meters_meter_search_get
-  - name: get_meter_info_by_meter_ref_meter__meter_ref__mpan_get
-    description: "Get Meter Info By Meter Ref"
-    method: GET
-    path: /meter/{meter_ref}/mpan
-    source_operation: openapi/axle-energy-openapi-original.json#get_meter_info_by_meter_ref_meter__meter_ref__mpan_get
-  - name: get_meter_info_by_meter_ref_meter_by_ref__meter_ref__get
-    description: "Get Meter Info By Meter Ref"
-    method: GET
-    path: /meter/by-ref/{meter_ref}
-    source_operation: openapi/axle-energy-openapi-original.json#get_meter_info_by_meter_ref_meter_by_ref__meter_ref__get
-  - name: get_meter_info_by_mpan_deprecated_meter__mpan__get
-    description: "Get Meter Info By Mpan Deprecated"
-    method: GET
-    path: /meter/{mpan}
-    source_operation: openapi/axle-energy-openapi-original.json#get_meter_info_by_mpan_deprecated_meter__mpan__get
-  - name: login_for_access_token_form_auth_token_form_post
-    description: "Login For Access Token Form"
-    method: POST
-    path: /auth/token-form
-    source_operation: openapi/axle-energy-openapi-original.json#login_for_access_token_form_auth_token_form_post
-  - name: read_users_me_auth_users_me__get
-    description: "Read Users Me"
-    method: GET
-    path: /auth/users/me/
-    source_operation: openapi/axle-energy-openapi-original.json#read_users_me_auth_users_me__get
-  - name: create_component_token_auth_component_token_post
-    description: "Create Component Token"
-    method: POST
-    path: /auth/component-token
-    source_operation: openapi/axle-energy-openapi-original.json#create_component_token_auth_component_token_post
-  - name: post_readings_data_readings_post
-    description: "Post Readings"
-    method: POST
-    path: /data/readings
-    source_operation: openapi/axle-energy-openapi-original.json#post_readings_data_readings_post
-  - name: get_balance_info_rewards__site_id__info_get
-    description: "Get Balance Info"
-    method: GET
-    path: /rewards/{site_id}/info
-    source_operation: openapi/axle-energy-openapi-original.json#get_balance_info_rewards__site_id__info_get
-  - name: get_rewards_balance_withdrawal_url_rewards__site_id__url_balance_get
-    description: "Get Rewards Balance Withdrawal Url"
-    method: GET
-    path: /rewards/{site_id}/url/balance
-    source_operation: openapi/axle-energy-openapi-original.json#get_rewards_balance_withdrawal_url_rewards__site_id__url_balance_get
-  - name: get_transaction_history_rewards__site_id__transactions_get
-    description: "Get Transaction History"
-    method: GET
-    path: /rewards/{site_id}/transactions
-    source_operation: openapi/axle-energy-openapi-original.json#get_transaction_history_rewards__site_id__transactions_get
-  - name: get_example_dispatch_event_examples_dispatch_event_get
-    description: "Get Example Dispatch Event"
-    method: GET
-    path: /examples/dispatch-event
-    source_operation: openapi/axle-energy-openapi-original.json#get_example_dispatch_event_examples_dispatch_event_get
-  - name: get_example_ocpp_charging_profile_examples_ocpp_charging_profile_get
-    description: "Get Example Ocpp Charging Profile"
-    method: GET
-    path: /examples/ocpp-charging-profile
-    source_operation: openapi/axle-energy-openapi-original.json#get_example_ocpp_charging_profile_examples_ocpp_charging_profile_get
-  - name: validate_mpan_validation_mpan_post
-    description: "Validate Mpan"
-    method: POST
-    path: /validation/mpan
-    source_operation: openapi/axle-energy-openapi-original.json#validate_mpan_validation_mpan_post
+- name: get_assets_entities_asset_get
+  description: Get Assets
+  method: GET
+  path: /entities/asset
+  source_operation: openapi/axle-energy-openapi-original.json#get_assets_entities_asset_get
+- name: create_asset_entities_asset_post
+  description: Create Asset
+  method: POST
+  path: /entities/asset
+  source_operation: openapi/axle-energy-openapi-original.json#create_asset_entities_asset_post
+- name: get_asset_entities_asset__asset_id__get
+  description: Get Asset
+  method: GET
+  path: /entities/asset/{asset_id}
+  source_operation: openapi/axle-energy-openapi-original.json#get_asset_entities_asset__asset_id__get
+- name: delete_asset_entities_asset__asset_id__delete
+  description: Delete Asset
+  method: DELETE
+  path: /entities/asset/{asset_id}
+  source_operation: openapi/axle-energy-openapi-original.json#delete_asset_entities_asset__asset_id__delete
+- name: update_asset_entities_asset__asset_id__patch
+  description: Update Asset
+  method: PATCH
+  path: /entities/asset/{asset_id}
+  source_operation: openapi/axle-energy-openapi-original.json#update_asset_entities_asset__asset_id__patch
+- name: get_asset_by_external_id_entities_asset_external_id__external_id__get
+  description: Get Asset By External Id
+  method: GET
+  path: /entities/asset/external-id/{external_id}
+  source_operation: openapi/axle-energy-openapi-original.json#get_asset_by_external_id_entities_asset_external_id__external_id__get
+- name: event_handling_status_update_entities_asset__asset_id__callback__event_id__post
+  description: Event Handling Status Update
+  method: POST
+  path: /entities/asset/{asset_id}/callback/{event_id}
+  source_operation: openapi/axle-energy-openapi-original.json#event_handling_status_update_entities_asset__asset_id__callback__event_id__post
+- name: asset_event_entities_asset__asset_id__event_post
+  description: Asset Event
+  method: POST
+  path: /entities/asset/{asset_id}/event
+  source_operation: openapi/axle-energy-openapi-original.json#asset_event_entities_asset__asset_id__event_post
+- name: asset_plug_in_event_entities_asset__asset_id__event_plug_in_post
+  description: Asset Plug In Event
+  method: POST
+  path: /entities/asset/{asset_id}/event/plug-in
+  source_operation: openapi/axle-energy-openapi-original.json#asset_plug_in_event_entities_asset__asset_id__event_plug_in_post
+- name: asset_plug_out_event_entities_asset__asset_id__event_plug_out_post
+  description: Asset Plug Out Event
+  method: POST
+  path: /entities/asset/{asset_id}/event/plug-out
+  source_operation: openapi/axle-energy-openapi-original.json#asset_plug_out_event_entities_asset__asset_id__event_plug_out_post
+- name: asset_intent_update_event_entities_asset__asset_id__event_intent_post
+  description: Asset Intent Update Event
+  method: POST
+  path: /entities/asset/{asset_id}/event/intent
+  source_operation: openapi/axle-energy-openapi-original.json#asset_intent_update_event_entities_asset__asset_id__event_intent_post
+- name: asset_charge_now_event_entities_asset__asset_id__event_charge_now_post
+  description: Asset Charge Now Event
+  method: POST
+  path: /entities/asset/{asset_id}/event/charge-now
+  source_operation: openapi/axle-energy-openapi-original.json#asset_charge_now_event_entities_asset__asset_id__event_charge_now_post
+- name: asset_charge_now_deleted_event_entities_asset__asset_id__event_charge_now_deleted_post
+  description: Asset Charge Now Deleted Event
+  method: POST
+  path: /entities/asset/{asset_id}/event/charge-now-deleted
+  source_operation: openapi/axle-energy-openapi-original.json#asset_charge_now_deleted_event_entities_asset__asset_id__event_charge_now_deleted_post
+- name: asset_tariff_update_event_entities_asset__asset_id__event_tariff_update_post
+  description: Asset Tariff Update Event
+  method: POST
+  path: /entities/asset/{asset_id}/event/tariff-update
+  source_operation: openapi/axle-energy-openapi-original.json#asset_tariff_update_event_entities_asset__asset_id__event_tariff_update_post
+- name: get_latest_intent_entities_asset__asset_id__intent_get
+  description: Get Latest Intent
+  method: GET
+  path: /entities/asset/{asset_id}/intent
+  source_operation: openapi/axle-energy-openapi-original.json#get_latest_intent_entities_asset__asset_id__intent_get
+- name: get_battery_schedule_entities_asset__asset_id__battery_schedule_get
+  description: Get Battery Schedule
+  method: GET
+  path: /entities/asset/{asset_id}/battery-schedule
+  source_operation: openapi/axle-energy-openapi-original.json#get_battery_schedule_entities_asset__asset_id__battery_schedule_get
+- name: asset_plug_in_schedule_event_entities_asset__asset_id__event_plug_in_schedule_post
+  description: Asset Plug In Schedule Event
+  method: POST
+  path: /entities/asset/{asset_id}/event/plug-in-schedule
+  source_operation: openapi/axle-energy-openapi-original.json#asset_plug_in_schedule_event_entities_asset__asset_id__event_plug_in_schedule_post
+- name: get_price_curve_entities_asset__asset_id__price_curve_get
+  description: Get Price Curve
+  method: GET
+  path: /entities/asset/{asset_id}/price-curve
+  source_operation: openapi/axle-energy-openapi-original.json#get_price_curve_entities_asset__asset_id__price_curve_get
+- name: get_sites_entities_site_get
+  description: Get Sites
+  method: GET
+  path: /entities/site
+  source_operation: openapi/axle-energy-openapi-original.json#get_sites_entities_site_get
+- name: create_site_entities_site_post
+  description: Create Site
+  method: POST
+  path: /entities/site
+  source_operation: openapi/axle-energy-openapi-original.json#create_site_entities_site_post
+- name: initialise_site_entities_site_initialise_post
+  description: Initialise Site
+  method: POST
+  path: /entities/site/initialise
+  source_operation: openapi/axle-energy-openapi-original.json#initialise_site_entities_site_initialise_post
+- name: check_eligibility_entities_site_check_eligibility_post
+  description: Check Eligibility
+  method: POST
+  path: /entities/site/check-eligibility
+  source_operation: openapi/axle-energy-openapi-original.json#check_eligibility_entities_site_check_eligibility_post
+- name: enrol_site_entities_site__site_id__enrol_post
+  description: Enrol Site
+  method: POST
+  path: /entities/site/{site_id}/enrol
+  source_operation: openapi/axle-energy-openapi-original.json#enrol_site_entities_site__site_id__enrol_post
+- name: onboard_entities_site_onboard_post
+  description: Onboard
+  method: POST
+  path: /entities/site/onboard
+  source_operation: openapi/axle-energy-openapi-original.json#onboard_entities_site_onboard_post
+- name: unenrol_site_entities_site__site_id__unenrol_post
+  description: Unenrol Site
+  method: POST
+  path: /entities/site/{site_id}/unenrol
+  source_operation: openapi/axle-energy-openapi-original.json#unenrol_site_entities_site__site_id__unenrol_post
+- name: onboard_site_and_asset_entities_site_onboard_site_and_asset_post
+  description: Onboard Site And Asset
+  method: POST
+  path: /entities/site/onboard-site-and-asset
+  source_operation: openapi/axle-energy-openapi-original.json#onboard_site_and_asset_entities_site_onboard_site_and_asset_post
+- name: offboard_site_and_assets_entities_site__site_id__offboard_site_and_assets_post
+  description: Offboard Site And Assets
+  method: POST
+  path: /entities/site/{site_id}/offboard-site-and-assets
+  source_operation: openapi/axle-energy-openapi-original.json#offboard_site_and_assets_entities_site__site_id__offboard_site_and_assets_post
+- name: get_site_entities_site__site_id__get
+  description: Get Site
+  method: GET
+  path: /entities/site/{site_id}
+  source_operation: openapi/axle-energy-openapi-original.json#get_site_entities_site__site_id__get
+- name: delete_site_entities_site__site_id__delete
+  description: Delete Site
+  method: DELETE
+  path: /entities/site/{site_id}
+  source_operation: openapi/axle-energy-openapi-original.json#delete_site_entities_site__site_id__delete
+- name: update_site_entities_site__site_id__patch
+  description: Update Site
+  method: PATCH
+  path: /entities/site/{site_id}
+  source_operation: openapi/axle-energy-openapi-original.json#update_site_entities_site__site_id__patch
+- name: get_site_eligibility_entities_site__site_id__eligibility_get
+  description: Get Site Eligibility
+  method: GET
+  path: /entities/site/{site_id}/eligibility
+  source_operation: openapi/axle-energy-openapi-original.json#get_site_eligibility_entities_site__site_id__eligibility_get
+- name: add_site_meter_consent_entities_site__site_id__meter_consent_post
+  description: Add Site Meter Consent
+  method: POST
+  path: /entities/site/{site_id}/meter-consent
+  source_operation: openapi/axle-energy-openapi-original.json#add_site_meter_consent_entities_site__site_id__meter_consent_post
+- name: add_site_dispatch_consent_entities_site__site_id__dispatch_consent_post
+  description: Add Site Dispatch Consent
+  method: POST
+  path: /entities/site/{site_id}/dispatch-consent
+  source_operation: openapi/axle-energy-openapi-original.json#add_site_dispatch_consent_entities_site__site_id__dispatch_consent_post
+- name: remove_site_dispatch_consent_entities_site__site_id__dispatch_deconsent_post
+  description: Remove Site Dispatch Consent
+  method: POST
+  path: /entities/site/{site_id}/dispatch-deconsent
+  source_operation: openapi/axle-energy-openapi-original.json#remove_site_dispatch_consent_entities_site__site_id__dispatch_deconsent_post
+- name: add_site_auth_token_entities_site__site_id__token_post
+  description: Add Site Auth Token
+  method: POST
+  path: /entities/site/{site_id}/token
+  source_operation: openapi/axle-energy-openapi-original.json#add_site_auth_token_entities_site__site_id__token_post
+- name: get_site_flex_events_entities_site__site_id__flex_events_get
+  description: Get Site Flex Events
+  method: GET
+  path: /entities/site/{site_id}/flex-events
+  source_operation: openapi/axle-energy-openapi-original.json#get_site_flex_events_entities_site__site_id__flex_events_get
+- name: get_price_curve_entities_site__site_id__price_curve_get
+  description: Get Price Curve
+  method: GET
+  path: /entities/site/{site_id}/price-curve
+  source_operation: openapi/axle-energy-openapi-original.json#get_price_curve_entities_site__site_id__price_curve_get
+- name: initiate_site_oauth_entities_site__site_id__oauth__provider__initiate_get
+  description: Initiate Site Oauth
+  method: GET
+  path: /entities/site/{site_id}/oauth/{provider}/initiate
+  source_operation: openapi/axle-energy-openapi-original.json#initiate_site_oauth_entities_site__site_id__oauth__provider__initiate_get
+- name: get_meter_info_by_address_meter_by_address_post
+  description: Get Meter Info By Address
+  method: POST
+  path: /meter/by-address
+  source_operation: openapi/axle-energy-openapi-original.json#get_meter_info_by_address_meter_by_address_post
+- name: get_meter_info_by_mpan_meter_by_mpan_post
+  description: Get Meter Info By Mpan
+  method: POST
+  path: /meter/by-mpan
+  source_operation: openapi/axle-energy-openapi-original.json#get_meter_info_by_mpan_meter_by_mpan_post
+- name: get_meter_info_by_address_deprecated_meter__get
+  description: Get Meter Info By Address Deprecated
+  method: GET
+  path: /meter/
+  source_operation: openapi/axle-energy-openapi-original.json#get_meter_info_by_address_deprecated_meter__get
+- name: search_meters_meter_search_get
+  description: Search Meters
+  method: GET
+  path: /meter/search
+  source_operation: openapi/axle-energy-openapi-original.json#search_meters_meter_search_get
+- name: get_meter_info_by_meter_ref_meter__meter_ref__mpan_get
+  description: Get Meter Info By Meter Ref
+  method: GET
+  path: /meter/{meter_ref}/mpan
+  source_operation: openapi/axle-energy-openapi-original.json#get_meter_info_by_meter_ref_meter__meter_ref__mpan_get
+- name: get_meter_info_by_meter_ref_meter_by_ref__meter_ref__get
+  description: Get Meter Info By Meter Ref
+  method: GET
+  path: /meter/by-ref/{meter_ref}
+  source_operation: openapi/axle-energy-openapi-original.json#get_meter_info_by_meter_ref_meter_by_ref__meter_ref__get
+- name: get_meter_info_by_mpan_deprecated_meter__mpan__get
+  description: Get Meter Info By Mpan Deprecated
+  method: GET
+  path: /meter/{mpan}
+  source_operation: openapi/axle-energy-openapi-original.json#get_meter_info_by_mpan_deprecated_meter__mpan__get
+- name: login_for_access_token_form_auth_token_form_post
+  description: Login For Access Token Form
+  method: POST
+  path: /auth/token-form
+  source_operation: openapi/axle-energy-openapi-original.json#login_for_access_token_form_auth_token_form_post
+- name: read_users_me_auth_users_me__get
+  description: Read Users Me
+  method: GET
+  path: /auth/users/me/
+  source_operation: openapi/axle-energy-openapi-original.json#read_users_me_auth_users_me__get
+- name: create_component_token_auth_component_token_post
+  description: Create Component Token
+  method: POST
+  path: /auth/component-token
+  source_operation: openapi/axle-energy-openapi-original.json#create_component_token_auth_component_token_post
+- name: post_readings_data_readings_post
+  description: Post Readings
+  method: POST
+  path: /data/readings
+  source_operation: openapi/axle-energy-openapi-original.json#post_readings_data_readings_post
+- name: get_balance_info_rewards__site_id__info_get
+  description: Get Balance Info
+  method: GET
+  path: /rewards/{site_id}/info
+  source_operation: openapi/axle-energy-openapi-original.json#get_balance_info_rewards__site_id__info_get
+- name: get_rewards_balance_withdrawal_url_rewards__site_id__url_balance_get
+  description: Get Rewards Balance Withdrawal Url
+  method: GET
+  path: /rewards/{site_id}/url/balance
+  source_operation: openapi/axle-energy-openapi-original.json#get_rewards_balance_withdrawal_url_rewards__site_id__url_balance_get
+- name: get_transaction_history_rewards__site_id__transactions_get
+  description: Get Transaction History
+  method: GET
+  path: /rewards/{site_id}/transactions
+  source_operation: openapi/axle-energy-openapi-original.json#get_transaction_history_rewards__site_id__transactions_get
+- name: get_example_dispatch_event_examples_dispatch_event_get
+  description: Get Example Dispatch Event
+  method: GET
+  path: /examples/dispatch-event
+  source_operation: openapi/axle-energy-openapi-original.json#get_example_dispatch_event_examples_dispatch_event_get
+- name: get_example_ocpp_charging_profile_examples_ocpp_charging_profile_get
+  description: Get Example Ocpp Charging Profile
+  method: GET
+  path: /examples/ocpp-charging-profile
+  source_operation: openapi/axle-energy-openapi-original.json#get_example_ocpp_charging_profile_examples_ocpp_charging_profile_get
+- name: validate_mpan_validation_mpan_post
+  description: Validate Mpan
+  method: POST
+  path: /validation/mpan
+  source_operation: openapi/axle-energy-openapi-original.json#validate_mpan_validation_mpan_post
+deployment:
+  mode: none
+  verified: derived
+  tools: 55
+  checked: '2026-08-12'
+  source: catalog MCP census

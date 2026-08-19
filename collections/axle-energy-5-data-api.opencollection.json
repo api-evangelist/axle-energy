@@ -1,0 +1,42 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Axle 1. Authentication 5. Data API",
+    "version": "1.4.6"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "5. Data",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Post Readings",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.axle.energy/data/readings",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "resource_owner_password_credentials",
+              "accessTokenUrl": "auth/token-form",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Send asset readings data to Axle using the generic readings format.\n\nThis endpoint accepts compressed data using gzip encoding. Returns statuses of the processed readings, indicating whether each reading was accepted or rejected.\n\n**Direction convention:** for readings that can be either positive or negative (e.g. `boundary_import_kw`, `battery_inverter_import_kw`), a positive value denotes *import* (power flowing in from the grid, or into the battery) and a negative value denotes *export* (powe"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

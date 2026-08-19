@@ -1,0 +1,77 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Axle 1. Authentication API",
+    "version": "1.4.6"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "1. Authentication",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Login For Access Token Form",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.axle.energy/auth/token-form",
+            "body": {
+              "type": "form-urlencoded",
+              "data": []
+            }
+          },
+          "docs": "Authenticate using username and password submitted via form data.\n\nThis endpoint is compatible with standard OAuth2 clients that use form-based authentication. Returns an access token upon successful authentication.\n\nThe returned token is valid for 1 hour, after which a new token must be requested."
+        },
+        {
+          "info": {
+            "name": "Read Users Me",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.axle.energy/auth/users/me/",
+            "auth": {
+              "type": "oauth2",
+              "flow": "resource_owner_password_credentials",
+              "accessTokenUrl": "auth/token-form",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Get information about the currently authenticated user.\n\nReturns the user details for the authenticated user based on the provided access token."
+        },
+        {
+          "info": {
+            "name": "Create Component Token",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.axle.energy/auth/component-token",
+            "body": {
+              "type": "form-urlencoded",
+              "data": []
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "resource_owner_password_credentials",
+              "accessTokenUrl": "auth/token-form",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Authenticate on behalf of an end user by supplying their external user ID.\n\nThis endpoint is used by authenticated API clients to create a user-scoped access token for a specific end user (referenced by their external ID) in the API client's organisation. If no such end user exists, one will be created on demand.\n\nReturns a bearer access token scoped to this end user upon success.\n\nThis token is site-scoped and valid for 24 hours, longer-lived than the standard organisation token (1 hour) as it "
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

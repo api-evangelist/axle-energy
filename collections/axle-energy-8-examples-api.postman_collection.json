@@ -1,0 +1,296 @@
+{
+  "item": [
+    {
+      "id": "54e0503a-9912-48f4-89b9-c4f1717f8781",
+      "name": "8. Examples",
+      "description": {
+        "content": "Get example data for testing",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "a0a57345-a0f3-446d-93cf-1abe81cce4cb",
+          "name": "Get Example Dispatch Event",
+          "request": {
+            "name": "Get Example Dispatch Event",
+            "description": {
+              "content": "Get an example dispatch event.\n\nReturns a pre-filled DispatchEvent object that can be used as a reference for the expected format and structure of dispatch events.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "examples",
+                "dispatch-event"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "accessTokenUrl",
+                  "value": "auth/token-form"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "password_credentials"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "7230638c-bbb2-4c25-81fb-891de53e7a3a",
+              "name": "Example dispatch event",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "examples",
+                    "dispatch-event"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"asset_id\": \"fb9e2614-83be-7a08-e43f-083db2ac6a69\",\n  \"event_id\": \"3207ef0e-c5b7-3288-a173-4693338f6ed3\",\n  \"issued_timestamp\": \"1981-01-03T19:50:28.472Z\",\n  \"event_timestamp\": \"1994-03-14T07:17:53.885Z\",\n  \"market_id\": \"string\",\n  \"level_kw\": 1676.057565128376,\n  \"from_time\": \"1960-05-01T11:25:07.403Z\",\n  \"to_time\": \"1993-03-02T15:50:18.190Z\",\n  \"update_status_callback\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "2ac24e19-1409-4bad-b017-b5d44916f325",
+              "name": "Server error while generating example",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "examples",
+                    "dispatch-event"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "68333e0e-f8fc-4b61-9e65-e4f5ca4620f2",
+          "name": "Get Example Ocpp Charging Profile",
+          "request": {
+            "name": "Get Example Ocpp Charging Profile",
+            "description": {
+              "content": "Get an example OCPP charging profile.\n\nReturns a pre-filled SetChargingProfileRequest object that can be used as a reference for the expected format and structure of OCPP charging profiles.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "examples",
+                "ocpp-charging-profile"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "accessTokenUrl",
+                  "value": "auth/token-form"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "password_credentials"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "c47b546f-3f44-4349-ba33-d861feda2d99",
+              "name": "Example OCPP charging profile",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "examples",
+                    "ocpp-charging-profile"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"connectorId\": 4351,\n  \"csChargingProfiles\": {\n    \"chargingProfileId\": 6387,\n    \"stackLevel\": 9727,\n    \"chargingProfilePurpose\": \"TxDefaultProfile\",\n    \"chargingProfileKind\": \"Relative\",\n    \"chargingSchedule\": {\n      \"chargingRateUnit\": \"W\",\n      \"chargingSchedulePeriod\": [\n        {\n          \"startPeriod\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"limit\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"numberPhases\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        {\n          \"startPeriod\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"limit\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"numberPhases\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      ],\n      \"duration\": 3017,\n      \"startSchedule\": \"1955-04-15T10:03:53.429Z\",\n      \"minChargingRate\": 9183.642880477031\n    },\n    \"transactionId\": 8138,\n    \"recurrencyKind\": \"Weekly\",\n    \"validFrom\": \"1998-06-04T09:07:10.356Z\",\n    \"validTo\": \"1980-12-21T13:12:36.466Z\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "876470b6-6166-434e-afd8-15001ec5b4ba",
+              "name": "Server error while generating example",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "examples",
+                    "ocpp-charging-profile"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.axle.energy",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "5a9ae349-70f0-4066-8ec5-2fc2eadd92ea",
+    "name": "Axle 1. Authentication 8. Examples API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "For full documentation please see our official docs at <a href='http://docs.axle.energy'>docs.axle.energy</a>",
+      "type": "text/plain"
+    }
+  }
+}

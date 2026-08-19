@@ -1,0 +1,58 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Axle 1. Authentication 8. Examples API",
+    "version": "1.4.6"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "8. Examples",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get Example Dispatch Event",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.axle.energy/examples/dispatch-event",
+            "auth": {
+              "type": "oauth2",
+              "flow": "resource_owner_password_credentials",
+              "accessTokenUrl": "auth/token-form",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Get an example dispatch event.\n\nReturns a pre-filled DispatchEvent object that can be used as a reference for the expected format and structure of dispatch events."
+        },
+        {
+          "info": {
+            "name": "Get Example Ocpp Charging Profile",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.axle.energy/examples/ocpp-charging-profile",
+            "auth": {
+              "type": "oauth2",
+              "flow": "resource_owner_password_credentials",
+              "accessTokenUrl": "auth/token-form",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Get an example OCPP charging profile.\n\nReturns a pre-filled SetChargingProfileRequest object that can be used as a reference for the expected format and structure of OCPP charging profiles."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

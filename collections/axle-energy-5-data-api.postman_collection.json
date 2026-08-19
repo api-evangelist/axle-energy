@@ -1,0 +1,341 @@
+{
+  "item": [
+    {
+      "id": "7ba74a1a-c202-4296-af01-e3640ec49ef8",
+      "name": "5. Data",
+      "description": {
+        "content": "Send asset metrics to Axle, for analysis and optimisation purposes",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "3360ac7b-4d64-466c-b964-7aaa77c93d0a",
+          "name": "Post Readings",
+          "request": {
+            "name": "Post Readings",
+            "description": {
+              "content": "Send asset readings data to Axle using the generic readings format.\n\nThis endpoint accepts compressed data using gzip encoding. Returns statuses of the processed readings, indicating whether each reading was accepted or rejected.\n\n**Direction convention:** for readings that can be either positive or negative (e.g. `boundary_import_kw`, `battery_inverter_import_kw`), a positive value denotes *import* (power flowing in from the grid, or into the battery) and a negative value denotes *export* (power flowing out to the grid, or out of the battery). All other reading types are unidirectional; the required sign for each `label` is documented in the `ReadingDataPointLabel` schema below.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "data",
+                "readings"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "accessTokenUrl",
+                  "value": "auth/token-form"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "password_credentials"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"readings\": [\n    {\n      \"asset_id\": \"<uuid>\",\n      \"start_timestamp\": \"<dateTime>\",\n      \"end_timestamp\": \"<dateTime>\",\n      \"value\": \"<number>\",\n      \"label\": \"<string>\"\n    },\n    {\n      \"asset_id\": \"<uuid>\",\n      \"start_timestamp\": \"<dateTime>\",\n      \"end_timestamp\": \"<dateTime>\",\n      \"value\": \"<number>\",\n      \"label\": \"<string>\"\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "cf3ed06c-e0a5-423e-b279-6dc63cc68367",
+              "name": "Successfully recorded readings with processing summary",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "data",
+                    "readings"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"readings\": [\n    {\n      \"asset_id\": \"1124d8a0-3d69-82ba-6e33-6664074dc488\",\n      \"start_timestamp\": \"1972-10-17T06:23:31.048Z\",\n      \"end_timestamp\": \"2017-01-07T12:00:10.367Z\",\n      \"value\": 5797.092896906582,\n      \"label\": \"provisional_consumption_kwh\"\n    },\n    {\n      \"asset_id\": \"e1ffef8c-19e0-06a2-e3fe-8a0236e073c9\",\n      \"start_timestamp\": \"1957-06-29T21:13:23.898Z\",\n      \"end_timestamp\": \"1959-06-22T18:56:55.692Z\",\n      \"value\": 9550.01015919206,\n      \"label\": \"solar_power_kw\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"responses\": [\n    {\n      \"asset_id\": \"2f0ab4fc-bad0-5bf0-9994-423779d4949a\",\n      \"start_timestamp\": \"1979-09-08T16:48:21.014Z\",\n      \"end_timestamp\": \"1957-01-26T19:06:11.335Z\",\n      \"label\": \"charger_lifetime_consumption_energy_kwh\",\n      \"accepted\": true,\n      \"error\": \"string\"\n    },\n    {\n      \"asset_id\": \"b5fe6b87-535c-cf13-9380-1af4060f9124\",\n      \"start_timestamp\": \"1961-01-04T21:50:36.914Z\",\n      \"end_timestamp\": \"1963-03-14T14:47:19.043Z\",\n      \"label\": \"battery_stored_energy_kwh\",\n      \"accepted\": true,\n      \"error\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6062cd63-04bc-40db-8263-445803a5f79c",
+              "name": "Invalid data format or validation error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "data",
+                    "readings"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"readings\": [\n    {\n      \"asset_id\": \"1124d8a0-3d69-82ba-6e33-6664074dc488\",\n      \"start_timestamp\": \"1972-10-17T06:23:31.048Z\",\n      \"end_timestamp\": \"2017-01-07T12:00:10.367Z\",\n      \"value\": 5797.092896906582,\n      \"label\": \"provisional_consumption_kwh\"\n    },\n    {\n      \"asset_id\": \"e1ffef8c-19e0-06a2-e3fe-8a0236e073c9\",\n      \"start_timestamp\": \"1957-06-29T21:13:23.898Z\",\n      \"end_timestamp\": \"1959-06-22T18:56:55.692Z\",\n      \"value\": 9550.01015919206,\n      \"label\": \"solar_power_kw\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "d89a3533-01ae-435f-9347-bb9a86750474",
+              "name": "Permission denied",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "data",
+                    "readings"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"readings\": [\n    {\n      \"asset_id\": \"1124d8a0-3d69-82ba-6e33-6664074dc488\",\n      \"start_timestamp\": \"1972-10-17T06:23:31.048Z\",\n      \"end_timestamp\": \"2017-01-07T12:00:10.367Z\",\n      \"value\": 5797.092896906582,\n      \"label\": \"provisional_consumption_kwh\"\n    },\n    {\n      \"asset_id\": \"e1ffef8c-19e0-06a2-e3fe-8a0236e073c9\",\n      \"start_timestamp\": \"1957-06-29T21:13:23.898Z\",\n      \"end_timestamp\": \"1959-06-22T18:56:55.692Z\",\n      \"value\": 9550.01015919206,\n      \"label\": \"solar_power_kw\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "0ae55f7d-39c4-4380-8322-ff71f7559bf8",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "data",
+                    "readings"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"readings\": [\n    {\n      \"asset_id\": \"1124d8a0-3d69-82ba-6e33-6664074dc488\",\n      \"start_timestamp\": \"1972-10-17T06:23:31.048Z\",\n      \"end_timestamp\": \"2017-01-07T12:00:10.367Z\",\n      \"value\": 5797.092896906582,\n      \"label\": \"provisional_consumption_kwh\"\n    },\n    {\n      \"asset_id\": \"e1ffef8c-19e0-06a2-e3fe-8a0236e073c9\",\n      \"start_timestamp\": \"1957-06-29T21:13:23.898Z\",\n      \"end_timestamp\": \"1959-06-22T18:56:55.692Z\",\n      \"value\": 9550.01015919206,\n      \"label\": \"solar_power_kw\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\"\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "0ebb606f-024b-4362-bd11-34d2369e6531",
+              "name": "Server error while recording readings",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "data",
+                    "readings"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"readings\": [\n    {\n      \"asset_id\": \"1124d8a0-3d69-82ba-6e33-6664074dc488\",\n      \"start_timestamp\": \"1972-10-17T06:23:31.048Z\",\n      \"end_timestamp\": \"2017-01-07T12:00:10.367Z\",\n      \"value\": 5797.092896906582,\n      \"label\": \"provisional_consumption_kwh\"\n    },\n    {\n      \"asset_id\": \"e1ffef8c-19e0-06a2-e3fe-8a0236e073c9\",\n      \"start_timestamp\": \"1957-06-29T21:13:23.898Z\",\n      \"end_timestamp\": \"1959-06-22T18:56:55.692Z\",\n      \"value\": 9550.01015919206,\n      \"label\": \"solar_power_kw\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.axle.energy",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "e9610db6-fdb5-4b84-a86a-db873aa3dbef",
+    "name": "Axle 1. Authentication 5. Data API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "For full documentation please see our official docs at <a href='http://docs.axle.energy'>docs.axle.energy</a>",
+      "type": "text/plain"
+    }
+  }
+}

@@ -1,0 +1,124 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Axle 1. Authentication 6. Rewards API",
+    "version": "1.4.6"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "6. Rewards",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get Balance Info",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.axle.energy/rewards/:site_id/info",
+            "params": [
+              {
+                "name": "site_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "resource_owner_password_credentials",
+              "accessTokenUrl": "auth/token-form",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Get info about current balance and total earnings for the site. Requires an organisational bearer token."
+        },
+        {
+          "info": {
+            "name": "Get Rewards Balance Withdrawal Url",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.axle.energy/rewards/:site_id/url/balance",
+            "params": [
+              {
+                "name": "site_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID on Axle's system for this user. The site_id can be easily retrieved from the get-by-external-id endpoint."
+              },
+              {
+                "name": "enforce_two_factor_auth",
+                "value": "",
+                "type": "query",
+                "description": "Require email verification before the user can link a bank account. Balance and transaction-history views are not gated. When omitted, falls back to the organisation's configured 2FA posture."
+              },
+              {
+                "name": "redirect_uri",
+                "value": "",
+                "type": "query",
+                "description": "Where to redirect after completion"
+              },
+              {
+                "name": "hide_transactions",
+                "value": "",
+                "type": "query",
+                "description": "Hide transaction history from the user"
+              },
+              {
+                "name": "auto_redirect_to_setup",
+                "value": "",
+                "type": "query",
+                "description": "Skip the balance page and go straight to bank setup if no account exists"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "resource_owner_password_credentials",
+              "accessTokenUrl": "auth/token-form",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Get a temporary link to an Axle-hosted form through which users can view and withdraw rewards. Requires an organisational bearer token."
+        },
+        {
+          "info": {
+            "name": "Get Transaction History",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.axle.energy/rewards/:site_id/transactions",
+            "params": [
+              {
+                "name": "site_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "resource_owner_password_credentials",
+              "accessTokenUrl": "auth/token-form",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Get history of transactions for the site. Requires an organisational bearer token."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
