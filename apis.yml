@@ -11,6 +11,17 @@ description: >-
   Britain, France, Germany, the Netherlands, Denmark and Sweden. React/hosted UI components and a
   documented outbound dispatch webhook round out the developer surface.
 url: https://raw.githubusercontent.com/api-evangelist/axle-energy/refs/heads/main/apis.yml
+deliveryModel:
+  model: unknown
+  open_source: false
+  commercial: false
+  callable_host: true
+  label: Delivery model not determined — needs a product licence on record
+  confidence: low
+  source:
+  - openapi
+  generated: '2026-08-28'
+  method: derived
 accessModel:
   pricing: unknown
   onboarding: self-serve
