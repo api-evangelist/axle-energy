@@ -1,7 +1,7 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: Axle 1. Authentication 5. Data API
-  description: For full documentation please see our official docs at <a href='http://docs.axle.energy'>docs.axle.energy</a>
+  title: Axle 5. Data API
+  description: For full documentation please see our official docs at docs.axle.energy
   version: 1.4.6
 servers:
 - url: https://api.axle.energy
@@ -51,6 +51,15 @@ paths:
       - OAuth2PasswordBearer: []
 components:
   schemas:
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
     ReadingDataPoint:
       properties:
         asset_id:
@@ -85,6 +94,44 @@ components:
       - label
       title: ReadingDataPoint
       description: Reading data for a single asset.
+    ReadingResponse:
+      properties:
+        asset_id:
+          type: string
+          format: uuid
+          title: Asset Id
+          description: ID of the asset
+        start_timestamp:
+          type: string
+          format: date-time
+          title: Start Timestamp
+          description: Start time of the reading
+        end_timestamp:
+          type: string
+          format: date-time
+          title: End Timestamp
+          description: End time of the reading
+        label:
+          allOf:
+          - $ref: '#/components/schemas/ReadingDataPointLabel'
+          description: Label for the reading
+        accepted:
+          type: boolean
+          title: Accepted
+          description: Whether the reading was accepted
+        error:
+          type: string
+          title: Error
+          description: Error message if the reading was rejected
+      type: object
+      required:
+      - asset_id
+      - start_timestamp
+      - end_timestamp
+      - label
+      - accepted
+      title: ReadingResponse
+      description: Response model for a single reading submission.
     ReadingsDataPoints:
       properties:
         readings:
@@ -98,6 +145,19 @@ components:
       - readings
       title: ReadingsDataPoints
       description: Readings data for multiple assets.
+    ReadingsResponse:
+      properties:
+        responses:
+          items:
+            $ref: '#/components/schemas/ReadingResponse'
+          type: array
+          title: Responses
+          description: List of responses for each reading submission
+      type: object
+      required:
+      - responses
+      title: ReadingsResponse
+      description: Response model for a batch of readings submissions.
     ReadingDataPointLabel:
       type: string
       enum:
@@ -155,66 +215,6 @@ components:
       - msg
       - type
       title: ValidationError
-    ReadingsResponse:
-      properties:
-        responses:
-          items:
-            $ref: '#/components/schemas/ReadingResponse'
-          type: array
-          title: Responses
-          description: List of responses for each reading submission
-      type: object
-      required:
-      - responses
-      title: ReadingsResponse
-      description: Response model for a batch of readings submissions.
-    ReadingResponse:
-      properties:
-        asset_id:
-          type: string
-          format: uuid
-          title: Asset Id
-          description: ID of the asset
-        start_timestamp:
-          type: string
-          format: date-time
-          title: Start Timestamp
-          description: Start time of the reading
-        end_timestamp:
-          type: string
-          format: date-time
-          title: End Timestamp
-          description: End time of the reading
-        label:
-          allOf:
-          - $ref: '#/components/schemas/ReadingDataPointLabel'
-          description: Label for the reading
-        accepted:
-          type: boolean
-          title: Accepted
-          description: Whether the reading was accepted
-        error:
-          type: string
-          title: Error
-          description: Error message if the reading was rejected
-      type: object
-      required:
-      - asset_id
-      - start_timestamp
-      - end_timestamp
-      - label
-      - accepted
-      title: ReadingResponse
-      description: Response model for a single reading submission.
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
   securitySchemes:
     OAuth2PasswordBearer:
       type: oauth2

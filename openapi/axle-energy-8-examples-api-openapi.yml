@@ -1,7 +1,7 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: Axle 1. Authentication 8. Examples API
-  description: For full documentation please see our official docs at <a href='http://docs.axle.energy'>docs.axle.energy</a>
+  title: Axle 8. Examples API
+  description: For full documentation please see our official docs at docs.axle.energy
   version: 1.4.6
 servers:
 - url: https://api.axle.energy
@@ -53,53 +53,88 @@ paths:
       - OAuth2PasswordBearer: []
 components:
   schemas:
-    ChargingProfileKindType:
+    ChargingRateUnitType:
       type: string
       enum:
-      - Absolute
-      - Recurring
-      - Relative
-      title: ChargingProfileKindType
-      description: 'Kind of charging profile
+      - W
+      - A
+      title: ChargingRateUnitType
+      description: 'Unit in which a charging schedule is defined
 
 
-        Absolute: Schedule periods are relative to a fixed point in time defined in the schedule.
+        W: Watts (power). This is the TOTAL allowed charging power. It is usually more convenient to use this for DC charging.
 
-        Recurring: The schedule restarts periodically at the first schedule period.
-
-        Relative: Schedule periods are relative to a situation-specific start point (such as the start of a Transaction) that is determined by the charge point.'
-    ChargingSchedulePeriod:
+        A: Amperes (current). The amount of Ampere per phase, not the sum of all phases. It is usually more convenient to use this for AC charging.'
+    ChargingProfile:
       properties:
-        startPeriod:
+        chargingProfileId:
           type: integer
-          title: Startperiod
-          description: Start of the period, in seconds from the start of schedule. The value of StartPeriod also defines the stop time of the previous period.
-        limit:
-          type: number
-          title: Limit
-          description: Charging rate limit during the schedule period, in the applicable chargingRateUnit, for example in Amperes or Watts. Accepts at most one digit fraction (e.g. 8.1).
-        numberPhases:
+          title: Chargingprofileid
+          description: Unique identifier for this profile.
+        transactionId:
           type: integer
-          title: Numberphases
-          description: The number of phases that can be used for charging. If a number of phases is needed, numberPhases=3 will be assumed unless another number is given.
+          title: Transactionid
+          description: Only valid if ChargingProfilePurpose is set to TxProfile, the transactionId MAY be used to match the profile to a specific transaction.
+        stackLevel:
+          type: integer
+          title: Stacklevel
+          description: Value determining level in hierarchy stack of profiles. Higher values have precedence over lower values. Lowest level is 0.
+        chargingProfilePurpose:
+          allOf:
+          - $ref: '#/components/schemas/ChargingProfilePurposeType'
+          description: Defines the purpose of the schedule transferred by this message.
+        chargingProfileKind:
+          allOf:
+          - $ref: '#/components/schemas/ChargingProfileKindType'
+          description: Indicates the kind of schedule.
+        recurrencyKind:
+          allOf:
+          - $ref: '#/components/schemas/RecurrencyKindType'
+          description: Indicates the start point of a recurrence.
+        validFrom:
+          type: string
+          format: date-time
+          title: Validfrom
+          description: Point in time at which the profile starts to be valid. If absent, the profile is valid as soon as it is received by the Charge Point.
+        validTo:
+          type: string
+          format: date-time
+          title: Validto
+          description: Point in time at which the profile stops to be valid. If absent, the profile is valid until it is replaced by another profile.
+        chargingSchedule:
+          allOf:
+          - $ref: '#/components/schemas/ChargingSchedule'
+          title: Chargingschedule
+          description: Contains limits for the available power or current over time.
       type: object
       required:
-      - startPeriod
-      - limit
-      title: ChargingSchedulePeriod
-      description: Charging schedule period structure defines a time period in a charging schedule
-    RecurrencyKindType:
-      type: string
-      enum:
-      - Daily
-      - Weekly
-      title: RecurrencyKindType
-      description: 'Type of recurrence of a charging profile
+      - chargingProfileId
+      - stackLevel
+      - chargingProfilePurpose
+      - chargingProfileKind
+      - chargingSchedule
+      title: ChargingProfile
+      description: A ChargingProfile consists of a ChargingSchedule, describing the amount of power or current that can be delivered per time interval.
+    SetChargingProfileRequest:
+      properties:
+        connectorId:
+          type: integer
+          title: Connectorid
+          description: The connector to which the charging profile applies. If connectorId = 0, the message contains an overall limit for the Charge Point.
+        csChargingProfiles:
+          allOf:
+          - $ref: '#/components/schemas/ChargingProfile'
+          title: Cschargingprofiles
+          description: The charging profile to be set at the Charge Point.
+      type: object
+      required:
+      - connectorId
+      - csChargingProfiles
+      title: SetChargingProfileRequest
+      description: 'A SetChargingProfileRequest object, as defined in section 6.43 of the OCPP 1.6 documentation at https://openchargealliance.org/protocols/open-charge-point-protocol/#OCPP1.6
 
 
-        Daily: The schedule restarts every 24 hours, at the same time as in the startSchedule.
-
-        Weekly: The schedule restarts every 7 days, at the same time and day-of-the-week as in the startSchedule.'
+        This is used by the central system to send charging profiles to an EV charger.'
     DispatchEvent:
       properties:
         asset_id:
@@ -161,18 +196,6 @@ components:
       - to_time
       - update_status_callback
       title: DispatchEvent
-    ChargingRateUnitType:
-      type: string
-      enum:
-      - W
-      - A
-      title: ChargingRateUnitType
-      description: 'Unit in which a charging schedule is defined
-
-
-        W: Watts (power). This is the TOTAL allowed charging power. It is usually more convenient to use this for DC charging.
-
-        A: Amperes (current). The amount of Ampere per phase, not the sum of all phases. It is usually more convenient to use this for AC charging.'
     ChargingSchedule:
       properties:
         duration:
@@ -204,26 +227,26 @@ components:
       - chargingSchedulePeriod
       title: ChargingSchedule
       description: Charging schedule structure defines a list of charging periods
-    SetChargingProfileRequest:
+    ChargingSchedulePeriod:
       properties:
-        connectorId:
+        startPeriod:
           type: integer
-          title: Connectorid
-          description: The connector to which the charging profile applies. If connectorId = 0, the message contains an overall limit for the Charge Point.
-        csChargingProfiles:
-          allOf:
-          - $ref: '#/components/schemas/ChargingProfile'
-          title: Cschargingprofiles
-          description: The charging profile to be set at the Charge Point.
+          title: Startperiod
+          description: Start of the period, in seconds from the start of schedule. The value of StartPeriod also defines the stop time of the previous period.
+        limit:
+          type: number
+          title: Limit
+          description: Charging rate limit during the schedule period, in the applicable chargingRateUnit, for example in Amperes or Watts. Accepts at most one digit fraction (e.g. 8.1).
+        numberPhases:
+          type: integer
+          title: Numberphases
+          description: The number of phases that can be used for charging. If a number of phases is needed, numberPhases=3 will be assumed unless another number is given.
       type: object
       required:
-      - connectorId
-      - csChargingProfiles
-      title: SetChargingProfileRequest
-      description: 'A SetChargingProfileRequest object, as defined in section 6.43 of the OCPP 1.6 documentation at https://openchargealliance.org/protocols/open-charge-point-protocol/#OCPP1.6
-
-
-        This is used by the central system to send charging profiles to an EV charger.'
+      - startPeriod
+      - limit
+      title: ChargingSchedulePeriod
+      description: Charging schedule period structure defines a time period in a charging schedule
     ChargingProfilePurposeType:
       type: string
       enum:
@@ -239,56 +262,33 @@ components:
         TxDefaultProfile: Default profile that can be configured in the Charge Point. When a new transaction is started, this profile SHALL be used, unless it was a transaction that was started by a RemoteStartTransaction.req with a ChargeProfile that is accepted by the Charge Point.
 
         TxProfile: Profile with constraints to be imposed by the Charge Point on the current transaction, or on a new transaction when this is started via a RemoteStartTransaction.req with a ChargeProfile. A profile with this purpose SHALL cease to be valid when the transaction terminates.'
-    ChargingProfile:
-      properties:
-        chargingProfileId:
-          type: integer
-          title: Chargingprofileid
-          description: Unique identifier for this profile.
-        transactionId:
-          type: integer
-          title: Transactionid
-          description: Only valid if ChargingProfilePurpose is set to TxProfile, the transactionId MAY be used to match the profile to a specific transaction.
-        stackLevel:
-          type: integer
-          title: Stacklevel
-          description: Value determining level in hierarchy stack of profiles. Higher values have precedence over lower values. Lowest level is 0.
-        chargingProfilePurpose:
-          allOf:
-          - $ref: '#/components/schemas/ChargingProfilePurposeType'
-          description: Defines the purpose of the schedule transferred by this message.
-        chargingProfileKind:
-          allOf:
-          - $ref: '#/components/schemas/ChargingProfileKindType'
-          description: Indicates the kind of schedule.
-        recurrencyKind:
-          allOf:
-          - $ref: '#/components/schemas/RecurrencyKindType'
-          description: Indicates the start point of a recurrence.
-        validFrom:
-          type: string
-          format: date-time
-          title: Validfrom
-          description: Point in time at which the profile starts to be valid. If absent, the profile is valid as soon as it is received by the Charge Point.
-        validTo:
-          type: string
-          format: date-time
-          title: Validto
-          description: Point in time at which the profile stops to be valid. If absent, the profile is valid until it is replaced by another profile.
-        chargingSchedule:
-          allOf:
-          - $ref: '#/components/schemas/ChargingSchedule'
-          title: Chargingschedule
-          description: Contains limits for the available power or current over time.
-      type: object
-      required:
-      - chargingProfileId
-      - stackLevel
-      - chargingProfilePurpose
-      - chargingProfileKind
-      - chargingSchedule
-      title: ChargingProfile
-      description: A ChargingProfile consists of a ChargingSchedule, describing the amount of power or current that can be delivered per time interval.
+    ChargingProfileKindType:
+      type: string
+      enum:
+      - Absolute
+      - Recurring
+      - Relative
+      title: ChargingProfileKindType
+      description: 'Kind of charging profile
+
+
+        Absolute: Schedule periods are relative to a fixed point in time defined in the schedule.
+
+        Recurring: The schedule restarts periodically at the first schedule period.
+
+        Relative: Schedule periods are relative to a situation-specific start point (such as the start of a Transaction) that is determined by the charge point.'
+    RecurrencyKindType:
+      type: string
+      enum:
+      - Daily
+      - Weekly
+      title: RecurrencyKindType
+      description: 'Type of recurrence of a charging profile
+
+
+        Daily: The schedule restarts every 24 hours, at the same time as in the startSchedule.
+
+        Weekly: The schedule restarts every 7 days, at the same time and day-of-the-week as in the startSchedule.'
   securitySchemes:
     OAuth2PasswordBearer:
       type: oauth2

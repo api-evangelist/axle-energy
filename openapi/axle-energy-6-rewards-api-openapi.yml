@@ -1,7 +1,7 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: Axle 1. Authentication 6. Rewards API
-  description: For full documentation please see our official docs at <a href='http://docs.axle.energy'>docs.axle.energy</a>
+  title: Axle 6. Rewards API
+  description: For full documentation please see our official docs at docs.axle.energy
   version: 1.4.6
 servers:
 - url: https://api.axle.energy
@@ -149,64 +149,6 @@ paths:
       - OAuth2PasswordBearer: []
 components:
   schemas:
-    PaymentStatus:
-      type: string
-      enum:
-      - pending_approval
-      - approved
-      - processing
-      - posted
-      - failed
-      - rejected
-      - cancelled
-      - returned
-      title: PaymentStatus
-      description: Payment lifecycle states
-    TransactionDataResponse:
-      properties:
-        site_id:
-          type: string
-          format: uuid
-          title: Site Id
-          description: ID of the site
-        transactions:
-          items:
-            $ref: '#/components/schemas/TransactionDatumResponse'
-          type: array
-          title: Transactions
-          description: List of transactions for the site
-        is_below_withdrawal_minimum:
-          type: boolean
-          title: Is Below Withdrawal Minimum
-          description: If the user is below the minimum withdrawal threshold (if configured)
-          default: false
-        days_until_minimum_wait_time_met:
-          type: integer
-          title: Days Until Minimum Wait Time Met
-          description: How many days the user needs to wait to withdraw (if configured)
-      type: object
-      required:
-      - site_id
-      - transactions
-      title: TransactionDataResponse
-      description: Response model for transaction history.
-    BalanceWithdrawalURLResponse:
-      properties:
-        balance_withdrawal_url:
-          type: string
-          title: Balance Withdrawal Url
-          description: Temporary standalone URL via which an end-user may enter their bank details to withdraw their balance
-        url_expiry_timestamp:
-          type: string
-          format: date-time
-          title: Url Expiry Timestamp
-          description: Time at which the given URL will expire
-      type: object
-      required:
-      - balance_withdrawal_url
-      - url_expiry_timestamp
-      title: BalanceWithdrawalURLResponse
-      description: Response model for balance withdrawal URL.
     UserTransactionType:
       type: string
       enum:
@@ -236,27 +178,82 @@ components:
           title: Detail
       type: object
       title: HTTPValidationError
-    ValidationError:
+    BalanceWithdrawalURLResponse:
       properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
+        balance_withdrawal_url:
           type: string
-          title: Message
-        type:
+          title: Balance Withdrawal Url
+          description: Temporary standalone URL via which an end-user may enter their bank details to withdraw their balance
+        url_expiry_timestamp:
           type: string
-          title: Error Type
+          format: date-time
+          title: Url Expiry Timestamp
+          description: Time at which the given URL will expire
       type: object
       required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
+      - balance_withdrawal_url
+      - url_expiry_timestamp
+      title: BalanceWithdrawalURLResponse
+      description: Response model for balance withdrawal URL.
+    BalanceInfoResponse:
+      properties:
+        current_balance_pence:
+          type: integer
+          title: Current Balance Pence
+          description: Current balance of the site in pence (total earnings minus total withdrawals)
+        total_earnings_pence:
+          type: integer
+          title: Total Earnings Pence
+          description: Lifetime earnings of the site in pence
+        minimum_withdrawal_threshold_pence:
+          type: integer
+          title: Minimum Withdrawal Threshold Pence
+          description: The minimum a user can withdraw in one transaction, in pence
+        withdrawal_min_wait_days:
+          type: integer
+          title: Withdrawal Min Wait Days
+          description: The number of days a user must wait to withdraw after their first reward
+        can_withdraw:
+          type: boolean
+          title: Can Withdraw
+          description: Whether the user can withdraw their balance
+      type: object
+      required:
+      - current_balance_pence
+      - total_earnings_pence
+      - minimum_withdrawal_threshold_pence
+      - withdrawal_min_wait_days
+      - can_withdraw
+      title: BalanceInfoResponse
+      description: Response model for site balance information.
+    TransactionDataResponse:
+      properties:
+        site_id:
+          type: string
+          format: uuid
+          title: Site Id
+          description: ID of the site
+        transactions:
+          items:
+            $ref: '#/components/schemas/TransactionDatumResponse'
+          type: array
+          title: Transactions
+          description: List of transactions for the site
+        is_below_withdrawal_minimum:
+          type: boolean
+          title: Is Below Withdrawal Minimum
+          description: If the user is below the minimum withdrawal threshold (if configured)
+          default: false
+        days_until_minimum_wait_time_met:
+          type: integer
+          title: Days Until Minimum Wait Time Met
+          description: How many days the user needs to wait to withdraw (if configured)
+      type: object
+      required:
+      - site_id
+      - transactions
+      title: TransactionDataResponse
+      description: Response model for transaction history.
     TransactionDatumResponse:
       properties:
         transaction_type:
@@ -319,37 +316,40 @@ components:
       - credit_pence
       title: TransactionDatumResponse
       description: Response model for single transaction.
-    BalanceInfoResponse:
+    PaymentStatus:
+      type: string
+      enum:
+      - pending_approval
+      - approved
+      - processing
+      - posted
+      - failed
+      - rejected
+      - cancelled
+      - returned
+      title: PaymentStatus
+      description: Payment lifecycle states
+    ValidationError:
       properties:
-        current_balance_pence:
-          type: integer
-          title: Current Balance Pence
-          description: Current balance of the site in pence (total earnings minus total withdrawals)
-        total_earnings_pence:
-          type: integer
-          title: Total Earnings Pence
-          description: Lifetime earnings of the site in pence
-        minimum_withdrawal_threshold_pence:
-          type: integer
-          title: Minimum Withdrawal Threshold Pence
-          description: The minimum a user can withdraw in one transaction, in pence
-        withdrawal_min_wait_days:
-          type: integer
-          title: Withdrawal Min Wait Days
-          description: The number of days a user must wait to withdraw after their first reward
-        can_withdraw:
-          type: boolean
-          title: Can Withdraw
-          description: Whether the user can withdraw their balance
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
       type: object
       required:
-      - current_balance_pence
-      - total_earnings_pence
-      - minimum_withdrawal_threshold_pence
-      - withdrawal_min_wait_days
-      - can_withdraw
-      title: BalanceInfoResponse
-      description: Response model for site balance information.
+      - loc
+      - msg
+      - type
+      title: ValidationError
   securitySchemes:
     OAuth2PasswordBearer:
       type: oauth2

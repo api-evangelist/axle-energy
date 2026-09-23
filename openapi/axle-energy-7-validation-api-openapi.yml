@@ -1,7 +1,7 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: Axle 1. Authentication 7. Validation API
-  description: For full documentation please see our official docs at <a href='http://docs.axle.energy'>docs.axle.energy</a>
+  title: Axle 7. Validation API
+  description: For full documentation please see our official docs at docs.axle.energy
   version: 1.4.6
 servers:
 - url: https://api.axle.energy
@@ -51,6 +51,15 @@ paths:
       - OAuth2PasswordBearer: []
 components:
   schemas:
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
     MPANValidationResponse:
       properties:
         isValid:
@@ -62,17 +71,6 @@ components:
       - isValid
       title: MPANValidationResponse
       description: Response for a correctly validated MPAN
-    MPANValidationRequest:
-      properties:
-        mpan:
-          type: string
-          title: Mpan
-          description: MPAN to be validated
-      type: object
-      required:
-      - mpan
-      title: MPANValidationRequest
-      description: Request model for validating an MPAN
     MPANValidationError:
       properties:
         detail:
@@ -86,6 +84,17 @@ components:
       - detail
       title: MPANValidationError
       description: Error(s) when trying to validate an MPAN
+    MPANValidationRequest:
+      properties:
+        mpan:
+          type: string
+          title: Mpan
+          description: MPAN to be validated
+      type: object
+      required:
+      - mpan
+      title: MPANValidationRequest
+      description: Request model for validating an MPAN
     ValidationError:
       properties:
         loc:
@@ -107,15 +116,6 @@ components:
       - msg
       - type
       title: ValidationError
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
   securitySchemes:
     OAuth2PasswordBearer:
       type: oauth2

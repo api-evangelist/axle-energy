@@ -1,7 +1,7 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
   title: Axle 1. Authentication API
-  description: For full documentation please see our official docs at <a href='http://docs.axle.energy'>docs.axle.energy</a>
+  description: For full documentation please see our official docs at docs.axle.energy
   version: 1.4.6
 servers:
 - url: https://api.axle.energy
@@ -107,6 +107,50 @@ paths:
       - OAuth2PasswordBearer: []
 components:
   schemas:
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    User:
+      properties:
+        username:
+          type: string
+          title: Username
+        roles:
+          items:
+            type: string
+          type: array
+          title: Roles
+          description: Set of roles assigned to the user; any of `entity_read`, `entity_write`, `rewards`, `lookup`, `metrics_write`, `components`
+      type: object
+      required:
+      - username
+      - roles
+      title: User
+      description: Response model for info about the current API user, including their roles.
+    Body_login_for_access_token_form_auth_token_form_post:
+      properties:
+        username:
+          type: string
+          title: Username
+        password:
+          type: string
+          title: Password
+        grant_type:
+          type: string
+          pattern: ^password$
+          title: Grant Type
+          default: password
+      type: object
+      required:
+      - username
+      - password
+      title: Body_login_for_access_token_form_auth_token_form_post
     Body_create_component_token_auth_component_token_post:
       properties:
         external_user_id:
@@ -134,45 +178,6 @@ components:
       - external_user_id
       - allowed_origin
       title: Body_create_component_token_auth_component_token_post
-    Body_login_for_access_token_form_auth_token_form_post:
-      properties:
-        username:
-          type: string
-          title: Username
-        password:
-          type: string
-          title: Password
-        grant_type:
-          type: string
-          pattern: ^password$
-          title: Grant Type
-          default: password
-      type: object
-      required:
-      - username
-      - password
-      title: Body_login_for_access_token_form_auth_token_form_post
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
     Token:
       properties:
         access_token:
@@ -208,32 +213,27 @@ components:
       description: 'Organisation scoped token. Includes internal user ID so clients can make futher
 
         API requests regarding this user if needed.'
-    User:
+    ValidationError:
       properties:
-        username:
-          type: string
-          title: Username
-        roles:
+        loc:
           items:
-            type: string
+            anyOf:
+            - type: string
+            - type: integer
           type: array
-          title: Roles
-          description: Set of roles assigned to the user; any of `entity_read`, `entity_write`, `rewards`, `lookup`, `metrics_write`, `components`
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
       type: object
       required:
-      - username
-      - roles
-      title: User
-      description: Response model for info about the current API user, including their roles.
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
+      - loc
+      - msg
+      - type
+      title: ValidationError
   securitySchemes:
     OAuth2PasswordBearer:
       type: oauth2

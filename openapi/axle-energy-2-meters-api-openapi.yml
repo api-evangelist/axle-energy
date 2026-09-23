@@ -1,7 +1,7 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: Axle 1. Authentication 2. Meters API
-  description: For full documentation please see our official docs at <a href='http://docs.axle.energy'>docs.axle.energy</a>
+  title: Axle 2. Meters API
+  description: For full documentation please see our official docs at docs.axle.energy
   version: 1.4.6
 servers:
 - url: https://api.axle.energy
@@ -349,6 +349,16 @@ paths:
       - OAuth2PasswordBearer: []
 components:
   schemas:
+    MeterByAddressRequest:
+      properties:
+        address:
+          type: string
+          title: Address
+          description: Full address of the meter, e.g. '221B Baker Street, London, NW1 6XE'. Must include postcode and begin with house number/ name or other uniquely-identifying information. May be constructed from individual address components, concatenated with separating commas. Better formatting may increase the chance of a meter being found.
+      type: object
+      required:
+      - address
+      title: MeterByAddressRequest
     MeterResponse:
       properties:
         mpan:
@@ -392,16 +402,24 @@ components:
       - detail
       title: ErrorWithDetail
       description: Standard error response with a detailed message.
-    MeterByAddressRequest:
+    MeterByMPANRequest:
       properties:
-        address:
+        mpan:
           type: string
-          title: Address
-          description: Full address of the meter, e.g. '221B Baker Street, London, NW1 6XE'. Must include postcode and begin with house number/ name or other uniquely-identifying information. May be constructed from individual address components, concatenated with separating commas. Better formatting may increase the chance of a meter being found.
+          title: Mpan
+          description: 13-digit Meter Point Administration Number (MPAN) whose meter info is requested
       type: object
       required:
-      - address
-      title: MeterByAddressRequest
+      - mpan
+      title: MeterByMPANRequest
+    EligibleMarket:
+      type: string
+      enum:
+      - cm
+      - dno
+      - wholesale
+      title: EligibleMarket
+      description: An enumeration.
     MeterSearchResponse:
       properties:
         ref:
@@ -421,24 +439,6 @@ components:
 
 
         Contains a reference to the meter and its associated address.'
-    EligibleMarket:
-      type: string
-      enum:
-      - cm
-      - dno
-      - wholesale
-      title: EligibleMarket
-      description: An enumeration.
-    MeterByMPANRequest:
-      properties:
-        mpan:
-          type: string
-          title: Mpan
-          description: 13-digit Meter Point Administration Number (MPAN) whose meter info is requested
-      type: object
-      required:
-      - mpan
-      title: MeterByMPANRequest
   securitySchemes:
     OAuth2PasswordBearer:
       type: oauth2
