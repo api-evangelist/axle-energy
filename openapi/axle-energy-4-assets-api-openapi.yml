@@ -757,147 +757,128 @@ paths:
       - OAuth2PasswordBearer: []
 components:
   schemas:
-    HalfHourlyPrice:
-      properties:
-        start_timestamp:
-          type: string
-          format: date-time
-          title: Start Timestamp
-        price_gbp_per_mwh:
-          type: number
-          title: Price Gbp Per Mwh
-          description: Price in £/MWh (2dp)
-      type: object
-      required:
-      - start_timestamp
-      - price_gbp_per_mwh
-      title: HalfHourlyPrice
-      description: 'Represents the market price for a given half-hour period.
+    EventStatus:
+      type: string
+      enum:
+      - RECEIVED
+      - ACCEPTED
+      - REJECTED
+      - FAILED
+      - EXECUTED
+      title: EventStatus
+      description: 'Status values for asset event handling.
 
 
-        If the asset is not participating in the market for that period, price_gbp_per_mwh will be None.'
-    Intent:
-      properties:
-        energy_required_kwh:
-          type: number
-          title: Energy Required Kwh
-        ready_by:
-          type: string
-          format: date-time
-          title: Ready By
-          description: 'Deprecated: use ready_by_local_time instead. The date component is discarded; only used to derive local time when ready_by_local_time is absent.'
-        ready_by_local_time:
-          type: string
-          format: time
-          title: Ready By Local Time
-          description: Local time by which energy is required (wall time)
-        energy_estimated:
-          type: boolean
-          title: Energy Estimated
-          description: False if energy_required_kwh is derived from target %SOC set on vehicle (e.g. via Enode), True if the energy_required_kwh is purely a user input
-        may_charge_peak:
-          type: boolean
-          title: May Charge Peak
-          description: If True, the vehicle may be charged in peak periods but only if all off-peak periods are used up and the energy requirement is not met.
-          default: false
-        charging_mode:
-          allOf:
-          - $ref: '#/components/schemas/ChargingMode'
-          description: 'Charging strategy: maximise_charging_time (charge all available periods) or minimise_charging_time (charge only up to the user''s stated intent in kWh)'
-          default: maximise_charging_time
-      type: object
-      required:
-      - energy_required_kwh
-      - ready_by
-      title: Intent
-      description: This is the received intent from a user
-    IntentResponse:
-      properties:
-        intent:
-          $ref: '#/components/schemas/Intent'
-        received_at:
-          type: string
-          format: date-time
-          title: Received At
-      type: object
-      required:
-      - intent
-      - received_at
-      title: IntentResponse
-      description: An intent and the time it was received.
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    ChargeNowDeletedEventRequest:
-      properties: {}
-      type: object
-      title: ChargeNowDeletedEventRequest
-      description: 'Request model for charge-now-deleted events.
+        - RECEIVED: Event was received by the system
 
+        - ACCEPTED: Event was accepted for processing
 
-        This is an empty request model to allow for future updates.'
-    PlugInScheduleEventResponse:
+        - REJECTED: Event was rejected (invalid or not applicable)
+
+        - FAILED: Event processing failed
+
+        - EXECUTED: Event was successfully executed'
+    PlugInScheduleEventRequest:
       properties:
-        modified_charging_schedule:
+        charging_schedule:
           items:
             $ref: '#/components/schemas/ChargingScheduleBlock'
           type: array
-          title: Modified Charging Schedule
+          title: Charging Schedule
       type: object
       required:
-      - modified_charging_schedule
-      title: PlugInScheduleEventResponse
-      description: 'This is the modified charging schedule which will be returned to the client.
+      - charging_schedule
+      title: PlugInScheduleEventRequest
+      description: 'This is the original charging schedule which will be modified and returned to the client in the response.
 
         Used in WSLite integration model.'
-    BatteryScheduleStep:
+    PriceCurveResponse:
+      properties:
+        half_hourly_traded_prices:
+          items:
+            $ref: '#/components/schemas/HalfHourlyPrice'
+          type: array
+          title: Half Hourly Traded Prices
+      type: object
+      required:
+      - half_hourly_traded_prices
+      title: PriceCurveResponse
+      description: Response model for getting the price curve for a dispatchable asset (battery / charger).
+    AssetResponse:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+          description: Axle's internal UUID for the asset
+        external_id:
+          type: string
+          title: External Id
+          description: Vendor-specific identifier for the asset
+        type:
+          allOf:
+          - $ref: '#/components/schemas/AssetType'
+          description: Type of asset
+        site_id:
+          type: string
+          format: uuid
+          title: Site Id
+          description: ID of the site where the asset is located
+        properties:
+          allOf:
+          - $ref: '#/components/schemas/AssetProperties'
+          title: Properties
+          description: Optional asset properties
+      type: object
+      required:
+      - id
+      - external_id
+      - type
+      - site_id
+      title: AssetResponse
+      description: Response model for asset information.
+    BatteryScheduleResponse:
+      properties:
+        schedule_steps:
+          items:
+            $ref: '#/components/schemas/BatteryScheduleStep'
+          type: array
+          title: Schedule Steps
+          description: List of schedule steps for the asset
+        schedule_last_updated:
+          type: string
+          format: date-time
+          title: Schedule Last Updated
+          description: When the schedule was last recalculated
+      type: object
+      required:
+      - schedule_steps
+      - schedule_last_updated
+      title: BatteryScheduleResponse
+    AssetEventType:
+      type: string
+      enum:
+      - plug_in
+      - plug_out
+      - intent_update
+      - charge_now
+      - charge_now_deleted
+      title: AssetEventType
+      description: An enumeration.
+    ChargingScheduleBlock:
       properties:
         start_timestamp:
           type: string
-          format: date-time
           title: Start Timestamp
-          description: Start timestamp of the schedule step, tz-aware
         end_timestamp:
           type: string
-          format: date-time
           title: End Timestamp
-          description: End timestamp of the schedule step, tz-aware
-        action:
-          allOf:
-          - $ref: '#/components/schemas/BatteryScheduleAction'
-          description: Action to be taken during this schedule step
-        allow_deviation:
-          type: boolean
-          title: Allow Deviation
-          description: Whether the battery is allowed to deviate from the schedule
       type: object
       required:
       - start_timestamp
       - end_timestamp
-      - action
-      - allow_deviation
-      title: BatteryScheduleStep
-    AssetProperties:
-      properties:
-        power_kw:
-          type: number
-          minimum: 0.0
-          title: Power Kw
-          description: Power rating in kW
-        capacity_kwh:
-          type: number
-          minimum: 0.0
-          title: Capacity Kwh
-          description: Capacity in kWh
-      type: object
-      title: AssetProperties
-      description: Optional properties for an asset.
+      title: ChargingScheduleBlock
+      description: Sync has defined this simple schedule structure which we will use for initial WSLite integration.
     AssetEventRequest:
       properties:
         event_type:
@@ -926,47 +907,6 @@ components:
       required:
       - event_type
       title: AssetEventRequest
-    IntentEventRequest:
-      properties:
-        intent:
-          allOf:
-          - $ref: '#/components/schemas/Intent'
-          title: Intent
-          description: Intent to charge the vehicle.
-      type: object
-      required:
-      - intent
-      title: IntentEventRequest
-      description: This event should be triggered when the end user updates their charging preferences.
-    CreatableAssetType:
-      type: string
-      enum:
-      - charger
-      - battery
-      - heat pump
-      - electric_vehicle
-      - hot water tank
-      title: CreatableAssetType
-      description: Asset types that can be created through the API.
-    ChargingMode:
-      type: string
-      enum:
-      - maximise_charging_time
-      - minimise_charging_time
-      title: ChargingMode
-      description: An enumeration.
-    ChargeNowEventRequest:
-      properties:
-        end_at:
-          type: string
-          format: date-time
-          title: End At
-          description: End time for the charge now request.
-      type: object
-      required:
-      - end_at
-      title: ChargeNowEventRequest
-      description: Request model for a user's charge now request.
     AssetUpdateRequest:
       properties:
         properties:
@@ -986,27 +926,135 @@ components:
       type: object
       title: AssetUpdateRequest
       description: Request model for updating an existing asset.
-    EventStatus:
-      type: string
-      enum:
-      - RECEIVED
-      - ACCEPTED
-      - REJECTED
-      - FAILED
-      - EXECUTED
-      title: EventStatus
-      description: 'Status values for asset event handling.
+    Vehicle:
+      properties:
+        charging_rate_kw:
+          type: number
+          title: Charging Rate Kw
+      type: object
+      required:
+      - charging_rate_kw
+      title: Vehicle
+    Tariff:
+      properties:
+        off_peak_times:
+          type: string
+          title: Off Peak Times
+        timezone:
+          type: string
+          title: Timezone
+        tariff_type:
+          $ref: '#/components/schemas/TariffType'
+      type: object
+      required:
+      - off_peak_times
+      - timezone
+      title: Tariff
+    AssetResponsePage:
+      properties:
+        assets:
+          items:
+            $ref: '#/components/schemas/AssetResponse'
+          type: array
+          title: Assets
+          description: List of assets for the current page
+        total_num_assets:
+          type: integer
+          title: Total Num Assets
+          description: Total number of assets available
+        total_num_pages:
+          type: integer
+          title: Total Num Pages
+          description: Total number of pages available
+        page_number:
+          type: integer
+          title: Page Number
+          description: Current page number (1-based)
+      type: object
+      required:
+      - assets
+      - total_num_assets
+      - total_num_pages
+      - page_number
+      title: AssetResponsePage
+      description: Paginated response for asset listings.
+    TariffUpdateEventRequest:
+      properties:
+        tariff:
+          allOf:
+          - $ref: '#/components/schemas/Tariff'
+          title: Tariff
+          description: Updated tariff information.
+      type: object
+      required:
+      - tariff
+      title: TariffUpdateEventRequest
+      description: Request model for a user's tariff update.
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    PlugInScheduleEventResponse:
+      properties:
+        modified_charging_schedule:
+          items:
+            $ref: '#/components/schemas/ChargingScheduleBlock'
+          type: array
+          title: Modified Charging Schedule
+      type: object
+      required:
+      - modified_charging_schedule
+      title: PlugInScheduleEventResponse
+      description: 'This is the modified charging schedule which will be returned to the client.
+
+        Used in WSLite integration model.'
+    ChargeNowDeletedEventRequest:
+      properties: {}
+      type: object
+      title: ChargeNowDeletedEventRequest
+      description: 'Request model for charge-now-deleted events.
 
 
-        - RECEIVED: Event was received by the system
+        This is an empty request model to allow for future updates.'
+    HalfHourlyPrice:
+      properties:
+        start_timestamp:
+          type: string
+          format: date-time
+          title: Start Timestamp
+        price_gbp_per_mwh:
+          type: number
+          title: Price Gbp Per Mwh
+          description: Price in £/MWh (2dp)
+      type: object
+      required:
+      - start_timestamp
+      - price_gbp_per_mwh
+      title: HalfHourlyPrice
+      description: 'Represents the market price for a given half-hour period.
 
-        - ACCEPTED: Event was accepted for processing
 
-        - REJECTED: Event was rejected (invalid or not applicable)
-
-        - FAILED: Event processing failed
-
-        - EXECUTED: Event was successfully executed'
+        If the asset is not participating in the market for that period, price_gbp_per_mwh will be None.'
+    AssetProperties:
+      properties:
+        power_kw:
+          type: number
+          minimum: 0.0
+          title: Power Kw
+          description: Power rating in kW
+        capacity_kwh:
+          type: number
+          minimum: 0.0
+          title: Capacity Kwh
+          description: Capacity in kWh
+      type: object
+      title: AssetProperties
+      description: Optional properties for an asset.
     AssetRequest:
       properties:
         external_id:
@@ -1047,39 +1095,16 @@ components:
       - site_id
       title: AssetRequest
       description: Request model for creating a new asset.
-    TariffType:
+    CreatableAssetType:
       type: string
       enum:
-      - single_rate
-      - dual_rate
-      - dynamic
-      - smart
-      - unknown
-      title: TariffType
-      description: An enumeration.
-    PlugOutEventRequest:
-      properties: {}
-      type: object
-      title: PlugOutEventRequest
-      description: 'Request model for plug-out events.
-
-
-        This is an empty request model to allow for future updates.'
-    EventResponse:
-      properties:
-        timestamp:
-          type: string
-          format: date-time
-          title: Timestamp
-          description: Timestamp for the response (UTC)
-        status:
-          $ref: '#/components/schemas/EventStatus'
-      type: object
-      required:
-      - timestamp
-      - status
-      title: EventResponse
-      description: Response for an asset event status update.
+      - charger
+      - battery
+      - heat pump
+      - electric_vehicle
+      - hot water tank
+      title: CreatableAssetType
+      description: Asset types that can be created through the API.
     BatteryScheduleAction:
       type: string
       enum:
@@ -1098,16 +1123,26 @@ components:
         - avoid_export: Avoid exporting energy, but allow import.
 
         - avoid_import: Avoid importing energy, but allow export.'
-    AssetEventType:
-      type: string
-      enum:
-      - plug_in
-      - plug_out
-      - intent_update
-      - charge_now
-      - charge_now_deleted
-      title: AssetEventType
-      description: An enumeration.
+    IntentEventRequest:
+      properties:
+        intent:
+          allOf:
+          - $ref: '#/components/schemas/Intent'
+          title: Intent
+          description: Intent to charge the vehicle.
+      type: object
+      required:
+      - intent
+      title: IntentEventRequest
+      description: This event should be triggered when the end user updates their charging preferences.
+    PlugOutEventRequest:
+      properties: {}
+      type: object
+      title: PlugOutEventRequest
+      description: 'Request model for plug-out events.
+
+
+        This is an empty request model to allow for future updates.'
     AssetType:
       type: string
       enum:
@@ -1121,32 +1156,68 @@ components:
       - pv inverter
       title: AssetType
       description: An enumeration.
-    TariffUpdateEventRequest:
+    ValidationError:
       properties:
-        tariff:
-          allOf:
-          - $ref: '#/components/schemas/Tariff'
-          title: Tariff
-          description: Updated tariff information.
-      type: object
-      required:
-      - tariff
-      title: TariffUpdateEventRequest
-      description: Request model for a user's tariff update.
-    PlugInScheduleEventRequest:
-      properties:
-        charging_schedule:
+        loc:
           items:
-            $ref: '#/components/schemas/ChargingScheduleBlock'
+            anyOf:
+            - type: string
+            - type: integer
           type: array
-          title: Charging Schedule
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
       type: object
       required:
-      - charging_schedule
-      title: PlugInScheduleEventRequest
-      description: 'This is the original charging schedule which will be modified and returned to the client in the response.
-
-        Used in WSLite integration model.'
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    EventResponse:
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+          title: Timestamp
+          description: Timestamp for the response (UTC)
+        status:
+          $ref: '#/components/schemas/EventStatus'
+      type: object
+      required:
+      - timestamp
+      - status
+      title: EventResponse
+      description: Response for an asset event status update.
+    ChargeNowEventRequest:
+      properties:
+        end_at:
+          type: string
+          format: date-time
+          title: End At
+          description: End time for the charge now request.
+      type: object
+      required:
+      - end_at
+      title: ChargeNowEventRequest
+      description: Request model for a user's charge now request.
+    IntentResponse:
+      properties:
+        intent:
+          $ref: '#/components/schemas/Intent'
+        received_at:
+          type: string
+          format: date-time
+          title: Received At
+      type: object
+      required:
+      - intent
+      - received_at
+      title: IntentResponse
+      description: An intent and the time it was received.
     PlugInEventRequest:
       properties:
         intent:
@@ -1169,156 +1240,85 @@ components:
       description: 'A minimal plug-in event requires no data.
 
         Optionally `intent`, `tariff` and `vehicle` information can be supplied here too.'
-    ChargingScheduleBlock:
+    Intent:
+      properties:
+        energy_required_kwh:
+          type: number
+          title: Energy Required Kwh
+        ready_by:
+          type: string
+          format: date-time
+          title: Ready By
+          description: 'Deprecated: use ready_by_local_time instead. The date component is discarded; only used to derive local time when ready_by_local_time is absent.'
+        ready_by_local_time:
+          type: string
+          format: time
+          title: Ready By Local Time
+          description: Local time by which energy is required (wall time)
+        energy_estimated:
+          type: boolean
+          title: Energy Estimated
+          description: False if energy_required_kwh is derived from target %SOC set on vehicle (e.g. via Enode), True if the energy_required_kwh is purely a user input
+        may_charge_peak:
+          type: boolean
+          title: May Charge Peak
+          description: If True, the vehicle may be charged in peak periods but only if all off-peak periods are used up and the energy requirement is not met.
+          default: false
+        charging_mode:
+          allOf:
+          - $ref: '#/components/schemas/ChargingMode'
+          description: 'Charging strategy: maximise_charging_time (charge all available periods) or minimise_charging_time (charge only up to the user''s stated intent in kWh)'
+          default: maximise_charging_time
+      type: object
+      required:
+      - energy_required_kwh
+      - ready_by
+      title: Intent
+      description: This is the received intent from a user
+    ChargingMode:
+      type: string
+      enum:
+      - maximise_charging_time
+      - minimise_charging_time
+      title: ChargingMode
+      description: An enumeration.
+    TariffType:
+      type: string
+      enum:
+      - single_rate
+      - dual_rate
+      - dynamic
+      - smart
+      - unknown
+      title: TariffType
+      description: An enumeration.
+    BatteryScheduleStep:
       properties:
         start_timestamp:
           type: string
+          format: date-time
           title: Start Timestamp
+          description: Start timestamp of the schedule step, tz-aware
         end_timestamp:
           type: string
+          format: date-time
           title: End Timestamp
+          description: End timestamp of the schedule step, tz-aware
+        action:
+          allOf:
+          - $ref: '#/components/schemas/BatteryScheduleAction'
+          description: Action to be taken during this schedule step
+        allow_deviation:
+          type: boolean
+          title: Allow Deviation
+          description: Whether the battery is allowed to deviate from the schedule
       type: object
       required:
       - start_timestamp
       - end_timestamp
-      title: ChargingScheduleBlock
-      description: Sync has defined this simple schedule structure which we will use for initial WSLite integration.
-    AssetResponsePage:
-      properties:
-        assets:
-          items:
-            $ref: '#/components/schemas/AssetResponse'
-          type: array
-          title: Assets
-          description: List of assets for the current page
-        total_num_assets:
-          type: integer
-          title: Total Num Assets
-          description: Total number of assets available
-        total_num_pages:
-          type: integer
-          title: Total Num Pages
-          description: Total number of pages available
-        page_number:
-          type: integer
-          title: Page Number
-          description: Current page number (1-based)
-      type: object
-      required:
-      - assets
-      - total_num_assets
-      - total_num_pages
-      - page_number
-      title: AssetResponsePage
-      description: Paginated response for asset listings.
-    PriceCurveResponse:
-      properties:
-        half_hourly_traded_prices:
-          items:
-            $ref: '#/components/schemas/HalfHourlyPrice'
-          type: array
-          title: Half Hourly Traded Prices
-      type: object
-      required:
-      - half_hourly_traded_prices
-      title: PriceCurveResponse
-      description: Response model for getting the price curve for a dispatchable asset (battery / charger).
-    Tariff:
-      properties:
-        off_peak_times:
-          type: string
-          title: Off Peak Times
-        timezone:
-          type: string
-          title: Timezone
-        tariff_type:
-          $ref: '#/components/schemas/TariffType'
-      type: object
-      required:
-      - off_peak_times
-      - timezone
-      title: Tariff
-    BatteryScheduleResponse:
-      properties:
-        schedule_steps:
-          items:
-            $ref: '#/components/schemas/BatteryScheduleStep'
-          type: array
-          title: Schedule Steps
-          description: List of schedule steps for the asset
-        schedule_last_updated:
-          type: string
-          format: date-time
-          title: Schedule Last Updated
-          description: When the schedule was last recalculated
-      type: object
-      required:
-      - schedule_steps
-      - schedule_last_updated
-      title: BatteryScheduleResponse
-    AssetResponse:
-      properties:
-        id:
-          type: string
-          format: uuid
-          title: Id
-          description: Axle's internal UUID for the asset
-        external_id:
-          type: string
-          title: External Id
-          description: Vendor-specific identifier for the asset
-        type:
-          allOf:
-          - $ref: '#/components/schemas/AssetType'
-          description: Type of asset
-        site_id:
-          type: string
-          format: uuid
-          title: Site Id
-          description: ID of the site where the asset is located
-        properties:
-          allOf:
-          - $ref: '#/components/schemas/AssetProperties'
-          title: Properties
-          description: Optional asset properties
-      type: object
-      required:
-      - id
-      - external_id
-      - type
-      - site_id
-      title: AssetResponse
-      description: Response model for asset information.
-    Vehicle:
-      properties:
-        charging_rate_kw:
-          type: number
-          title: Charging Rate Kw
-      type: object
-      required:
-      - charging_rate_kw
-      title: Vehicle
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
+      - action
+      - allow_deviation
+      title: BatteryScheduleStep
   securitySchemes:
     OAuth2PasswordBearer:
       type: oauth2

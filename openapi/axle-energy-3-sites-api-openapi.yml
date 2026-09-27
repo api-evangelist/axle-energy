@@ -881,86 +881,29 @@ paths:
       - OAuth2PasswordBearer: []
 components:
   schemas:
-    HalfHourlyPrice:
+    UnenrolResponse:
       properties:
-        start_timestamp:
+        site_id:
           type: string
-          format: date-time
-          title: Start Timestamp
-        price_gbp_per_mwh:
-          type: number
-          title: Price Gbp Per Mwh
-          description: Price in £/MWh (2dp)
+          format: uuid
+          title: Site Id
+          description: ID of the unenrolled site
+          examples:
+          - a1b2c3d4-e5f6-7890-abcd-ef1234567890
+        status:
+          type: string
+          enum:
+          - unenrolled
+          - already_unenrolled
+          title: Status
+          examples:
+          - unenrolled
       type: object
       required:
-      - start_timestamp
-      - price_gbp_per_mwh
-      title: HalfHourlyPrice
-      description: 'Represents the market price for a given half-hour period.
-
-
-        If the asset is not participating in the market for that period, price_gbp_per_mwh will be None.'
-    OnboardResponse:
-      properties:
-        site:
-          allOf:
-          - $ref: '#/components/schemas/InitialiseSiteResult'
-          title: Site
-          description: Site result metadata
-        assets:
-          items:
-            $ref: '#/components/schemas/InitialiseAssetResult'
-          type: array
-          title: Assets
-          description: Per-asset result metadata
-        enrolment:
-          allOf:
-          - $ref: '#/components/schemas/EnrolResponse'
-          title: Enrolment
-          description: Enrolment result
-      type: object
-      required:
-      - site
-      - assets
-      - enrolment
-      title: OnboardResponse
-      description: Response model for the onboard endpoint.
-    DispatchMethodResponse:
-      type: string
-      enum:
-      - cm_infrequent_dispatch
-      - full_asset_schedule_control
-      - limited_pause
-      - vpp_limited_control
-      title: DispatchMethodResponse
-      description: Axle propositions that a site can enrol into.
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    OnboardingResponse:
-      properties:
-        site:
-          allOf:
-          - $ref: '#/components/schemas/SiteResponse'
-          title: Site
-          description: Created site details
-        asset:
-          allOf:
-          - $ref: '#/components/schemas/AssetResponse'
-          title: Asset
-          description: Created asset details
-      type: object
-      required:
-      - site
-      - asset
-      title: OnboardingResponse
-      description: Response model for onboarding operation.
+      - site_id
+      - status
+      title: UnenrolResponse
+      description: Response model for the unenrol endpoint.
     OnboardRequest:
       properties:
         site:
@@ -1008,174 +951,6 @@ components:
       - proposition
       title: OnboardRequest
       description: Request model for the onboard endpoint.
-    TariffResponse:
-      properties:
-        tariff_type:
-          allOf:
-          - $ref: '#/components/schemas/TariffType'
-          description: Type of tariff
-        tariff_cheap_start_time:
-          type: string
-          format: time
-          title: Tariff Cheap Start Time
-          description: Start time for off-peak/cheap rate period
-        tariff_cheap_end_time:
-          type: string
-          format: time
-          title: Tariff Cheap End Time
-          description: End time for off-peak/cheap rate period
-      type: object
-      title: TariffResponse
-      description: Response model for tariff information.
-    ErrorWithDetail:
-      properties:
-        detail:
-          type: string
-          title: Detail
-      type: object
-      required:
-      - detail
-      title: ErrorWithDetail
-      description: Standard error response with a detailed message.
-    EnrolRequest:
-      properties:
-        proposition:
-          type: string
-          enum:
-          - limited_pause
-          - full_asset_schedule_control
-          title: Proposition
-          description: Proposition to enrol for
-        override_withdrawal:
-          type: boolean
-          title: Override Withdrawal
-          description: Set to true to re-enrol regardless of previous withdrawals. If this is a user-initated action, overriding previous withdrawals is recommended.
-          default: false
-          examples:
-          - false
-        gave_boundary_meter_consent_at:
-          type: string
-          format: date-time
-          title: Gave Boundary Meter Consent At
-          description: Optional timezone-aware ISO 8601 timestamp recording when the household gave boundary meter consent. If provided, overwrites any existing meter consent timestamp on the site.
-      type: object
-      required:
-      - proposition
-      title: EnrolRequest
-      description: Request model for enrolling a site in a proposition.
-    AssetProperties:
-      properties:
-        power_kw:
-          type: number
-          minimum: 0.0
-          title: Power Kw
-          description: Power rating in kW
-        capacity_kwh:
-          type: number
-          minimum: 0.0
-          title: Capacity Kwh
-          description: Capacity in kWh
-      type: object
-      title: AssetProperties
-      description: Optional properties for an asset.
-    SiteResponsePage:
-      properties:
-        sites:
-          items:
-            $ref: '#/components/schemas/SiteResponse'
-          type: array
-          title: Sites
-          description: List of sites for the current page
-        total_num_sites:
-          type: integer
-          title: Total Num Sites
-          description: Total number of sites available
-        total_num_pages:
-          type: integer
-          title: Total Num Pages
-          description: Total number of pages available
-        page_number:
-          type: integer
-          title: Page Number
-          description: Current page number (1-based)
-      type: object
-      required:
-      - sites
-      - total_num_sites
-      - total_num_pages
-      - page_number
-      title: SiteResponsePage
-      description: Paginated response for site listings.
-    InitialiseResponse:
-      properties:
-        site:
-          allOf:
-          - $ref: '#/components/schemas/InitialiseSiteResult'
-          title: Site
-          description: Site result metadata
-        assets:
-          items:
-            $ref: '#/components/schemas/InitialiseAssetResult'
-          type: array
-          title: Assets
-          description: Per-asset result metadata
-        eligibility:
-          allOf:
-          - $ref: '#/components/schemas/SiteEligibilityDetail'
-          title: Eligibility
-          description: Eligibility information for the site and its assets
-      type: object
-      required:
-      - site
-      - assets
-      - eligibility
-      title: InitialiseResponse
-      description: Response model for the initialise endpoint.
-    TariffRequest:
-      properties:
-        tariff_cheap_start_time:
-          type: string
-          format: time
-          title: Tariff Cheap Start Time
-          description: Start time for off-peak/cheap rate period
-        tariff_cheap_end_time:
-          type: string
-          format: time
-          title: Tariff Cheap End Time
-          description: End time for off-peak/cheap rate period
-        tariff_type:
-          allOf:
-          - $ref: '#/components/schemas/TariffType'
-          description: Type of tariff
-      type: object
-      required:
-      - tariff_type
-      title: TariffRequest
-      description: Request model for updating tariff information.
-    PropositionEligibility:
-      properties:
-        proposition:
-          type: string
-          enum:
-          - limited_pause
-          - full_asset_schedule_control
-          title: Proposition
-          examples:
-          - limited_pause
-        is_eligible:
-          type: boolean
-          title: Is Eligible
-        issues:
-          items:
-            $ref: '#/components/schemas/EligibilityCode'
-          type: array
-          default: []
-      type: object
-      required:
-      - proposition
-      - is_eligible
-      title: PropositionEligibility
-      description: Eligibility detail for a single proposition.
     MarketResponse:
       type: string
       enum:
@@ -1200,98 +975,28 @@ components:
         - SFFR: Static Firm Frequency Response
 
         - WHOLESALE: Wholesale energy market'
-    SiteFlexEventsResponse:
-      properties:
-        site_id:
-          type: string
-          format: uuid
-          title: Site Id
-          description: ID of the site
-        events:
-          items:
-            $ref: '#/components/schemas/FlexEventResponse'
-          type: array
-          title: Events
-          description: List of flex events the site participated in
-      type: object
-      required:
-      - site_id
-      - events
-      title: SiteFlexEventsResponse
-    OnboardingAssetRequest:
-      properties:
-        external_id:
-          type: string
-          title: External Id
-          description: Vendor-specific identifier for the asset
-          examples:
-          - charger-001
-        type:
-          allOf:
-          - $ref: '#/components/schemas/CreatableAssetType'
-          description: Type of asset being created
-          examples:
-          - charger
-        properties:
-          allOf:
-          - $ref: '#/components/schemas/AssetProperties'
-          title: Properties
-          description: Optional asset properties
-          examples:
-          - power_kw: 7.4
-        asset_model:
-          type: string
-          title: Asset Model
-          description: Name of the AssetModel to assign (looked up by name). Required for CoP11 eligibility.
-          examples:
-          - axle_charger_v1
-        installation_date:
-          type: string
-          format: date
-          title: Installation Date
-          description: Date when the asset was installed. Required alongside asset_model for CoP11 eligibility.
-          examples:
-          - '2025-06-15'
-      type: object
-      required:
-      - external_id
-      - type
-      title: OnboardingAssetRequest
-      description: Request model for creating an asset during onboarding (without site_id).
-    CreatableAssetType:
+    DispatchMethodResponse:
       type: string
       enum:
-      - charger
-      - battery
-      - heat pump
-      - electric_vehicle
-      - hot water tank
-      title: CreatableAssetType
-      description: Asset types that can be created through the API.
-    EnrolResponse:
+      - cm_infrequent_dispatch
+      - full_asset_schedule_control
+      - limited_pause
+      - vpp_limited_control
+      title: DispatchMethodResponse
+      description: Axle propositions that a site can enrol into.
+    SiteDispatchConsentRequest:
       properties:
-        site_id:
-          type: string
-          format: uuid
-          title: Site Id
-          description: ID of the enrolled site
-          examples:
-          - a1b2c3d4-e5f6-7890-abcd-ef1234567890
-        status:
-          type: string
-          enum:
-          - enrolled
-          - already_enrolled
-          title: Status
-          description: Outcome of the enrolment attempt. Both `enrolled` and `already_enrolled` indicate success.
-          examples:
-          - enrolled
+        dispatch_methods:
+          items:
+            $ref: '#/components/schemas/DispatchMethodResponse'
+          type: array
+          uniqueItems: true
+          description: Dispatch methods to consent to or remove consent from. Leave empty to not consent to any dispatch methods.
       type: object
       required:
-      - site_id
-      - status
-      title: EnrolResponse
-      description: Outcome of an enrolment attempt.
+      - dispatch_methods
+      title: SiteDispatchConsentRequest
+      description: Request model for updating dispatch consent for a site.
     OAuthInitiateResponse:
       properties:
         authorization_url:
@@ -1303,6 +1008,46 @@ components:
       - authorization_url
       title: OAuthInitiateResponse
       description: Response for initiating OAuth flow with a third party service (e.g. FoxESS)
+    AssetEligibilityDetail:
+      properties:
+        asset_id:
+          type: string
+          format: uuid
+          title: Asset Id
+          examples:
+          - b2c3d4e5-f6a7-8901-bcde-f23456789012
+        external_id:
+          type: string
+          title: External Id
+          examples:
+          - charger-001
+        propositions:
+          items:
+            $ref: '#/components/schemas/PropositionEligibility'
+          type: array
+          title: Propositions
+          default: []
+      type: object
+      required:
+      - asset_id
+      - external_id
+      title: AssetEligibilityDetail
+      description: Eligibility detail for a single asset across all propositions.
+    OAuthProvider:
+      type: string
+      enum:
+      - foxess
+      - solaredge
+      - solax
+      - huawei
+      - myenergi
+      - nexblue
+      - givenergy
+      - volvo
+      - deye
+      - ideal
+      title: OAuthProvider
+      description: OAuth 2 providers supported for asset connections.
     SiteEligibilityDetail:
       properties:
         eligible_propositions:
@@ -1339,156 +1084,6 @@ components:
       - site_properties
       title: SiteEligibilityDetail
       description: Eligibility detail for a site's proposition eligibility check.
-    SiteAuthTokenRequest:
-      properties:
-        refresh_token:
-          type: string
-          title: Refresh Token
-          description: Refresh token for acquiring fresh access tokens after they expire; required, except for 'API_KEY'-type submissions
-        access_token:
-          type: string
-          title: Access Token
-          description: Access token for dispatching and monitoring assets
-        token_type:
-          type: string
-          title: Token Type
-          description: Type of token (e.g. 'Bearer' or 'API_KEY')
-        expires_utc:
-          type: string
-          format: date-time
-          title: Expires Utc
-          description: Time in UTC at which the token expires
-        expires_in:
-          type: integer
-          title: Expires In
-          description: Time in seconds until the token expires
-      type: object
-      title: SiteAuthTokenRequest
-      description: Request model for providing an auth token to enable Axle to access assets at a site.
-    TariffType:
-      type: string
-      enum:
-      - single_rate
-      - dual_rate
-      - dynamic
-      - smart
-      - unknown
-      title: TariffType
-      description: An enumeration.
-    UnenrolRequest:
-      properties:
-        proposition:
-          type: string
-          enum:
-          - limited_pause
-          - full_asset_schedule_control
-          title: Proposition
-          description: Proposition to unenrol from
-      type: object
-      required:
-      - proposition
-      title: UnenrolRequest
-      description: Request model for unenrolling a site from a proposition.
-    InitialiseRequest:
-      properties:
-        site:
-          allOf:
-          - $ref: '#/components/schemas/SiteRequest'
-          title: Site
-          description: Site information
-          examples:
-          - mpan: '1234567890123'
-            postcode: SW1A 1AA
-            street_address: 10 Downing Street
-            email: resident@example.com
-            gave_boundary_meter_consent_at: '2026-01-15T10:30:00Z'
-        assets:
-          items:
-            $ref: '#/components/schemas/OnboardingAssetRequest'
-          type: array
-          title: Assets
-          description: One or more assets to register at the site
-          examples:
-          - - external_id: charger-001
-              type: charger
-              asset_model: zappi
-              installation_date: '2025-06-15'
-              properties:
-                power_kw: 7.4
-      type: object
-      required:
-      - site
-      - assets
-      title: InitialiseRequest
-      description: 'Request model for initialising a site with one or more assets.
-
-
-        Upserts the site and assets, returning eligibility information.
-
-        No enrollment side effects (no dispatch consent, no bonus, no email).'
-    SiteProperties:
-      properties:
-        is_half_hourly_settled:
-          type: boolean
-          title: Is Half Hourly Settled
-        has_meter_consent:
-          type: boolean
-          title: Has Meter Consent
-      type: object
-      required:
-      - is_half_hourly_settled
-      - has_meter_consent
-      title: SiteProperties
-      description: Site-level properties relevant to eligibility evaluation.
-    SiteDispatchConsentRequest:
-      properties:
-        dispatch_methods:
-          items:
-            $ref: '#/components/schemas/DispatchMethodResponse'
-          type: array
-          uniqueItems: true
-          description: Dispatch methods to consent to or remove consent from. Leave empty to not consent to any dispatch methods.
-      type: object
-      required:
-      - dispatch_methods
-      title: SiteDispatchConsentRequest
-      description: Request model for updating dispatch consent for a site.
-    AssetType:
-      type: string
-      enum:
-      - boundary meter
-      - charger
-      - battery
-      - heat pump
-      - hot water tank
-      - frequency meter
-      - electric_vehicle
-      - pv inverter
-      title: AssetType
-      description: An enumeration.
-    EligibilityCode:
-      type: string
-      enum:
-      - asset_model_not_set
-      - asset_model_not_found
-      - asset_model_not_cop11_qualified
-      - asset_installation_date_not_set
-      - asset_model_enrol_eligibility_override
-      - non_domestic_site
-      title: EligibilityCode
-      description: Codes identifying specific eligibility issues for an asset.
-    SiteMeterConsentRequest:
-      properties:
-        gave_boundary_meter_consent_at:
-          type: string
-          format: date-time
-          title: Gave Boundary Meter Consent At
-          description: Timezone-aware ISO 8601 timestamp (e.g. '2026-01-01T12:34:56Z') indicating when the household gave consent for Axle to access readings from their boundary meter, if consent was given.
-      type: object
-      required:
-      - gave_boundary_meter_consent_at
-      title: SiteMeterConsentRequest
-      description: Request model for adding boundary meter consent for a site.
     InitialiseSiteResult:
       properties:
         site_id:
@@ -1518,177 +1113,39 @@ components:
       - site_created
       title: InitialiseSiteResult
       description: Result metadata for a site after upsert.
-    SiteUpdateRequest:
+    AssetResponse:
       properties:
-        tariff:
-          allOf:
-          - $ref: '#/components/schemas/TariffRequest'
-          title: Tariff
-          description: Tariff information to update
-        address:
-          type: string
-          title: Address
-          description: Full address for the site
-        postcode:
-          type: string
-          title: Postcode
-          description: UK postcode for the site
-        mpan:
-          type: string
-          title: Mpan
-          description: Meter Point Administration Number
-        email:
-          type: string
-          title: Email
-          description: Email address for the site
-      type: object
-      title: SiteUpdateRequest
-      description: Request model for updating site information.
-    EligibilityCheckResponse:
-      properties:
-        is_half_hourly_settled:
-          type: boolean
-          title: Is Half Hourly Settled
-          description: Whether the site is half-hourly settled, per ECOES.
-        propositions:
-          items:
-            $ref: '#/components/schemas/PropositionEligibility'
-          type: array
-          title: Propositions
-          description: Per-proposition eligibility for the supplied MPAN + asset model combination.
-          default: []
-      type: object
-      required:
-      - is_half_hourly_settled
-      title: EligibilityCheckResponse
-      description: Response model for the ephemeral eligibility check endpoint.
-    UnenrolResponse:
-      properties:
-        site_id:
+        id:
           type: string
           format: uuid
-          title: Site Id
-          description: ID of the unenrolled site
-          examples:
-          - a1b2c3d4-e5f6-7890-abcd-ef1234567890
-        status:
-          type: string
-          enum:
-          - unenrolled
-          - already_unenrolled
-          title: Status
-          examples:
-          - unenrolled
-      type: object
-      required:
-      - site_id
-      - status
-      title: UnenrolResponse
-      description: Response model for the unenrol endpoint.
-    FlexEventResponse:
-      properties:
-        start_at:
-          type: string
-          format: date-time
-          title: Start At
-          description: UTC start time of the flex event
-        end_at:
-          type: string
-          format: date-time
-          title: End At
-          description: UTC end time of the flex event
-        estimated_gross_revenue_gbp:
-          type: number
-          title: Estimated Gross Revenue Gbp
-          description: Estimated gross revenue earned in GBP for the event, before data has been submitted and reviewed by the relevant market bodies. Gross earnings are total flex earnings before any Axle and end-user revenue sharing deductions.
-        final_gross_revenue_gbp:
-          type: number
-          title: Final Gross Revenue Gbp
-          description: Final gross revenue earned in GBP for the event. This will be completed before the final settlement run of the event month (in UK Time), which runs at the end of the following month. Gross earnings are total flex earnings before any Axle and end-user revenue sharing deductions.
-      type: object
-      required:
-      - start_at
-      - end_at
-      - estimated_gross_revenue_gbp
-      title: FlexEventResponse
-    InitialiseAssetResult:
-      properties:
-        asset_id:
-          type: string
-          format: uuid
-          title: Asset Id
+          title: Id
           description: Axle's internal UUID for the asset
         external_id:
           type: string
           title: External Id
           description: Vendor-specific identifier for the asset
-        asset_created:
-          type: boolean
-          title: Asset Created
-          description: True if the asset was newly created, False if it was upserted
-        fields_updated:
-          items:
-            type: string
-          type: array
-          title: Fields Updated
-          description: List of fields that were updated on upsert
-        warnings:
-          items:
-            type: string
-          type: array
-          title: Warnings
-          description: Per-asset warnings generated during initialisation
-      type: object
-      required:
-      - asset_id
-      - external_id
-      - asset_created
-      title: InitialiseAssetResult
-      description: Result metadata for a single asset after upsert.
-    AssetEligibilityDetail:
-      properties:
-        asset_id:
+        type:
+          allOf:
+          - $ref: '#/components/schemas/AssetType'
+          description: Type of asset
+        site_id:
           type: string
           format: uuid
-          title: Asset Id
-          examples:
-          - b2c3d4e5-f6a7-8901-bcde-f23456789012
-        external_id:
-          type: string
-          title: External Id
-          examples:
-          - charger-001
-        propositions:
-          items:
-            $ref: '#/components/schemas/PropositionEligibility'
-          type: array
-          title: Propositions
-          default: []
+          title: Site Id
+          description: ID of the site where the asset is located
+        properties:
+          allOf:
+          - $ref: '#/components/schemas/AssetProperties'
+          title: Properties
+          description: Optional asset properties
       type: object
       required:
-      - asset_id
+      - id
       - external_id
-      title: AssetEligibilityDetail
-      description: Eligibility detail for a single asset across all propositions.
-    EligibilityCheckRequest:
-      properties:
-        mpan:
-          type: string
-          title: Mpan
-          description: Meter Point Administration Number. Used to determine whether the site is half-hourly settled.
-          examples:
-          - '1234567890123'
-        asset_model:
-          type: string
-          title: Asset Model
-          description: Optional value of the AssetModel to evaluate against. Required for CoP11-route eligibility; half-hourly settled sites qualify regardless of asset model.
-          examples:
-          - axle_charger_v1
-      type: object
-      required:
-      - mpan
-      title: EligibilityCheckRequest
-      description: Request model for the ephemeral eligibility check endpoint.
+      - type
+      - site_id
+      title: AssetResponse
+      description: Response model for asset information.
     PriceCurveResponse:
       properties:
         half_hourly_traded_prices:
@@ -1701,6 +1158,18 @@ components:
       - half_hourly_traded_prices
       title: PriceCurveResponse
       description: Response model for getting the price curve for a dispatchable asset (battery / charger).
+    SiteMeterConsentRequest:
+      properties:
+        gave_boundary_meter_consent_at:
+          type: string
+          format: date-time
+          title: Gave Boundary Meter Consent At
+          description: Timezone-aware ISO 8601 timestamp (e.g. '2026-01-01T12:34:56Z') indicating when the household gave consent for Axle to access readings from their boundary meter, if consent was given.
+      type: object
+      required:
+      - gave_boundary_meter_consent_at
+      title: SiteMeterConsentRequest
+      description: Request model for adding boundary meter consent for a site.
     SiteResponse:
       properties:
         id:
@@ -1755,83 +1224,113 @@ components:
       - id
       title: SiteResponse
       description: Response model for site information.
-    SiteRequest:
+    ErrorWithDetail:
       properties:
-        mpan:
+        detail:
           type: string
-          title: Mpan
-          description: Meter Point Administration Number
-        postcode:
-          type: string
-          title: Postcode
-          description: UK postcode for the site
-        street_address:
-          type: string
-          title: Street Address
-          description: Street address for the site
-        email:
-          type: string
-          title: Email
-          description: Email address for the site. Include to enable 2FA for payment withdrawals.
-        gave_boundary_meter_consent_at:
-          type: string
-          format: date-time
-          title: Gave Boundary Meter Consent At
-          description: Timezone-aware ISO 8601 timestamp (e.g. '2026-01-01T12:34:56Z') indicating when the household gave consent for Axle to access readings from their boundary meter, if consent was given.
+          title: Detail
       type: object
       required:
-      - mpan
-      - postcode
-      title: SiteRequest
-      description: Request model for creating a new site.
-    AssetResponse:
+      - detail
+      title: ErrorWithDetail
+      description: Standard error response with a detailed message.
+    InitialiseAssetResult:
       properties:
-        id:
+        asset_id:
           type: string
           format: uuid
-          title: Id
+          title: Asset Id
           description: Axle's internal UUID for the asset
         external_id:
           type: string
           title: External Id
           description: Vendor-specific identifier for the asset
-        type:
-          allOf:
-          - $ref: '#/components/schemas/AssetType'
-          description: Type of asset
-        site_id:
-          type: string
-          format: uuid
-          title: Site Id
-          description: ID of the site where the asset is located
-        properties:
-          allOf:
-          - $ref: '#/components/schemas/AssetProperties'
-          title: Properties
-          description: Optional asset properties
+        asset_created:
+          type: boolean
+          title: Asset Created
+          description: True if the asset was newly created, False if it was upserted
+        fields_updated:
+          items:
+            type: string
+          type: array
+          title: Fields Updated
+          description: List of fields that were updated on upsert
+        warnings:
+          items:
+            type: string
+          type: array
+          title: Warnings
+          description: Per-asset warnings generated during initialisation
       type: object
       required:
-      - id
+      - asset_id
       - external_id
-      - type
-      - site_id
-      title: AssetResponse
-      description: Response model for asset information.
-    OAuthProvider:
+      - asset_created
+      title: InitialiseAssetResult
+      description: Result metadata for a single asset after upsert.
+    EligibilityCode:
       type: string
       enum:
-      - foxess
-      - solaredge
-      - solax
-      - huawei
-      - myenergi
-      - nexblue
-      - givenergy
-      - volvo
-      - deye
-      - ideal
-      title: OAuthProvider
-      description: OAuth 2 providers supported for asset connections.
+      - asset_model_not_set
+      - asset_model_not_found
+      - asset_model_not_cop11_qualified
+      - asset_installation_date_not_set
+      - asset_model_enrol_eligibility_override
+      - non_domestic_site
+      title: EligibilityCode
+      description: Codes identifying specific eligibility issues for an asset.
+    FlexEventResponse:
+      properties:
+        start_at:
+          type: string
+          format: date-time
+          title: Start At
+          description: UTC start time of the flex event
+        end_at:
+          type: string
+          format: date-time
+          title: End At
+          description: UTC end time of the flex event
+        estimated_gross_revenue_gbp:
+          type: number
+          title: Estimated Gross Revenue Gbp
+          description: Estimated gross revenue earned in GBP for the event, before data has been submitted and reviewed by the relevant market bodies. Gross earnings are total flex earnings before any Axle and end-user revenue sharing deductions.
+        final_gross_revenue_gbp:
+          type: number
+          title: Final Gross Revenue Gbp
+          description: Final gross revenue earned in GBP for the event. This will be completed before the final settlement run of the event month (in UK Time), which runs at the end of the following month. Gross earnings are total flex earnings before any Axle and end-user revenue sharing deductions.
+      type: object
+      required:
+      - start_at
+      - end_at
+      - estimated_gross_revenue_gbp
+      title: FlexEventResponse
+    SiteAuthTokenRequest:
+      properties:
+        refresh_token:
+          type: string
+          title: Refresh Token
+          description: Refresh token for acquiring fresh access tokens after they expire; required, except for 'API_KEY'-type submissions
+        access_token:
+          type: string
+          title: Access Token
+          description: Access token for dispatching and monitoring assets
+        token_type:
+          type: string
+          title: Token Type
+          description: Type of token (e.g. 'Bearer' or 'API_KEY')
+        expires_utc:
+          type: string
+          format: date-time
+          title: Expires Utc
+          description: Time in UTC at which the token expires
+        expires_in:
+          type: integer
+          title: Expires In
+          description: Time in seconds until the token expires
+      type: object
+      title: SiteAuthTokenRequest
+      description: Request model for providing an auth token to enable Axle to access assets at a site.
     OnboardingRequest:
       properties:
         site:
@@ -1870,6 +1369,222 @@ components:
       - dispatch_consent
       title: OnboardingRequest
       description: Request model for onboarding a site with an asset and dispatch consent in a single call.
+    SiteProperties:
+      properties:
+        is_half_hourly_settled:
+          type: boolean
+          title: Is Half Hourly Settled
+        has_meter_consent:
+          type: boolean
+          title: Has Meter Consent
+      type: object
+      required:
+      - is_half_hourly_settled
+      - has_meter_consent
+      title: SiteProperties
+      description: Site-level properties relevant to eligibility evaluation.
+    EnrolResponse:
+      properties:
+        site_id:
+          type: string
+          format: uuid
+          title: Site Id
+          description: ID of the enrolled site
+          examples:
+          - a1b2c3d4-e5f6-7890-abcd-ef1234567890
+        status:
+          type: string
+          enum:
+          - enrolled
+          - already_enrolled
+          title: Status
+          description: Outcome of the enrolment attempt. Both `enrolled` and `already_enrolled` indicate success.
+          examples:
+          - enrolled
+      type: object
+      required:
+      - site_id
+      - status
+      title: EnrolResponse
+      description: Outcome of an enrolment attempt.
+    SiteFlexEventsResponse:
+      properties:
+        site_id:
+          type: string
+          format: uuid
+          title: Site Id
+          description: ID of the site
+        events:
+          items:
+            $ref: '#/components/schemas/FlexEventResponse'
+          type: array
+          title: Events
+          description: List of flex events the site participated in
+      type: object
+      required:
+      - site_id
+      - events
+      title: SiteFlexEventsResponse
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    TariffRequest:
+      properties:
+        tariff_cheap_start_time:
+          type: string
+          format: time
+          title: Tariff Cheap Start Time
+          description: Start time for off-peak/cheap rate period
+        tariff_cheap_end_time:
+          type: string
+          format: time
+          title: Tariff Cheap End Time
+          description: End time for off-peak/cheap rate period
+        tariff_type:
+          allOf:
+          - $ref: '#/components/schemas/TariffType'
+          description: Type of tariff
+      type: object
+      required:
+      - tariff_type
+      title: TariffRequest
+      description: Request model for updating tariff information.
+    SiteRequest:
+      properties:
+        mpan:
+          type: string
+          title: Mpan
+          description: Meter Point Administration Number
+        postcode:
+          type: string
+          title: Postcode
+          description: UK postcode for the site
+        street_address:
+          type: string
+          title: Street Address
+          description: Street address for the site
+        email:
+          type: string
+          title: Email
+          description: Email address for the site. Include to enable 2FA for payment withdrawals.
+        gave_boundary_meter_consent_at:
+          type: string
+          format: date-time
+          title: Gave Boundary Meter Consent At
+          description: Timezone-aware ISO 8601 timestamp (e.g. '2026-01-01T12:34:56Z') indicating when the household gave consent for Axle to access readings from their boundary meter, if consent was given.
+      type: object
+      required:
+      - mpan
+      - postcode
+      title: SiteRequest
+      description: Request model for creating a new site.
+    HalfHourlyPrice:
+      properties:
+        start_timestamp:
+          type: string
+          format: date-time
+          title: Start Timestamp
+        price_gbp_per_mwh:
+          type: number
+          title: Price Gbp Per Mwh
+          description: Price in £/MWh (2dp)
+      type: object
+      required:
+      - start_timestamp
+      - price_gbp_per_mwh
+      title: HalfHourlyPrice
+      description: 'Represents the market price for a given half-hour period.
+
+
+        If the asset is not participating in the market for that period, price_gbp_per_mwh will be None.'
+    AssetProperties:
+      properties:
+        power_kw:
+          type: number
+          minimum: 0.0
+          title: Power Kw
+          description: Power rating in kW
+        capacity_kwh:
+          type: number
+          minimum: 0.0
+          title: Capacity Kwh
+          description: Capacity in kWh
+      type: object
+      title: AssetProperties
+      description: Optional properties for an asset.
+    CreatableAssetType:
+      type: string
+      enum:
+      - charger
+      - battery
+      - heat pump
+      - electric_vehicle
+      - hot water tank
+      title: CreatableAssetType
+      description: Asset types that can be created through the API.
+    OnboardingResponse:
+      properties:
+        site:
+          allOf:
+          - $ref: '#/components/schemas/SiteResponse'
+          title: Site
+          description: Created site details
+        asset:
+          allOf:
+          - $ref: '#/components/schemas/AssetResponse'
+          title: Asset
+          description: Created asset details
+      type: object
+      required:
+      - site
+      - asset
+      title: OnboardingResponse
+      description: Response model for onboarding operation.
+    EnrolRequest:
+      properties:
+        proposition:
+          type: string
+          enum:
+          - limited_pause
+          - full_asset_schedule_control
+          title: Proposition
+          description: Proposition to enrol for
+        override_withdrawal:
+          type: boolean
+          title: Override Withdrawal
+          description: Set to true to re-enrol regardless of previous withdrawals. If this is a user-initated action, overriding previous withdrawals is recommended.
+          default: false
+          examples:
+          - false
+        gave_boundary_meter_consent_at:
+          type: string
+          format: date-time
+          title: Gave Boundary Meter Consent At
+          description: Optional timezone-aware ISO 8601 timestamp recording when the household gave boundary meter consent. If provided, overwrites any existing meter consent timestamp on the site.
+      type: object
+      required:
+      - proposition
+      title: EnrolRequest
+      description: Request model for enrolling a site in a proposition.
+    AssetType:
+      type: string
+      enum:
+      - boundary meter
+      - charger
+      - battery
+      - heat pump
+      - hot water tank
+      - frequency meter
+      - electric_vehicle
+      - pv inverter
+      title: AssetType
+      description: An enumeration.
     ValidationError:
       properties:
         loc:
@@ -1891,6 +1606,291 @@ components:
       - msg
       - type
       title: ValidationError
+    EligibilityCheckRequest:
+      properties:
+        mpan:
+          type: string
+          title: Mpan
+          description: Meter Point Administration Number. Used to determine whether the site is half-hourly settled.
+          examples:
+          - '1234567890123'
+        asset_model:
+          type: string
+          title: Asset Model
+          description: Optional value of the AssetModel to evaluate against. Required for CoP11-route eligibility; half-hourly settled sites qualify regardless of asset model.
+          examples:
+          - axle_charger_v1
+      type: object
+      required:
+      - mpan
+      title: EligibilityCheckRequest
+      description: Request model for the ephemeral eligibility check endpoint.
+    OnboardingAssetRequest:
+      properties:
+        external_id:
+          type: string
+          title: External Id
+          description: Vendor-specific identifier for the asset
+          examples:
+          - charger-001
+        type:
+          allOf:
+          - $ref: '#/components/schemas/CreatableAssetType'
+          description: Type of asset being created
+          examples:
+          - charger
+        properties:
+          allOf:
+          - $ref: '#/components/schemas/AssetProperties'
+          title: Properties
+          description: Optional asset properties
+          examples:
+          - power_kw: 7.4
+        asset_model:
+          type: string
+          title: Asset Model
+          description: Name of the AssetModel to assign (looked up by name). Required for CoP11 eligibility.
+          examples:
+          - axle_charger_v1
+        installation_date:
+          type: string
+          format: date
+          title: Installation Date
+          description: Date when the asset was installed. Required alongside asset_model for CoP11 eligibility.
+          examples:
+          - '2025-06-15'
+      type: object
+      required:
+      - external_id
+      - type
+      title: OnboardingAssetRequest
+      description: Request model for creating an asset during onboarding (without site_id).
+    UnenrolRequest:
+      properties:
+        proposition:
+          type: string
+          enum:
+          - limited_pause
+          - full_asset_schedule_control
+          title: Proposition
+          description: Proposition to unenrol from
+      type: object
+      required:
+      - proposition
+      title: UnenrolRequest
+      description: Request model for unenrolling a site from a proposition.
+    EligibilityCheckResponse:
+      properties:
+        is_half_hourly_settled:
+          type: boolean
+          title: Is Half Hourly Settled
+          description: Whether the site is half-hourly settled, per ECOES.
+        propositions:
+          items:
+            $ref: '#/components/schemas/PropositionEligibility'
+          type: array
+          title: Propositions
+          description: Per-proposition eligibility for the supplied MPAN + asset model combination.
+          default: []
+      type: object
+      required:
+      - is_half_hourly_settled
+      title: EligibilityCheckResponse
+      description: Response model for the ephemeral eligibility check endpoint.
+    OnboardResponse:
+      properties:
+        site:
+          allOf:
+          - $ref: '#/components/schemas/InitialiseSiteResult'
+          title: Site
+          description: Site result metadata
+        assets:
+          items:
+            $ref: '#/components/schemas/InitialiseAssetResult'
+          type: array
+          title: Assets
+          description: Per-asset result metadata
+        enrolment:
+          allOf:
+          - $ref: '#/components/schemas/EnrolResponse'
+          title: Enrolment
+          description: Enrolment result
+      type: object
+      required:
+      - site
+      - assets
+      - enrolment
+      title: OnboardResponse
+      description: Response model for the onboard endpoint.
+    InitialiseResponse:
+      properties:
+        site:
+          allOf:
+          - $ref: '#/components/schemas/InitialiseSiteResult'
+          title: Site
+          description: Site result metadata
+        assets:
+          items:
+            $ref: '#/components/schemas/InitialiseAssetResult'
+          type: array
+          title: Assets
+          description: Per-asset result metadata
+        eligibility:
+          allOf:
+          - $ref: '#/components/schemas/SiteEligibilityDetail'
+          title: Eligibility
+          description: Eligibility information for the site and its assets
+      type: object
+      required:
+      - site
+      - assets
+      - eligibility
+      title: InitialiseResponse
+      description: Response model for the initialise endpoint.
+    InitialiseRequest:
+      properties:
+        site:
+          allOf:
+          - $ref: '#/components/schemas/SiteRequest'
+          title: Site
+          description: Site information
+          examples:
+          - mpan: '1234567890123'
+            postcode: SW1A 1AA
+            street_address: 10 Downing Street
+            email: resident@example.com
+            gave_boundary_meter_consent_at: '2026-01-15T10:30:00Z'
+        assets:
+          items:
+            $ref: '#/components/schemas/OnboardingAssetRequest'
+          type: array
+          title: Assets
+          description: One or more assets to register at the site
+          examples:
+          - - external_id: charger-001
+              type: charger
+              asset_model: zappi
+              installation_date: '2025-06-15'
+              properties:
+                power_kw: 7.4
+      type: object
+      required:
+      - site
+      - assets
+      title: InitialiseRequest
+      description: 'Request model for initialising a site with one or more assets.
+
+
+        Upserts the site and assets, returning eligibility information.
+
+        No enrollment side effects (no dispatch consent, no bonus, no email).'
+    SiteResponsePage:
+      properties:
+        sites:
+          items:
+            $ref: '#/components/schemas/SiteResponse'
+          type: array
+          title: Sites
+          description: List of sites for the current page
+        total_num_sites:
+          type: integer
+          title: Total Num Sites
+          description: Total number of sites available
+        total_num_pages:
+          type: integer
+          title: Total Num Pages
+          description: Total number of pages available
+        page_number:
+          type: integer
+          title: Page Number
+          description: Current page number (1-based)
+      type: object
+      required:
+      - sites
+      - total_num_sites
+      - total_num_pages
+      - page_number
+      title: SiteResponsePage
+      description: Paginated response for site listings.
+    TariffType:
+      type: string
+      enum:
+      - single_rate
+      - dual_rate
+      - dynamic
+      - smart
+      - unknown
+      title: TariffType
+      description: An enumeration.
+    SiteUpdateRequest:
+      properties:
+        tariff:
+          allOf:
+          - $ref: '#/components/schemas/TariffRequest'
+          title: Tariff
+          description: Tariff information to update
+        address:
+          type: string
+          title: Address
+          description: Full address for the site
+        postcode:
+          type: string
+          title: Postcode
+          description: UK postcode for the site
+        mpan:
+          type: string
+          title: Mpan
+          description: Meter Point Administration Number
+        email:
+          type: string
+          title: Email
+          description: Email address for the site
+      type: object
+      title: SiteUpdateRequest
+      description: Request model for updating site information.
+    TariffResponse:
+      properties:
+        tariff_type:
+          allOf:
+          - $ref: '#/components/schemas/TariffType'
+          description: Type of tariff
+        tariff_cheap_start_time:
+          type: string
+          format: time
+          title: Tariff Cheap Start Time
+          description: Start time for off-peak/cheap rate period
+        tariff_cheap_end_time:
+          type: string
+          format: time
+          title: Tariff Cheap End Time
+          description: End time for off-peak/cheap rate period
+      type: object
+      title: TariffResponse
+      description: Response model for tariff information.
+    PropositionEligibility:
+      properties:
+        proposition:
+          type: string
+          enum:
+          - limited_pause
+          - full_asset_schedule_control
+          title: Proposition
+          examples:
+          - limited_pause
+        is_eligible:
+          type: boolean
+          title: Is Eligible
+        issues:
+          items:
+            $ref: '#/components/schemas/EligibilityCode'
+          type: array
+          default: []
+      type: object
+      required:
+      - proposition
+      - is_eligible
+      title: PropositionEligibility
+      description: Eligibility detail for a single proposition.
   securitySchemes:
     OAuth2PasswordBearer:
       type: oauth2

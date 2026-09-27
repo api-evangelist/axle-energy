@@ -51,6 +51,27 @@ paths:
       - OAuth2PasswordBearer: []
 components:
   schemas:
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
     HTTPValidationError:
       properties:
         detail:
@@ -60,17 +81,6 @@ components:
           title: Detail
       type: object
       title: HTTPValidationError
-    MPANValidationResponse:
-      properties:
-        isValid:
-          type: boolean
-          title: Isvalid
-          description: If the provided MPAN is valid and supported by Axle
-      type: object
-      required:
-      - isValid
-      title: MPANValidationResponse
-      description: Response for a correctly validated MPAN
     MPANValidationError:
       properties:
         detail:
@@ -95,27 +105,17 @@ components:
       - mpan
       title: MPANValidationRequest
       description: Request model for validating an MPAN
-    ValidationError:
+    MPANValidationResponse:
       properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
+        isValid:
+          type: boolean
+          title: Isvalid
+          description: If the provided MPAN is valid and supported by Axle
       type: object
       required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
+      - isValid
+      title: MPANValidationResponse
+      description: Response for a correctly validated MPAN
   securitySchemes:
     OAuth2PasswordBearer:
       type: oauth2

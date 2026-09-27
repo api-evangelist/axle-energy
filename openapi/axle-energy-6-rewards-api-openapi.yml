@@ -149,83 +149,27 @@ paths:
       - OAuth2PasswordBearer: []
 components:
   schemas:
-    UserTransactionType:
-      type: string
-      enum:
-      - flex period
-      - flex period top-up
-      - flex event
-      - withdrawal
-      - invoice paid
-      - goodwill credit
-      - signup bonus
-      - correction
-      - VPP Signup Bonus
-      - Referred Credit
-      - Referrer Credit
-      - Recurring Referrer Credit
-      - FR SC Referred Credit
-      - FR SC Referrer Credit
-      - FR SC Signup Bonus
-      title: UserTransactionType
-      description: An enumeration.
-    HTTPValidationError:
+    ValidationError:
       properties:
-        detail:
+        loc:
           items:
-            $ref: '#/components/schemas/ValidationError'
+            anyOf:
+            - type: string
+            - type: integer
           type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    BalanceWithdrawalURLResponse:
-      properties:
-        balance_withdrawal_url:
+          title: Location
+        msg:
           type: string
-          title: Balance Withdrawal Url
-          description: Temporary standalone URL via which an end-user may enter their bank details to withdraw their balance
-        url_expiry_timestamp:
+          title: Message
+        type:
           type: string
-          format: date-time
-          title: Url Expiry Timestamp
-          description: Time at which the given URL will expire
+          title: Error Type
       type: object
       required:
-      - balance_withdrawal_url
-      - url_expiry_timestamp
-      title: BalanceWithdrawalURLResponse
-      description: Response model for balance withdrawal URL.
-    BalanceInfoResponse:
-      properties:
-        current_balance_pence:
-          type: integer
-          title: Current Balance Pence
-          description: Current balance of the site in pence (total earnings minus total withdrawals)
-        total_earnings_pence:
-          type: integer
-          title: Total Earnings Pence
-          description: Lifetime earnings of the site in pence
-        minimum_withdrawal_threshold_pence:
-          type: integer
-          title: Minimum Withdrawal Threshold Pence
-          description: The minimum a user can withdraw in one transaction, in pence
-        withdrawal_min_wait_days:
-          type: integer
-          title: Withdrawal Min Wait Days
-          description: The number of days a user must wait to withdraw after their first reward
-        can_withdraw:
-          type: boolean
-          title: Can Withdraw
-          description: Whether the user can withdraw their balance
-      type: object
-      required:
-      - current_balance_pence
-      - total_earnings_pence
-      - minimum_withdrawal_threshold_pence
-      - withdrawal_min_wait_days
-      - can_withdraw
-      title: BalanceInfoResponse
-      description: Response model for site balance information.
+      - loc
+      - msg
+      - type
+      title: ValidationError
     TransactionDataResponse:
       properties:
         site_id:
@@ -254,6 +198,45 @@ components:
       - transactions
       title: TransactionDataResponse
       description: Response model for transaction history.
+    PaymentStatus:
+      type: string
+      enum:
+      - pending_approval
+      - approved
+      - processing
+      - posted
+      - failed
+      - rejected
+      - cancelled
+      - returned
+      title: PaymentStatus
+      description: Payment lifecycle states
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    BalanceWithdrawalURLResponse:
+      properties:
+        balance_withdrawal_url:
+          type: string
+          title: Balance Withdrawal Url
+          description: Temporary standalone URL via which an end-user may enter their bank details to withdraw their balance
+        url_expiry_timestamp:
+          type: string
+          format: date-time
+          title: Url Expiry Timestamp
+          description: Time at which the given URL will expire
+      type: object
+      required:
+      - balance_withdrawal_url
+      - url_expiry_timestamp
+      title: BalanceWithdrawalURLResponse
+      description: Response model for balance withdrawal URL.
     TransactionDatumResponse:
       properties:
         transaction_type:
@@ -316,40 +299,57 @@ components:
       - credit_pence
       title: TransactionDatumResponse
       description: Response model for single transaction.
-    PaymentStatus:
-      type: string
-      enum:
-      - pending_approval
-      - approved
-      - processing
-      - posted
-      - failed
-      - rejected
-      - cancelled
-      - returned
-      title: PaymentStatus
-      description: Payment lifecycle states
-    ValidationError:
+    BalanceInfoResponse:
       properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
+        current_balance_pence:
+          type: integer
+          title: Current Balance Pence
+          description: Current balance of the site in pence (total earnings minus total withdrawals)
+        total_earnings_pence:
+          type: integer
+          title: Total Earnings Pence
+          description: Lifetime earnings of the site in pence
+        minimum_withdrawal_threshold_pence:
+          type: integer
+          title: Minimum Withdrawal Threshold Pence
+          description: The minimum a user can withdraw in one transaction, in pence
+        withdrawal_min_wait_days:
+          type: integer
+          title: Withdrawal Min Wait Days
+          description: The number of days a user must wait to withdraw after their first reward
+        can_withdraw:
+          type: boolean
+          title: Can Withdraw
+          description: Whether the user can withdraw their balance
       type: object
       required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
+      - current_balance_pence
+      - total_earnings_pence
+      - minimum_withdrawal_threshold_pence
+      - withdrawal_min_wait_days
+      - can_withdraw
+      title: BalanceInfoResponse
+      description: Response model for site balance information.
+    UserTransactionType:
+      type: string
+      enum:
+      - flex period
+      - flex period top-up
+      - flex event
+      - withdrawal
+      - invoice paid
+      - goodwill credit
+      - signup bonus
+      - correction
+      - VPP Signup Bonus
+      - Referred Credit
+      - Referrer Credit
+      - Recurring Referrer Credit
+      - FR SC Referred Credit
+      - FR SC Referrer Credit
+      - FR SC Signup Bonus
+      title: UserTransactionType
+      description: An enumeration.
   securitySchemes:
     OAuth2PasswordBearer:
       type: oauth2
