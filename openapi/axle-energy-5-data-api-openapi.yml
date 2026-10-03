@@ -51,27 +51,19 @@ paths:
       - OAuth2PasswordBearer: []
 components:
   schemas:
-    ValidationError:
+    ReadingsResponse:
       properties:
-        loc:
+        responses:
           items:
-            anyOf:
-            - type: string
-            - type: integer
+            $ref: '#/components/schemas/ReadingResponse'
           type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
+          title: Responses
+          description: List of responses for each reading submission
       type: object
       required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
+      - responses
+      title: ReadingsResponse
+      description: Response model for a batch of readings submissions.
     ReadingResponse:
       properties:
         asset_id:
@@ -110,49 +102,27 @@ components:
       - accepted
       title: ReadingResponse
       description: Response model for a single reading submission.
-    ReadingDataPoint:
+    ValidationError:
       properties:
-        asset_id:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
           type: string
-          format: uuid
-          title: Asset Id
-          description: ID of the asset
-        start_timestamp:
+          title: Message
+        type:
           type: string
-          format: date-time
-          title: Start Timestamp
-          description: Start time of the reading
-        end_timestamp:
-          type: string
-          format: date-time
-          title: End Timestamp
-          description: End time of the reading
-        value:
-          type: number
-          title: Value
-          description: Value of the reading
-        label:
-          allOf:
-          - $ref: '#/components/schemas/ReadingDataPointLabel'
-          description: Label for the reading
+          title: Error Type
       type: object
       required:
-      - asset_id
-      - start_timestamp
-      - end_timestamp
-      - value
-      - label
-      title: ReadingDataPoint
-      description: Reading data for a single asset.
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
+      - loc
+      - msg
+      - type
+      title: ValidationError
     ReadingDataPointLabel:
       type: string
       enum:
@@ -189,19 +159,6 @@ components:
         - battery_state_of_charge_pct: Instantaneous state of charge of the battery in percentage. Must be between 0 and 100 (inclusive).
 
         - battery_stored_energy_kwh: Stored energy in the battery in kWh. Must be >= 0.'
-    ReadingsResponse:
-      properties:
-        responses:
-          items:
-            $ref: '#/components/schemas/ReadingResponse'
-          type: array
-          title: Responses
-          description: List of responses for each reading submission
-      type: object
-      required:
-      - responses
-      title: ReadingsResponse
-      description: Response model for a batch of readings submissions.
     ReadingsDataPoints:
       properties:
         readings:
@@ -215,6 +172,49 @@ components:
       - readings
       title: ReadingsDataPoints
       description: Readings data for multiple assets.
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ReadingDataPoint:
+      properties:
+        asset_id:
+          type: string
+          format: uuid
+          title: Asset Id
+          description: ID of the asset
+        start_timestamp:
+          type: string
+          format: date-time
+          title: Start Timestamp
+          description: Start time of the reading
+        end_timestamp:
+          type: string
+          format: date-time
+          title: End Timestamp
+          description: End time of the reading
+        value:
+          type: number
+          title: Value
+          description: Value of the reading
+        label:
+          allOf:
+          - $ref: '#/components/schemas/ReadingDataPointLabel'
+          description: Label for the reading
+      type: object
+      required:
+      - asset_id
+      - start_timestamp
+      - end_timestamp
+      - value
+      - label
+      title: ReadingDataPoint
+      description: Reading data for a single asset.
   securitySchemes:
     OAuth2PasswordBearer:
       type: oauth2

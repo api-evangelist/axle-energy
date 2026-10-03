@@ -349,6 +349,25 @@ paths:
       - OAuth2PasswordBearer: []
 components:
   schemas:
+    MeterSearchResponse:
+      properties:
+        ref:
+          type: string
+          title: Ref
+          description: Encrypted reference to the meter that can be used in subsequent API calls
+        address:
+          type: string
+          title: Address
+          description: Full address where the meter is registered
+      type: object
+      required:
+      - ref
+      - address
+      title: MeterSearchResponse
+      description: 'Response model for meter search results.
+
+
+        Contains a reference to the meter and its associated address.'
     MeterResponse:
       properties:
         mpan:
@@ -382,16 +401,6 @@ components:
 
 
         Contains details about a meter including its MPAN, settlement status, and supplier information.'
-    MeterByAddressRequest:
-      properties:
-        address:
-          type: string
-          title: Address
-          description: Full address of the meter, e.g. '221B Baker Street, London, NW1 6XE'. Must include postcode and begin with house number/ name or other uniquely-identifying information. May be constructed from individual address components, concatenated with separating commas. Better formatting may increase the chance of a meter being found.
-      type: object
-      required:
-      - address
-      title: MeterByAddressRequest
     MeterByMPANRequest:
       properties:
         mpan:
@@ -410,6 +419,16 @@ components:
       - wholesale
       title: EligibleMarket
       description: An enumeration.
+    MeterByAddressRequest:
+      properties:
+        address:
+          type: string
+          title: Address
+          description: Full address of the meter, e.g. '221B Baker Street, London, NW1 6XE'. Must include postcode and begin with house number/ name or other uniquely-identifying information. May be constructed from individual address components, concatenated with separating commas. Better formatting may increase the chance of a meter being found.
+      type: object
+      required:
+      - address
+      title: MeterByAddressRequest
     ErrorWithDetail:
       properties:
         detail:
@@ -420,25 +439,6 @@ components:
       - detail
       title: ErrorWithDetail
       description: Standard error response with a detailed message.
-    MeterSearchResponse:
-      properties:
-        ref:
-          type: string
-          title: Ref
-          description: Encrypted reference to the meter that can be used in subsequent API calls
-        address:
-          type: string
-          title: Address
-          description: Full address where the meter is registered
-      type: object
-      required:
-      - ref
-      - address
-      title: MeterSearchResponse
-      description: 'Response model for meter search results.
-
-
-        Contains a reference to the meter and its associated address.'
   securitySchemes:
     OAuth2PasswordBearer:
       type: oauth2

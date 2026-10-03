@@ -51,6 +51,17 @@ paths:
       - OAuth2PasswordBearer: []
 components:
   schemas:
+    MPANValidationRequest:
+      properties:
+        mpan:
+          type: string
+          title: Mpan
+          description: MPAN to be validated
+      type: object
+      required:
+      - mpan
+      title: MPANValidationRequest
+      description: Request model for validating an MPAN
     ValidationError:
       properties:
         loc:
@@ -72,15 +83,6 @@ components:
       - msg
       - type
       title: ValidationError
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
     MPANValidationError:
       properties:
         detail:
@@ -94,17 +96,15 @@ components:
       - detail
       title: MPANValidationError
       description: Error(s) when trying to validate an MPAN
-    MPANValidationRequest:
+    HTTPValidationError:
       properties:
-        mpan:
-          type: string
-          title: Mpan
-          description: MPAN to be validated
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
       type: object
-      required:
-      - mpan
-      title: MPANValidationRequest
-      description: Request model for validating an MPAN
+      title: HTTPValidationError
     MPANValidationResponse:
       properties:
         isValid:
