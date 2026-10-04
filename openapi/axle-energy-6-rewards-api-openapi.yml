@@ -149,23 +149,19 @@ paths:
       - OAuth2PasswordBearer: []
 components:
   schemas:
-    BalanceWithdrawalURLResponse:
-      properties:
-        balance_withdrawal_url:
-          type: string
-          title: Balance Withdrawal Url
-          description: Temporary standalone URL via which an end-user may enter their bank details to withdraw their balance
-        url_expiry_timestamp:
-          type: string
-          format: date-time
-          title: Url Expiry Timestamp
-          description: Time at which the given URL will expire
-      type: object
-      required:
-      - balance_withdrawal_url
-      - url_expiry_timestamp
-      title: BalanceWithdrawalURLResponse
-      description: Response model for balance withdrawal URL.
+    PaymentStatus:
+      type: string
+      enum:
+      - pending_approval
+      - approved
+      - processing
+      - posted
+      - failed
+      - rejected
+      - cancelled
+      - returned
+      title: PaymentStatus
+      description: Payment lifecycle states
     UserTransactionType:
       type: string
       enum:
@@ -186,19 +182,32 @@ components:
       - FR SC Signup Bonus
       title: UserTransactionType
       description: An enumeration.
-    PaymentStatus:
-      type: string
-      enum:
-      - pending_approval
-      - approved
-      - processing
-      - posted
-      - failed
-      - rejected
-      - cancelled
-      - returned
-      title: PaymentStatus
-      description: Payment lifecycle states
+    BalanceWithdrawalURLResponse:
+      properties:
+        balance_withdrawal_url:
+          type: string
+          title: Balance Withdrawal Url
+          description: Temporary standalone URL via which an end-user may enter their bank details to withdraw their balance
+        url_expiry_timestamp:
+          type: string
+          format: date-time
+          title: Url Expiry Timestamp
+          description: Time at which the given URL will expire
+      type: object
+      required:
+      - balance_withdrawal_url
+      - url_expiry_timestamp
+      title: BalanceWithdrawalURLResponse
+      description: Response model for balance withdrawal URL.
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
     ValidationError:
       properties:
         loc:
@@ -220,6 +229,34 @@ components:
       - msg
       - type
       title: ValidationError
+    TransactionDataResponse:
+      properties:
+        site_id:
+          type: string
+          format: uuid
+          title: Site Id
+          description: ID of the site
+        transactions:
+          items:
+            $ref: '#/components/schemas/TransactionDatumResponse'
+          type: array
+          title: Transactions
+          description: List of transactions for the site
+        is_below_withdrawal_minimum:
+          type: boolean
+          title: Is Below Withdrawal Minimum
+          description: If the user is below the minimum withdrawal threshold (if configured)
+          default: false
+        days_until_minimum_wait_time_met:
+          type: integer
+          title: Days Until Minimum Wait Time Met
+          description: How many days the user needs to wait to withdraw (if configured)
+      type: object
+      required:
+      - site_id
+      - transactions
+      title: TransactionDataResponse
+      description: Response model for transaction history.
     TransactionDatumResponse:
       properties:
         transaction_type:
@@ -313,43 +350,6 @@ components:
       - can_withdraw
       title: BalanceInfoResponse
       description: Response model for site balance information.
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    TransactionDataResponse:
-      properties:
-        site_id:
-          type: string
-          format: uuid
-          title: Site Id
-          description: ID of the site
-        transactions:
-          items:
-            $ref: '#/components/schemas/TransactionDatumResponse'
-          type: array
-          title: Transactions
-          description: List of transactions for the site
-        is_below_withdrawal_minimum:
-          type: boolean
-          title: Is Below Withdrawal Minimum
-          description: If the user is below the minimum withdrawal threshold (if configured)
-          default: false
-        days_until_minimum_wait_time_met:
-          type: integer
-          title: Days Until Minimum Wait Time Met
-          description: How many days the user needs to wait to withdraw (if configured)
-      type: object
-      required:
-      - site_id
-      - transactions
-      title: TransactionDataResponse
-      description: Response model for transaction history.
   securitySchemes:
     OAuth2PasswordBearer:
       type: oauth2

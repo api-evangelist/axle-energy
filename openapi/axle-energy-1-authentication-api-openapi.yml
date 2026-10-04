@@ -121,6 +121,57 @@ components:
       - token_type
       title: Token
       description: Organisation scoped token.
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    ComponentToken:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+        access_token:
+          type: string
+          title: Access Token
+        token_type:
+          type: string
+          title: Token Type
+      type: object
+      required:
+      - id
+      - access_token
+      - token_type
+      title: ComponentToken
+      description: 'Organisation scoped token. Includes internal user ID so clients can make futher
+
+        API requests regarding this user if needed.'
     Body_create_component_token_auth_component_token_post:
       properties:
         external_user_id:
@@ -183,57 +234,6 @@ components:
       - roles
       title: User
       description: Response model for info about the current API user, including their roles.
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    ComponentToken:
-      properties:
-        id:
-          type: string
-          format: uuid
-          title: Id
-        access_token:
-          type: string
-          title: Access Token
-        token_type:
-          type: string
-          title: Token Type
-      type: object
-      required:
-      - id
-      - access_token
-      - token_type
-      title: ComponentToken
-      description: 'Organisation scoped token. Includes internal user ID so clients can make futher
-
-        API requests regarding this user if needed.'
   securitySchemes:
     OAuth2PasswordBearer:
       type: oauth2

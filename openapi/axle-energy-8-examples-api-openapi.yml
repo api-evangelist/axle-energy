@@ -115,6 +115,38 @@ components:
         W: Watts (power). This is the TOTAL allowed charging power. It is usually more convenient to use this for DC charging.
 
         A: Amperes (current). The amount of Ampere per phase, not the sum of all phases. It is usually more convenient to use this for AC charging.'
+    SetChargingProfileRequest:
+      properties:
+        connectorId:
+          type: integer
+          title: Connectorid
+          description: The connector to which the charging profile applies. If connectorId = 0, the message contains an overall limit for the Charge Point.
+        csChargingProfiles:
+          allOf:
+          - $ref: '#/components/schemas/ChargingProfile'
+          title: Cschargingprofiles
+          description: The charging profile to be set at the Charge Point.
+      type: object
+      required:
+      - connectorId
+      - csChargingProfiles
+      title: SetChargingProfileRequest
+      description: 'A SetChargingProfileRequest object, as defined in section 6.43 of the OCPP 1.6 documentation at https://openchargealliance.org/protocols/open-charge-point-protocol/#OCPP1.6
+
+
+        This is used by the central system to send charging profiles to an EV charger.'
+    RecurrencyKindType:
+      type: string
+      enum:
+      - Daily
+      - Weekly
+      title: RecurrencyKindType
+      description: 'Type of recurrence of a charging profile
+
+
+        Daily: The schedule restarts every 24 hours, at the same time as in the startSchedule.
+
+        Weekly: The schedule restarts every 7 days, at the same time and day-of-the-week as in the startSchedule.'
     ChargingProfilePurposeType:
       type: string
       enum:
@@ -130,64 +162,6 @@ components:
         TxDefaultProfile: Default profile that can be configured in the Charge Point. When a new transaction is started, this profile SHALL be used, unless it was a transaction that was started by a RemoteStartTransaction.req with a ChargeProfile that is accepted by the Charge Point.
 
         TxProfile: Profile with constraints to be imposed by the Charge Point on the current transaction, or on a new transaction when this is started via a RemoteStartTransaction.req with a ChargeProfile. A profile with this purpose SHALL cease to be valid when the transaction terminates.'
-    RecurrencyKindType:
-      type: string
-      enum:
-      - Daily
-      - Weekly
-      title: RecurrencyKindType
-      description: 'Type of recurrence of a charging profile
-
-
-        Daily: The schedule restarts every 24 hours, at the same time as in the startSchedule.
-
-        Weekly: The schedule restarts every 7 days, at the same time and day-of-the-week as in the startSchedule.'
-    ChargingProfileKindType:
-      type: string
-      enum:
-      - Absolute
-      - Recurring
-      - Relative
-      title: ChargingProfileKindType
-      description: 'Kind of charging profile
-
-
-        Absolute: Schedule periods are relative to a fixed point in time defined in the schedule.
-
-        Recurring: The schedule restarts periodically at the first schedule period.
-
-        Relative: Schedule periods are relative to a situation-specific start point (such as the start of a Transaction) that is determined by the charge point.'
-    ChargingSchedule:
-      properties:
-        duration:
-          type: integer
-          title: Duration
-          description: Duration of the charging schedule in seconds. If the duration is left empty, the last period will continue indefinitely or until end of the transaction in case startSchedule is absent.
-        startSchedule:
-          type: string
-          format: date-time
-          title: Startschedule
-          description: Starting point of an absolute schedule. If absent the schedule will be relative to start of charging.
-        chargingRateUnit:
-          allOf:
-          - $ref: '#/components/schemas/ChargingRateUnitType'
-          description: The unit of measure Limit is expressed in.
-        chargingSchedulePeriod:
-          items:
-            $ref: '#/components/schemas/ChargingSchedulePeriod'
-          type: array
-          title: Chargingscheduleperiod
-          description: List of ChargingSchedulePeriod elements defining maximum power or current usage over time. The startSchedule of the first ChargingSchedulePeriod SHALL always be 0.
-        minChargingRate:
-          type: number
-          title: Minchargingrate
-          description: Minimum charging rate supported by the electric vehicle. The unit of measure is defined by the chargingRateUnit. This parameter is intended to be used by a local smart charging algorithm to optimize the power allocation for in the case a charging process is inefficient at lower charging rates. Accepts at most one digit fraction (e.g. 8.1)
-      type: object
-      required:
-      - chargingRateUnit
-      - chargingSchedulePeriod
-      title: ChargingSchedule
-      description: Charging schedule structure defines a list of charging periods
     DispatchEvent:
       properties:
         asset_id:
@@ -249,26 +223,6 @@ components:
       - to_time
       - update_status_callback
       title: DispatchEvent
-    SetChargingProfileRequest:
-      properties:
-        connectorId:
-          type: integer
-          title: Connectorid
-          description: The connector to which the charging profile applies. If connectorId = 0, the message contains an overall limit for the Charge Point.
-        csChargingProfiles:
-          allOf:
-          - $ref: '#/components/schemas/ChargingProfile'
-          title: Cschargingprofiles
-          description: The charging profile to be set at the Charge Point.
-      type: object
-      required:
-      - connectorId
-      - csChargingProfiles
-      title: SetChargingProfileRequest
-      description: 'A SetChargingProfileRequest object, as defined in section 6.43 of the OCPP 1.6 documentation at https://openchargealliance.org/protocols/open-charge-point-protocol/#OCPP1.6
-
-
-        This is used by the central system to send charging profiles to an EV charger.'
     ChargingSchedulePeriod:
       properties:
         startPeriod:
@@ -289,6 +243,52 @@ components:
       - limit
       title: ChargingSchedulePeriod
       description: Charging schedule period structure defines a time period in a charging schedule
+    ChargingProfileKindType:
+      type: string
+      enum:
+      - Absolute
+      - Recurring
+      - Relative
+      title: ChargingProfileKindType
+      description: 'Kind of charging profile
+
+
+        Absolute: Schedule periods are relative to a fixed point in time defined in the schedule.
+
+        Recurring: The schedule restarts periodically at the first schedule period.
+
+        Relative: Schedule periods are relative to a situation-specific start point (such as the start of a Transaction) that is determined by the charge point.'
+    ChargingSchedule:
+      properties:
+        duration:
+          type: integer
+          title: Duration
+          description: Duration of the charging schedule in seconds. If the duration is left empty, the last period will continue indefinitely or until end of the transaction in case startSchedule is absent.
+        startSchedule:
+          type: string
+          format: date-time
+          title: Startschedule
+          description: Starting point of an absolute schedule. If absent the schedule will be relative to start of charging.
+        chargingRateUnit:
+          allOf:
+          - $ref: '#/components/schemas/ChargingRateUnitType'
+          description: The unit of measure Limit is expressed in.
+        chargingSchedulePeriod:
+          items:
+            $ref: '#/components/schemas/ChargingSchedulePeriod'
+          type: array
+          title: Chargingscheduleperiod
+          description: List of ChargingSchedulePeriod elements defining maximum power or current usage over time. The startSchedule of the first ChargingSchedulePeriod SHALL always be 0.
+        minChargingRate:
+          type: number
+          title: Minchargingrate
+          description: Minimum charging rate supported by the electric vehicle. The unit of measure is defined by the chargingRateUnit. This parameter is intended to be used by a local smart charging algorithm to optimize the power allocation for in the case a charging process is inefficient at lower charging rates. Accepts at most one digit fraction (e.g. 8.1)
+      type: object
+      required:
+      - chargingRateUnit
+      - chargingSchedulePeriod
+      title: ChargingSchedule
+      description: Charging schedule structure defines a list of charging periods
   securitySchemes:
     OAuth2PasswordBearer:
       type: oauth2

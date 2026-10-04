@@ -64,6 +64,85 @@ components:
       - responses
       title: ReadingsResponse
       description: Response model for a batch of readings submissions.
+    ReadingsDataPoints:
+      properties:
+        readings:
+          items:
+            $ref: '#/components/schemas/ReadingDataPoint'
+          type: array
+          title: Readings
+          description: List of readings to be submitted
+      type: object
+      required:
+      - readings
+      title: ReadingsDataPoints
+      description: Readings data for multiple assets.
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ReadingDataPointLabel:
+      type: string
+      enum:
+      - boundary_import_kw
+      - battery_inverter_import_kw
+      - charger_consumption_energy_kwh
+      - charger_lifetime_consumption_energy_kwh
+      - boundary_lifetime_import_energy_kwh
+      - boundary_lifetime_export_energy_kwh
+      - provisional_consumption_kwh
+      - solar_power_kw
+      - battery_state_of_charge_pct
+      - battery_stored_energy_kwh
+      title: ReadingDataPointLabel
+      description: 'The type of reading being submitted.
+
+
+        - boundary_import_kw: Instantaneous power import from the grid in kW. Positive indicates power imported from the grid, negative indicates power exported to the grid.
+
+        - battery_inverter_import_kw: Instantaneous inverter power into the battery in kW. Positive indicates power into the battery (charging), negative indicates power out of the battery (discharging).
+
+        - charger_consumption_energy_kwh: Total energy consumed by the charger in kWh in a 30min interval. Must be >= 0.
+
+        - charger_lifetime_consumption_energy_kwh: Total energy consumed by the charger in kWh in its lifetime. Must be >= 0.
+
+        - boundary_lifetime_import_energy_kwh: Cumulative lifetime energy imported across the site boundary in kWh. A monotonic non-decreasing register; must be >= 0.
+
+        - boundary_lifetime_export_energy_kwh: Cumulative lifetime energy exported across the site boundary in kWh. A monotonic non-decreasing register; must be >= 0.
+
+        - provisional_consumption_kwh: Provisional consumption data in kWh. Must be >= 0.
+
+        - solar_power_kw: Instantaneous solar generation in kW. Must be >= 0.
+
+        - battery_state_of_charge_pct: Instantaneous state of charge of the battery in percentage. Must be between 0 and 100 (inclusive).
+
+        - battery_stored_energy_kwh: Stored energy in the battery in kWh. Must be >= 0.'
     ReadingResponse:
       properties:
         asset_id:
@@ -102,85 +181,6 @@ components:
       - accepted
       title: ReadingResponse
       description: Response model for a single reading submission.
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
-    ReadingDataPointLabel:
-      type: string
-      enum:
-      - boundary_import_kw
-      - battery_inverter_import_kw
-      - charger_consumption_energy_kwh
-      - charger_lifetime_consumption_energy_kwh
-      - boundary_lifetime_import_energy_kwh
-      - boundary_lifetime_export_energy_kwh
-      - provisional_consumption_kwh
-      - solar_power_kw
-      - battery_state_of_charge_pct
-      - battery_stored_energy_kwh
-      title: ReadingDataPointLabel
-      description: 'The type of reading being submitted.
-
-
-        - boundary_import_kw: Instantaneous power import from the grid in kW. Positive indicates power imported from the grid, negative indicates power exported to the grid.
-
-        - battery_inverter_import_kw: Instantaneous inverter power into the battery in kW. Positive indicates power into the battery (charging), negative indicates power out of the battery (discharging).
-
-        - charger_consumption_energy_kwh: Total energy consumed by the charger in kWh in a 30min interval. Must be >= 0.
-
-        - charger_lifetime_consumption_energy_kwh: Total energy consumed by the charger in kWh in its lifetime. Must be >= 0.
-
-        - boundary_lifetime_import_energy_kwh: Cumulative lifetime energy imported across the site boundary in kWh. A monotonic non-decreasing register; must be >= 0.
-
-        - boundary_lifetime_export_energy_kwh: Cumulative lifetime energy exported across the site boundary in kWh. A monotonic non-decreasing register; must be >= 0.
-
-        - provisional_consumption_kwh: Provisional consumption data in kWh. Must be >= 0.
-
-        - solar_power_kw: Instantaneous solar generation in kW. Must be >= 0.
-
-        - battery_state_of_charge_pct: Instantaneous state of charge of the battery in percentage. Must be between 0 and 100 (inclusive).
-
-        - battery_stored_energy_kwh: Stored energy in the battery in kWh. Must be >= 0.'
-    ReadingsDataPoints:
-      properties:
-        readings:
-          items:
-            $ref: '#/components/schemas/ReadingDataPoint'
-          type: array
-          title: Readings
-          description: List of readings to be submitted
-      type: object
-      required:
-      - readings
-      title: ReadingsDataPoints
-      description: Readings data for multiple assets.
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
     ReadingDataPoint:
       properties:
         asset_id:
