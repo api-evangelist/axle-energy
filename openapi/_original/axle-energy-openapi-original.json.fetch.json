@@ -1,0 +1,12 @@
+{
+ "url": "https://api.axle.energy/openapi.json",
+ "requested_url": "https://api.axle.energy/openapi.json",
+ "status": 200,
+ "content_type": "application/json",
+ "bytes": 133210,
+ "sha256": "3f207bf191c4fad1a10f36cf6575e1389f633e0d5f47e35e77c6bbe42bacd31f",
+ "fetched_at": "2026-10-04",
+ "fetched_by": "APIEvangelist-Harvest/1.0 (+https://apievangelist.com)",
+ "match": "equivalent",
+ "note": "Re-fetched from the provider by verify-openapi-sources.py; the provider's current document describes the same operations (Jaccard 0.964), but the bytes differ, so the archive is an earlier or reformatted copy."
+}
