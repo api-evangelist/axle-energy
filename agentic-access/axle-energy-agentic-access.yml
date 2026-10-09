@@ -1,24 +1,43 @@
-generated: '2026-07-18'
+generated: '2026-09-23'
 method: generated
-source: openapi/axle-energy-openapi-original.json
+source: openapi/axle-energy-1-authentication-api-openapi.yml, openapi/axle-energy-2-meters-api-openapi.yml,
+  openapi/axle-energy-3-sites-api-openapi.yml, openapi/axle-energy-4-assets-api-openapi.yml,
+  openapi/axle-energy-5-data-api-openapi.yml, openapi/axle-energy-6-rewards-api-openapi.yml,
+  openapi/axle-energy-7-validation-api-openapi.yml, openapi/axle-energy-8-examples-api-openapi.yml
 description: Recommended x-agentic-access execution contracts, classified heuristically from
   the OpenAPI. A governance starting point for exposing this API to AI agents — review and bind
   audience per deployment. See research/curity/agentic-governance/.
 summary:
   operations: 55
   by_action_class:
-    connected: 23
-    acting: 32
+    acting: 30
+    connected: 25
   by_consequence:
-    read: 23
-    write: 28
-    physical: 2
+    write: 26
+    read: 25
     safety-critical: 2
+    physical: 2
   human_in_the_loop_required: 2
 operations:
-- path: /entities/asset
+- path: /auth/token-form
+  method: post
+  operationId: login_for_access_token_form_auth_token_form_post
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /auth/users/me/
   method: get
-  operationId: get_assets_entities_asset_get
+  operationId: read_users_me_auth_users_me__get
   x-agentic-access:
     action-class: connected
     consequence: read
@@ -26,9 +45,9 @@ operations:
     token:
       max-ttl: 3600
     audit: none
-- path: /entities/asset
+- path: /auth/component-token
   method: post
-  operationId: create_asset_entities_asset_post
+  operationId: create_component_token_auth_component_token_post
   x-agentic-access:
     action-class: acting
     consequence: write
@@ -42,9 +61,9 @@ operations:
       - abnormal
       - high-value
     audit: required
-- path: /entities/asset/{asset_id}
-  method: get
-  operationId: get_asset_entities_asset__asset_id__get
+- path: /meter/by-address
+  method: post
+  operationId: get_meter_info_by_address_meter_by_address_post
   x-agentic-access:
     action-class: connected
     consequence: read
@@ -52,41 +71,9 @@ operations:
     token:
       max-ttl: 3600
     audit: none
-- path: /entities/asset/{asset_id}
-  method: delete
-  operationId: delete_asset_entities_asset__asset_id__delete
-  x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
-    token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
-- path: /entities/asset/{asset_id}
-  method: patch
-  operationId: update_asset_entities_asset__asset_id__patch
-  x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
-    token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
-- path: /entities/asset/external-id/{external_id}
-  method: get
-  operationId: get_asset_by_external_id_entities_asset_external_id__external_id__get
+- path: /meter/by-mpan
+  method: post
+  operationId: get_meter_info_by_mpan_meter_by_mpan_post
   x-agentic-access:
     action-class: connected
     consequence: read
@@ -94,141 +81,9 @@ operations:
     token:
       max-ttl: 3600
     audit: none
-- path: /entities/asset/{asset_id}/callback/{event_id}
-  method: post
-  operationId: event_handling_status_update_entities_asset__asset_id__callback__event_id__post
-  x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
-    token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
-- path: /entities/asset/{asset_id}/event
-  method: post
-  operationId: asset_event_entities_asset__asset_id__event_post
-  x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
-    token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
-- path: /entities/asset/{asset_id}/event/plug-in
-  method: post
-  operationId: asset_plug_in_event_entities_asset__asset_id__event_plug_in_post
-  x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
-    token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
-- path: /entities/asset/{asset_id}/event/plug-out
-  method: post
-  operationId: asset_plug_out_event_entities_asset__asset_id__event_plug_out_post
-  x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
-    token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
-- path: /entities/asset/{asset_id}/event/intent
-  method: post
-  operationId: asset_intent_update_event_entities_asset__asset_id__event_intent_post
-  x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
-    token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
-- path: /entities/asset/{asset_id}/event/charge-now
-  method: post
-  operationId: asset_charge_now_event_entities_asset__asset_id__event_charge_now_post
-  x-agentic-access:
-    action-class: acting
-    consequence: physical
-    subject: required
-    audience: null
-    token:
-      max-ttl: 300
-      exchange: true
-      purpose-required: true
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
-- path: /entities/asset/{asset_id}/event/charge-now-deleted
-  method: post
-  operationId: asset_charge_now_deleted_event_entities_asset__asset_id__event_charge_now_deleted_post
-  x-agentic-access:
-    action-class: acting
-    consequence: physical
-    subject: required
-    audience: null
-    token:
-      max-ttl: 300
-      exchange: true
-      purpose-required: true
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
-- path: /entities/asset/{asset_id}/event/tariff-update
-  method: post
-  operationId: asset_tariff_update_event_entities_asset__asset_id__event_tariff_update_post
-  x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
-    token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
-- path: /entities/asset/{asset_id}/intent
+- path: /meter/
   method: get
-  operationId: get_latest_intent_entities_asset__asset_id__intent_get
+  operationId: get_meter_info_by_address_deprecated_meter__get
   x-agentic-access:
     action-class: connected
     consequence: read
@@ -236,9 +91,9 @@ operations:
     token:
       max-ttl: 3600
     audit: none
-- path: /entities/asset/{asset_id}/battery-schedule
+- path: /meter/search
   method: get
-  operationId: get_battery_schedule_entities_asset__asset_id__battery_schedule_get
+  operationId: search_meters_meter_search_get
   x-agentic-access:
     action-class: connected
     consequence: read
@@ -246,25 +101,29 @@ operations:
     token:
       max-ttl: 3600
     audit: none
-- path: /entities/asset/{asset_id}/event/plug-in-schedule
-  method: post
-  operationId: asset_plug_in_schedule_event_entities_asset__asset_id__event_plug_in_schedule_post
-  x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
-    token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
-- path: /entities/asset/{asset_id}/price-curve
+- path: /meter/{meter_ref}/mpan
   method: get
-  operationId: get_price_curve_entities_asset__asset_id__price_curve_get
+  operationId: get_meter_info_by_meter_ref_meter__meter_ref__mpan_get
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /meter/by-ref/{meter_ref}
+  method: get
+  operationId: get_meter_info_by_meter_ref_meter_by_ref__meter_ref__get
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /meter/{mpan}
+  method: get
+  operationId: get_meter_info_by_mpan_deprecated_meter__mpan__get
   x-agentic-access:
     action-class: connected
     consequence: read
@@ -556,9 +415,19 @@ operations:
     token:
       max-ttl: 3600
     audit: none
-- path: /meter/by-address
+- path: /entities/asset
+  method: get
+  operationId: get_assets_entities_asset_get
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /entities/asset
   method: post
-  operationId: get_meter_info_by_address_meter_by_address_post
+  operationId: create_asset_entities_asset_post
   x-agentic-access:
     action-class: acting
     consequence: write
@@ -572,9 +441,19 @@ operations:
       - abnormal
       - high-value
     audit: required
-- path: /meter/by-mpan
-  method: post
-  operationId: get_meter_info_by_mpan_meter_by_mpan_post
+- path: /entities/asset/{asset_id}
+  method: get
+  operationId: get_asset_entities_asset__asset_id__get
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /entities/asset/{asset_id}
+  method: delete
+  operationId: delete_asset_entities_asset__asset_id__delete
   x-agentic-access:
     action-class: acting
     consequence: write
@@ -588,59 +467,9 @@ operations:
       - abnormal
       - high-value
     audit: required
-- path: /meter/
-  method: get
-  operationId: get_meter_info_by_address_deprecated_meter__get
-  x-agentic-access:
-    action-class: connected
-    consequence: read
-    subject: optional
-    token:
-      max-ttl: 3600
-    audit: none
-- path: /meter/search
-  method: get
-  operationId: search_meters_meter_search_get
-  x-agentic-access:
-    action-class: connected
-    consequence: read
-    subject: optional
-    token:
-      max-ttl: 3600
-    audit: none
-- path: /meter/{meter_ref}/mpan
-  method: get
-  operationId: get_meter_info_by_meter_ref_meter__meter_ref__mpan_get
-  x-agentic-access:
-    action-class: connected
-    consequence: read
-    subject: optional
-    token:
-      max-ttl: 3600
-    audit: none
-- path: /meter/by-ref/{meter_ref}
-  method: get
-  operationId: get_meter_info_by_meter_ref_meter_by_ref__meter_ref__get
-  x-agentic-access:
-    action-class: connected
-    consequence: read
-    subject: optional
-    token:
-      max-ttl: 3600
-    audit: none
-- path: /meter/{mpan}
-  method: get
-  operationId: get_meter_info_by_mpan_deprecated_meter__mpan__get
-  x-agentic-access:
-    action-class: connected
-    consequence: read
-    subject: optional
-    token:
-      max-ttl: 3600
-    audit: none
-- path: /auth/token-form
-  method: post
-  operationId: login_for_access_token_form_auth_token_form_post
+- path: /entities/asset/{asset_id}
+  method: patch
+  operationId: update_asset_entities_asset__asset_id__patch
   x-agentic-access:
     action-class: acting
     consequence: write
@@ -654,9 +483,9 @@ operations:
       - abnormal
       - high-value
     audit: required
-- path: /auth/users/me/
+- path: /entities/asset/external-id/{external_id}
   method: get
-  operationId: read_users_me_auth_users_me__get
+  operationId: get_asset_by_external_id_entities_asset_external_id__external_id__get
   x-agentic-access:
     action-class: connected
     consequence: read
@@ -664,9 +493,9 @@ operations:
     token:
       max-ttl: 3600
     audit: none
-- path: /auth/component-token
+- path: /entities/asset/{asset_id}/callback/{event_id}
   method: post
-  operationId: create_component_token_auth_component_token_post
+  operationId: event_handling_status_update_entities_asset__asset_id__callback__event_id__post
   x-agentic-access:
     action-class: acting
     consequence: write
@@ -680,6 +509,168 @@ operations:
       - abnormal
       - high-value
     audit: required
+- path: /entities/asset/{asset_id}/event
+  method: post
+  operationId: asset_event_entities_asset__asset_id__event_post
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /entities/asset/{asset_id}/event/plug-in
+  method: post
+  operationId: asset_plug_in_event_entities_asset__asset_id__event_plug_in_post
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /entities/asset/{asset_id}/event/plug-out
+  method: post
+  operationId: asset_plug_out_event_entities_asset__asset_id__event_plug_out_post
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /entities/asset/{asset_id}/event/intent
+  method: post
+  operationId: asset_intent_update_event_entities_asset__asset_id__event_intent_post
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /entities/asset/{asset_id}/event/charge-now
+  method: post
+  operationId: asset_charge_now_event_entities_asset__asset_id__event_charge_now_post
+  x-agentic-access:
+    action-class: acting
+    consequence: physical
+    subject: required
+    audience: null
+    token:
+      max-ttl: 300
+      exchange: true
+      purpose-required: true
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /entities/asset/{asset_id}/event/charge-now-deleted
+  method: post
+  operationId: asset_charge_now_deleted_event_entities_asset__asset_id__event_charge_now_deleted_post
+  x-agentic-access:
+    action-class: acting
+    consequence: physical
+    subject: required
+    audience: null
+    token:
+      max-ttl: 300
+      exchange: true
+      purpose-required: true
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /entities/asset/{asset_id}/event/tariff-update
+  method: post
+  operationId: asset_tariff_update_event_entities_asset__asset_id__event_tariff_update_post
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /entities/asset/{asset_id}/intent
+  method: get
+  operationId: get_latest_intent_entities_asset__asset_id__intent_get
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /entities/asset/{asset_id}/battery-schedule
+  method: get
+  operationId: get_battery_schedule_entities_asset__asset_id__battery_schedule_get
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /entities/asset/{asset_id}/event/plug-in-schedule
+  method: post
+  operationId: asset_plug_in_schedule_event_entities_asset__asset_id__event_plug_in_schedule_post
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /entities/asset/{asset_id}/price-curve
+  method: get
+  operationId: get_price_curve_entities_asset__asset_id__price_curve_get
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
 - path: /data/readings
   method: post
   operationId: post_readings_data_readings_post
@@ -726,6 +717,22 @@ operations:
     token:
       max-ttl: 3600
     audit: none
+- path: /validation/mpan
+  method: post
+  operationId: validate_mpan_validation_mpan_post
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
 - path: /examples/dispatch-event
   method: get
   operationId: get_example_dispatch_event_examples_dispatch_event_get
@@ -746,19 +753,3 @@ operations:
     token:
       max-ttl: 3600
     audit: none
-- path: /validation/mpan
-  method: post
-  operationId: validate_mpan_validation_mpan_post
-  x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
-    token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
